@@ -1,3 +1,7 @@
+# Mongo
+db name -> WhiteBoard
+collections names -> docentes, alunos, ucs
+
 # Rotas CRUD
 /docentes {post}
 /docentes/:id {get, put, delete} -> Marta
