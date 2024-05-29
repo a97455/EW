@@ -1,23 +1,12 @@
 [
     {
-        "sigla": "ENGWEB2024",
+        "_id": "ENGWEB2024",
         "titulo": "Engenharia Web",
         "docentes": [
-            {
-                "nome": "José Carlos Ramalho",
-                "foto": "jcr-keep.jpeg",
-                "categoria": "Professor/Investigador/Empresário",
-                "filiacao": "Dep. Informática - Universidade do Minho",
-                "email": "jcr@di.uminho.pt",
-                "webpage": "http://www.di.uminho.pt/~jcr"
-            },
-            {
-                "nome": "Tiago Manuel Queirós Barata",
-                "foto": "tiago.jpg",
-                "categoria": "Professor Convidado",
-                "filiacao": "Dep. Informática - Universidade do Minho",
-                "email": "d13753@di.uminho.pt"
-            }
+            "d1", "d13753"
+        ],
+        "alunos": [
+            "a1", "a2"
         ],
         "horario": {
             "teoricas": ["segunda das 14h às 16h, sala Ed.2 - 0.05"],
