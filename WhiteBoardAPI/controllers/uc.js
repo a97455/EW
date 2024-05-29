@@ -1,9 +1,5 @@
 var UC = require('../models/uc')
 
-module.exports.list = function(){
-    return UC.find().sort({nome: 1}).exec()
-}
-
 module.exports.findById = function(id){
     return UC.findOne({_id: id}).exec()
 }
