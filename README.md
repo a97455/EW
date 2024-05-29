@@ -1,5 +1,6 @@
 # Mongo
 db name -> WhiteBoard
+
 collections names -> docentes, alunos, ucs
 
 # Rotas CRUD
@@ -14,15 +15,13 @@ collections names -> docentes, alunos, ucs
 
 
 # Models / Controllers
-UC: sigla, titulo, lista de schema docente, lista de schema aluno, schema horario, schema avaliacao, schema data, lista de schema aula -> Henrique
+UC: _id (sigla da uc), titulo, lista de ids de docentes, lista de ids de alunos, schema horario, avaliacao (lista Strings), schema data, lista de schema aula -> Henrique
 
 Docente: ver no docentes.json -> Marta
 
 Aluno: ver no alunos.json -> Ema
 
 Horario: lista de teoricas (strings) e lista de praticas (strings) -> Henrique
-
-Avaliacao: lista de strings -> Henrique
 
 Data: ver na ucs.json -> Henrique
 
