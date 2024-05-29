@@ -1,25 +1,25 @@
 # Rotas CRUD
 /docentes {post}
-/docentes/:id {get, put, delete}
+/docentes/:id {get, put, delete} -> Marta
 
 /alunos {post}
-/alunos/:id {get, put, delete}
+/alunos/:id {get, put, delete} -> Ema
 
 /ucs {post}
-/ucs/:id {get, put, delete}
+/ucs/:id {get, put, delete} -> Henrique
 
 
-# Models
-UC: sigla, titulo, lista de schema docente, lista de schema aluno, schema horario, schema avaliacao, schema data, lista de schema aula
+# Models / Controllers
+UC: sigla, titulo, lista de schema docente, lista de schema aluno, schema horario, schema avaliacao, schema data, lista de schema aula -> Henrique
 
-Docente: ver no docentes.json
+Docente: ver no docentes.json -> Marta
 
-Aluno: ver no alunos.json
+Aluno: ver no alunos.json -> Ema
 
-Horario: lista de teoricas (strings) e lista de praticas (strings)
+Horario: lista de teoricas (strings) e lista de praticas (strings) -> Henrique
 
-Avaliacao: lista de strings
+Avaliacao: lista de strings -> Henrique
 
-Data: ver na ucs.json
+Data: ver na ucs.json -> Henrique
 
-Aula: tipo, data e sumario (lista strings)
+Aula: tipo, data e sumario (lista strings) -> Henrique
