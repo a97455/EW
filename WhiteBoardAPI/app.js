@@ -15,6 +15,7 @@ db.once('open', function(){
 
 var ucRouter = require('./routes/uc');
 var alunoRouter = require('./routes/aluno');
+var docenteRouter = require('./routes/docente');
 
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/ucs', ucRouter);
 app.use('/alunos', alunoRouter);
+app.use('/docentes', docenteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
