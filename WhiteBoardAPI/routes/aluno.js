@@ -19,12 +19,11 @@ router.post('/', upload.single('foto'), function(req, res){
   var aluno={
     _id : req.body._id,
     nome: req.body.nome,
-    foto:'foto.' + req.file.originalname.split('.')[1],
-    email: req.email,
-    curso: req.curso,
+    foto: req.body._id+'.' + req.file.mimetype.split('/')[1],
+    email: req.body.email,
+    curso: req.body.curso,
     ucs: []
   }
-  console.log("cheguei")
   Aluno.insert(aluno)
     .then(data => {
       let oldPath = __dirname + '/../' + req.file.path 
@@ -36,6 +35,41 @@ router.post('/', upload.single('foto'), function(req, res){
     })
     .catch(erro => res.jsonp(erro))
 });
+
+
+router.delete('/:id', async function(req, res) {
+  const alunoId = req.params.id;
+
+  try {
+    const aluno = await Aluno.findById(alunoId);
+
+    if (!aluno) {
+      return res.status(404).jsonp({ error: 'Aluno not found' });
+    }
+
+    // Delete the file associated with the aluno
+    const filePath = __dirname + '/../FileStore/' + aluno.foto;
+    console.log(filePath)
+    fs.unlink(filePath, async function(error) {
+      if (error) {
+        // Handle the error if the file does not exist
+        console.error('File deletion error:', error);
+        return res.status(500).jsonp({ error: 'File deletion error' });
+      }
+
+      // Delete the aluno record from the database
+      try {
+        await Aluno.delete({ _id: alunoId });
+        return res.jsonp({ message: 'Aluno deleted successfully' });
+      } catch (err) {
+        return res.status(500).jsonp({ error: 'Database deletion error' });
+      }
+    });
+  } catch (err) {
+    return res.status(500).jsonp({ error: 'Database find error' });
+  }
+});
+
 
 
 module.exports = router;
