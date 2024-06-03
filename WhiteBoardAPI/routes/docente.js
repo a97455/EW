@@ -25,8 +25,7 @@ router.post('/', upload.single('foto'), function(req, res) {
       categoria: req.body.categoria,
       filiacao: req.body.filiacao,
       email: req.body.email,
-      webpage: req.body.webpage,
-      ucs: []
+      webpage: req.body.webpage
     }
 
     Docente.insert(docente)

@@ -4,19 +4,13 @@
         "nome": "Maria Albertina de Albuquerque",
         "foto": "a1.jpeg",
         "email": "a1@alunos.uminho.pt",
-        "curso": "Engenharia Biomédica - LEBIOM",
-        "ucs": [
-            "ENGWEB2024"
-        ]
+        "curso": "Engenharia Biomédica - LEBIOM"
     },
     {
         "_id": "a2",
         "nome": "João de Andrade e Deus",
         "foto": "a2.jpeg",
         "email": "a2@alunos.uminho.pt",
-        "curso": "Estudos Portugueses e Lusófonos - LEPL",
-        "ucs": [
-            "ENGWEB2024"
-        ]
+        "curso": "Estudos Portugueses e Lusófonos - LEPL"
     }
 ]

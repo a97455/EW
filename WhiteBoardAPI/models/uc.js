@@ -19,6 +19,7 @@ var aulaSchema = new mongoose.Schema({
 
 var ucSchema = new mongoose.Schema({
     _id : String, 
+    codUC: String,
     titulo: String,
     docentes: [String],
     alunos: [String],
