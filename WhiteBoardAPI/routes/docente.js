@@ -3,7 +3,8 @@ var router = express.Router();
 var Docente = require('../controllers/docente')
 var fs = require('fs')
 
-var multer = require('multer')
+var multer = require('multer');
+const { listenerCount } = require('../models/docente');
 const upload = multer({ dest: 'uploads/' })
 
 
@@ -42,14 +43,58 @@ router.post('/', upload.single('foto'), function(req, res) {
     })
 });
 
-router.put('/:id', function(req, res) {
-    Docente.update(req.params.id, req.body)
-    .then(function(data){
-        res.jsonp(data)
-    })
-    .catch(function(erro){
-        res.jsonp(erro)
-    })
+router.put('/:id', upload.single('foto'), async function(req, res) {
+
+  try {
+      // Fetch the existing Docente by ID
+      let oldDocente = await Docente.findById(req.params.id);
+
+      // If no oldDocente found, return an error
+      if (!oldDocente) {
+          return res.status(404).json({ error: "Docente não encontrado" });
+      }
+
+      // Determine the new file name if a new file is uploaded
+      if (req.file) var newFileName = req.params.id + '.' + req.file.mimetype.split('/')[1]
+      else newFileName = oldDocente.foto;
+
+      // Construct the new docente object
+      const docente = {
+          _id: req.body._id || oldDocente._id,
+          nome: req.body.nome || oldDocente.nome,
+          foto: newFileName,
+          categoria: req.body.categoria || oldDocente.categoria,
+          filiacao: req.body.filiacao || oldDocente.filiacao,
+          email: req.body.email || oldDocente.email,
+          webpage: req.body.webpage || oldDocente.webpage
+      };
+
+      // Example: Save updated docente to the database
+      await Docente.update(req.params.id, docente).then(function(data){
+        if (req.file) {
+          // Delete the old photo
+          let oldPath = __dirname + '/../FileStore/' + oldDocente.foto;
+          fs.unlink(oldPath, function(error) {
+              if (error) console.error('Erro ao eliminar o ficheiro antigo:', error);
+          });
+    
+          // Set new photo
+          let newFilePath = __dirname + '/../FileStore/' + docente.foto;
+          fs.rename(__dirname + '/../' + req.file.path, newFilePath, function(error) {
+              if (error) throw error;
+          });
+        }
+        res.jsonp(docente);
+      })
+      .catch(function(erro){
+          res.jsonp(erro)
+      })
+
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Não foi  possível atualizar as informações do docente" });
+  }
+    
 });
 
 router.delete('/:id', function(req, res) {
