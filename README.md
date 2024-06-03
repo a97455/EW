@@ -26,3 +26,9 @@ Horario: lista de teoricas (strings) e lista de praticas (strings) -> Henrique
 Data: ver na ucs.json -> Henrique
 
 Aula: tipo, data e sumario (lista strings) -> Henrique
+
+# Views
+
+1 -> Marta
+2 -> Ema
+3 -> Henrique
