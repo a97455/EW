@@ -1,6 +1,7 @@
 [
     {
         "_id": "ENGWEB2024",
+        "codUC": "1234",
         "titulo": "Engenharia Web",
         "docentes": [
             "d1", "d13753"
@@ -22,9 +23,9 @@
             "1 Teste escrito (45%)[nota mínima de 10 val.]"
         ],
         "datas": {
-            "teste": "???",
-            "exame": "???",
-            "projeto": "???"
+            "teste": "2024-05-07",
+            "exame": "2024-06-10",
+            "projeto": "2024-06-9"
         },
         "aulas": [
             {
@@ -160,6 +161,68 @@
                     "Resolução de uma ficha de aferição."
                 ]
             }
+        ]
+    },
+    {
+        "_id": "PL2024",
+        "codUC": "4321",
+        "titulo": "Processamente de Linguagens",
+        "docentes": [
+            "d1"
+        ],
+        "alunos": [
+            "a1", "a2"
+        ],
+        "horario": {
+            "teoricas": ["segunda das 14h às 16h, sala Ed.2 - 0.05"],
+            "praticas": [
+                "Turno 1: segunda das 16h às 18h, sala Ed.1 - 1.20",
+                "Turno 3: segunda das 16h às 18h, sala Ed.1 - 2.25",
+                "Turno 2: terça das 13h às 15h, sala Ed.1 - 2.17"
+            ]
+        },
+        "avaliacao": [
+            "8 Trabalhos de casa (20%)",
+            "1 Projeto em grupo até 3 elementos (35%)[nota mínima de 10 val.]",
+            "1 Teste escrito (45%)[nota mínima de 10 val.]"
+        ],
+        "datas": {
+            "teste": "2024-05-07",
+            "exame": "2024-06-10",
+            "projeto": "2024-06-9"
+        },
+        "aulas": [
+        ]
+    },
+    {
+        "_id": "IO2024",
+        "codUC": "1111",
+        "titulo": "Investigação Operacional",
+        "docentes": [
+            "d13753"
+        ],
+        "alunos": [
+            "a1", "a2"
+        ],
+        "horario": {
+            "teoricas": ["segunda das 14h às 16h, sala Ed.2 - 0.05"],
+            "praticas": [
+                "Turno 1: segunda das 16h às 18h, sala Ed.1 - 1.20",
+                "Turno 3: segunda das 16h às 18h, sala Ed.1 - 2.25",
+                "Turno 2: terça das 13h às 15h, sala Ed.1 - 2.17"
+            ]
+        },
+        "avaliacao": [
+            "8 Trabalhos de casa (20%)",
+            "1 Projeto em grupo até 3 elementos (35%)[nota mínima de 10 val.]",
+            "1 Teste escrito (45%)[nota mínima de 10 val.]"
+        ],
+        "datas": {
+            "teste": "2024-05-07",
+            "exame": "2024-06-10",
+            "projeto": "2024-06-9"
+        },
+        "aulas": [
         ]
     }
 ]

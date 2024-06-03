@@ -21,8 +21,7 @@ router.post('/', upload.single('foto'), function(req, res){
         nome: req.body.nome,
         foto: req.body._id + '.' + req.file.mimetype.split('/')[1],
         email: req.body.email,
-        curso: req.body.curso,
-        ucs: []
+        curso: req.body.curso
     };
     Aluno.insert(aluno)
     .then(data => {

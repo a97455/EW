@@ -6,10 +6,7 @@
         "categoria": "Professor/Investigador/Empresário",
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "jcr@di.uminho.pt",
-        "webpage": "http://www.di.uminho.pt/~jcr",
-        "ucs": [
-            "ENGWEB2024"
-        ]
+        "webpage": "http://www.di.uminho.pt/~jcr"
     },
     {
         "_id": "d13753",
@@ -17,9 +14,6 @@
         "foto": "d13753.jpg",
         "categoria": "Professor Convidado",
         "filiacao": "Dep. Informática - Universidade do Minho",
-        "email": "d13753@di.uminho.pt",
-        "ucs": [
-            "ENGWEB2024"
-        ]
+        "email": "d13753@di.uminho.pt"
     }
 ]
