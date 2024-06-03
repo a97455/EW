@@ -43,7 +43,7 @@ router.post('/', upload.single('foto'), function(req, res) {
     })
 });
 
-router.put('/:id', async function(req, res) {
+router.put('/:id', upload.single('foto'), async function(req, res) {
 
   try {
       // Fetch the existing Docente by ID
@@ -55,7 +55,7 @@ router.put('/:id', async function(req, res) {
       }
 
       // Determine the new file name if a new file is uploaded
-      if (req.file) var newFileName = req.body._id + '.' + req.file.mimetype.split('/')[1] 
+      if (req.file) var newFileName = req.params.id + '.' + req.file.mimetype.split('/')[1]
       else newFileName = oldDocente.foto;
 
       // Construct the new docente object
@@ -66,8 +66,7 @@ router.put('/:id', async function(req, res) {
           categoria: req.body.categoria || oldDocente.categoria,
           filiacao: req.body.filiacao || oldDocente.filiacao,
           email: req.body.email || oldDocente.email,
-          webpage: req.body.webpage || oldDocente.webpage,
-          ucs: oldDocente.ucs
+          webpage: req.body.webpage || oldDocente.webpage
       };
 
       // Example: Save updated docente to the database
