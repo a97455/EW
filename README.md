@@ -27,6 +27,22 @@ Data: ver na ucs.json -> Henrique
 
 Aula: tipo, data e sumario (lista strings) -> Henrique
 
+# Rotas View
+/ -> Login  
+/registoAluno -> registoAluno  
+/registoDocente -> registoDocente  
+/paginaInicial/:id -> paginaInicial (id pode ser docente ou aluno)  
+
+/ucs/:id/docente -> Uc de um certo id, versão docente  
+/ucs/:id/aluno -> Uc de um certo id, versão aluno  
+/ucs/:id/docente/editar -> Editar informações de docentes, horários, etc ...  
+/ucs/:id/docente/adicionarAula -> Adicionar aulas à UC  
+
+/perfil/:id -> perfil (id pode ser docente ou aluno)  
+/perfil/:id/editar -> editar informações do perfil  
+/inscreverUC/:id -> inscrever em UC (id pode ser docente ou aluno)  
+
+
 # Views
 
 1 -> Marta

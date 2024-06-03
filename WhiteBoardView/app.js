@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 
-var ucRouter = require('./routes/uc');
+var perfilRouter = require('./routes/perfil');
 
 var app = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', ucRouter);
+app.use('/perfil', perfilRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
