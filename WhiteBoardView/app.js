@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 
 var perfilRouter = require('./routes/perfil');
+var inicioRouter = require('./routes/inicio');
 
 var app = express();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/perfil', perfilRouter);
+app.use('/', inicioRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
