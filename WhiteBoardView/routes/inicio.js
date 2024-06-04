@@ -8,15 +8,19 @@ router.get('/', function(req, res) {
 })
 
 router.get('/registoAluno', function(req, res) {
-    res.render('registoAluno', {title: "Registo de um novo aluno"});
+    //! Alterar escolha de curso para opções em vez de texto
+    var d = new Date().toISOString().substring(0,16)
+    res.render('registoAluno', {title: "Registo de um novo aluno", data: d});
 })
 
 router.get('/registoDocente', function(req, res) {
-    res.render('registoDocente', {title: "Registo de um novo docente"});
+    var d = new Date().toISOString().substring(0,16)
+    res.render('registoDocente', {title: "Registo de um novo docente", data: d});
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
-    res.render('paginaInicial', {title: "Página inicial"});
+    var d = new Date().toISOString().substring(0,16)
+    res.render('paginaInicial', {title: "Página inicial", data: d});
 })
 
 
@@ -41,6 +45,12 @@ router.post('/', function(req, res) {
         })
     }
     else res.render('error', {message: 'Não foi possível realizar o login:'});
+})
+
+
+router.post('/registoAluno', function(req, res) {
+    //!Verificar número de aluno válido
+    res.render('registoAluno', {title: "Registo de um novo aluno"});
 })
   
 
