@@ -2,6 +2,56 @@ extends layout
 
 block content
   if isDocente 
-    h1 #{docente.nome} 
+    .w3-card-4
+      ul.w3-ul.w3-border.w3-margin-bottom
+        li.w3-indigo
+          h2 Perfil de #{docente.nome}
+        li.w3-light-gray
+          b Identificador: 
+          | #{docente._id}
+        li.w3-light-gray
+          b Nome: 
+          | #{docente.nome}
+        li.w3-light-gray
+          b Categoria: 
+          | #{docente.categoria}
+        li.w3-light-gray
+          b Filiação: 
+          | #{docente.filiacao}
+        li.w3-light-gray
+          b Email: 
+          | #{docente.email}
+        if docente.webpage != null
+          li.w3-light-gray
+            b Webpage: 
+            a(href=docente.webpage) #{docente.webpage}
+            
+      a(href="/perfil/"+docente._id+"/editar").w3-right.w3-margin-right
+        button.w3-button.w3-black Editar Perfil
+
+      a(href="/inscreverUC/"+docente._id).w3-right.w3-margin-right
+        button.w3-button.w3-black Inscrever UC
+      
   else 
-    h1 #{aluno.nome}
+    .w3-card-4
+      ul.w3-ul.w3-border.w3-margin-bottom
+        li.w3-indigo
+          h2 Perfil de #{aluno.nome}
+        li.w3-light-gray
+          b Identificador: 
+          | #{aluno._id}
+        li.w3-light-gray
+          b Nome: 
+          | #{aluno.nome}
+        li.w3-light-gray
+          b Email: 
+          | #{aluno.email}
+        li.w3-light-gray
+          b Curso: 
+          | #{aluno.curso}
+
+      a(href="/perfil/"+aluno._id+"/editar").w3-right.w3-margin-right
+        button.w3-button.w3-black Editar Perfil
+
+      a(href="/inscreverUC/"+aluno._id).w3-right.w3-margin-right
+        button.w3-button.w3-black Inscrever UC
