@@ -9,11 +9,13 @@ router.get('/', function(req, res) {
 
 router.get('/registoAluno', function(req, res) {
     //! Alterar escolha de curso para opções em vez de texto
+    //! Acrescentar palavra passe
     var d = new Date().toISOString().substring(0,16)
     res.render('registoAluno', {title: "Registo de um novo aluno", data: d});
 })
 
 router.get('/registoDocente', function(req, res) {
+    //! Acrescentar palavra passe
     var d = new Date().toISOString().substring(0,16)
     res.render('registoDocente', {title: "Registo de um novo docente", data: d});
 })
@@ -49,8 +51,32 @@ router.post('/', function(req, res) {
 
 
 router.post('/registoAluno', function(req, res) {
-    //!Verificar número de aluno válido
-    res.render('registoAluno', {title: "Registo de um novo aluno"});
+    if (/a[0-9]+/.test(req.body.id)){
+        axios.post('http://localhost:10000/alunos/', req.body)
+        .then(function(resposta){
+            var d = new Date().toISOString().substring(0,16)
+            res.render('login', {title: "Autenticação", data: d});
+        })
+        .catch(function(){
+            res.render('error', {message: 'Não foi possível registar o novo aluno'})
+        })
+    }
+    else res.render('error', {message: 'Número de aluno inválido'});
+})
+  
+
+router.post('/registoDocente', function(req, res) {
+    if (/d[0-9]+/.test(req.body.id)){
+        axios.post('http://localhost:10000/docentes/', req.body)
+        .then(function(resposta){
+            var d = new Date().toISOString().substring(0,16)
+            res.render('login', {title: "Autenticação", data: d});
+        })
+        .catch(function(){
+            res.render('error', {message: 'Não foi possível registar o novo aluno'})
+        })
+    }
+    else res.render('error', {message: 'Número de aluno inválido'});
 })
   
 
