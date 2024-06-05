@@ -39,7 +39,6 @@ router.get('/:id/editar', function(req, res) {
 });
 
 router.post('/:id/editar', function(req, res) {
-  console.log(JSON.stringify(req.body))
   if (req.params.id[0] == 'd'){
     axios.put('http://localhost:10000/docentes/'+req.body._id, req.body)
     .then(function(resposta){
