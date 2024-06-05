@@ -40,7 +40,41 @@ router.get('/:id/aluno', function(req, res) {
 
 router.get('/:id/docente/adicionarAula', function(req, res) {
   var d = new Date().toISOString().substring(0,16);
-  res.render('novaAula', {uc: req.params.id, data: d});
+  const id = req.params.id;
+  res.render('novaAula', {id: id, data: d});
 })
+
+router.post('/:id/docente/adicionarAula', function(req, res) {
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response) {
+        const uc = response.data;
+        
+        // Crie um novo objeto para representar a nova aula
+        const novaAula = {
+            tipo: req.body.tipo,
+            data: req.body.data,
+            sumario: req.body.topicos.split('\n')
+        };
+
+        uc.aulas.push(novaAula);
+
+        console.log(uc);
+
+        axios.put('http://localhost:10000/ucs/' + req.params.id, uc)
+        .then(function(response) {
+            res.status(200).json({ message: 'Aula adicionada com sucesso' });
+        })
+        .catch(function(error) {
+            console.error('Erro ao atualizar UC:', error);
+            res.status(500).json({ error: 'Erro ao atualizar a UC' });
+        });
+    })
+    .catch(function(error) {
+        console.error('Erro ao obter UC:', error);
+        res.status(500).json({ error: 'Erro ao obter a UC' });
+    });
+});
+
+
 
 module.exports = router;

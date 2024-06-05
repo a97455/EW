@@ -16,7 +16,6 @@ module.exports.delete = function(id) {
     return UC.findByIdAndDelete(id).exec()
 }
 
-
 module.exports.ucsAluno = function(id){
     return UC.find({alunos: id}).exec()
 }
