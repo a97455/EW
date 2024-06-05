@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios');
 
-router.get('/:id/docente', function(req, res) {
+router.get('/:id/aluno', function(req, res) {
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
