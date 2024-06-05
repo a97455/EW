@@ -9,12 +9,12 @@ block content
                         img(src="/images/back.png" alt="Back" class="w3-image" style="width:50px; height:50px; margin-top: 8px;")
                 .w3-col.s5
                     h2= title
-        form.w3-container(method="POST" enctype="multipart/form-data")
+        form.w3-container(method="POST")
             fieldset
                 legend Informações do Aluno
                 .w3-section
                     label Número de Aluno: 
-                    input.w3-input.w3-round(type="text" name="id")
+                    input.w3-input.w3-round(type="text" name="_id")
                 .w3-section
                     label Nome:
                     input.w3-input.w3-round(type="text" name="nome")
