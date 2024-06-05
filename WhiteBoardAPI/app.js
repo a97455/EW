@@ -22,6 +22,7 @@ var app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use("/filestore",express.static(path.join(__dirname, 'FileStore')));
 
 app.use('/ucs', ucRouter);
 app.use('/alunos', alunoRouter);
