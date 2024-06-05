@@ -42,4 +42,25 @@ router.delete('/:id', function(req, res) {
   })
 });
 
+
+router.get('/aluno/:id', function(req, res) {
+  UC.ucsAluno(req.params.id)
+  .then(function(data){
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
+
+router.get('/docente/:id', function(req, res) {
+  UC.ucsDocente(req.params.id)
+  .then(function(data){
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
+
 module.exports = router;
