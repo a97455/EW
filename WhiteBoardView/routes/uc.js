@@ -20,7 +20,7 @@ router.get('/:id/aluno', function(req, res) {
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
                         var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                        res.render('informacoesAlunoUC', {uc: uc, professores: listaNomesProfessores, data: d});
                     }
                 })
                 .catch(function(errorProfessores){
@@ -37,5 +37,10 @@ router.get('/:id/aluno', function(req, res) {
         res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
     });
 });
+
+router.get('/:id/docente/adicionarAula', function(req, res) {
+  var d = new Date().toISOString().substring(0,16);
+  res.render('novaAula', {uc: req.params.id, data: d});
+})
 
 module.exports = router;
