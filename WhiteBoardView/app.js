@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 
+var ucRouter = require('./routes/uc');
 var perfilRouter = require('./routes/perfil');
 var inicioRouter = require('./routes/inicio');
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/uc', ucRouter);
 app.use('/perfil', perfilRouter);
 app.use('/', inicioRouter);
 
