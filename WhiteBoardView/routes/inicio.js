@@ -10,26 +10,38 @@ router.get('/', function(req, res) {
 router.get('/registoAluno', function(req, res) {
     //! Alterar escolha de curso para opções em vez de texto
     //! Acrescentar palavra passe
+    //! Ver se dá para restringir apenas a imagens e não outro tipo de ficheiros
     var d = new Date().toISOString().substring(0,16)
     res.render('registoAluno', {title: "Registo de um novo aluno", data: d});
 })
 
 router.get('/registoDocente', function(req, res) {
     //! Acrescentar palavra passe
+    //! Ver se dá para restringir apenas a imagens e não outro tipo de ficheiros
     var d = new Date().toISOString().substring(0,16)
     res.render('registoDocente', {title: "Registo de um novo docente", data: d});
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
     var d = new Date().toISOString().substring(0,16)
-    if (req.body.id[0] == 'd'){
-        let list = []
-        res.render('paginaInicial', {title: "Página inicial", data: d, lista: list, aluno: false});
+    if (req.params.id[0] == 'd'){
+        axios.get('http://localhost:10000/ucs/docente/'+req.params.id)
+            .then(function(resposta){
+                res.render('paginaInicial', {title: "Página inicial", data: d, lista: resposta.data, aluno: false});
+            })
+            .catch(function(){
+                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+            }) 
     }
-    else if (req.body.id[0] == 'a'){
-        let list = []
-        res.render('paginaInicial', {title: "Página inicial", data: d, lista: list, aluno: true});
-    }
+    else if (req.params.id[0] == 'a'){
+        axios.get('http://localhost:10000/ucs/docente/'+req.params.id)
+            .then(function(resposta){
+                res.render('paginaInicial', {title: "Página inicial", data: d, lista: resposta.data, aluno: true});
+            })
+            .catch(function(){
+                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+            })
+        }
     else res.render('error', {message: 'Utilizador não encontrado'});
 })
 
@@ -38,21 +50,21 @@ router.post('/', function(req, res) {
     var d = new Date().toISOString().substring(0,16)
     if (req.body.id[0] == 'd'){
         axios.post('http://localhost:10000/docentes/login/'+req.body.id)
-        .then(function(resposta){
-            res.render('paginaInicial', {title: "Página inicial", user: resposta.data, data: d})
-        })
-        .catch(function(){
-            res.render('error', {message: 'Não foi possível realizar o login: docente não encontrado'})
-        })
+            .then(function(resposta){
+                res.render('paginaInicial', {title: "Página inicial", user: resposta.data, data: d})
+            })
+            .catch(function(){
+                res.render('error', {message: 'Não foi possível realizar o login: docente não encontrado'})
+            })
     }
     else if (req.body.id[0] == 'a'){
         axios.post('http://localhost:10000/alunos/login/'+req.body.id)
-        .then(function(resposta){
-            res.render('paginaInicial', {title: "Página inicial", user: resposta.data, data: d})
-        })
-        .catch(function(){
-            res.render('error', {message: 'Não foi possível realizar o login: Aluno não encontrado'})
-        })
+            .then(function(resposta){
+                res.render('paginaInicial', {title: "Página inicial", user: resposta.data, data: d})
+            })
+            .catch(function(){
+                res.render('error', {message: 'Não foi possível realizar o login: Aluno não encontrado'})
+            })
     }
     else res.render('error', {message: 'Não foi possível realizar o login'});
 })

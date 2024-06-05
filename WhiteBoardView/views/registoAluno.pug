@@ -3,7 +3,12 @@ extends layout
 block content
     .w3-card-4
         header.w3-container.w3-teal
-            h2= title
+            .w3-row
+                .w3-col.s1
+                    a(href="/")
+                        img(src="/images/back.png" alt="Back" class="w3-image" style="width:50px; height:50px; margin-top: 8px;")
+                .w3-col.s5
+                    h2= title
         form.w3-container(method="POST" enctype="multipart/form-data")
             fieldset
                 legend Informações do Aluno
@@ -23,7 +28,7 @@ block content
                     label Foto de perfil:
                     input.w3-input.w3-border.w3-light-grey(type="file" name="foto")
                 
-            button.w3-btn.w3-blue.w3-mb-2(type="submit") Registar
+            button.w3-btn.w3-gray.w3-mb-2(type="submit") Registar
 
         footer.w3-container.w3-teal
             h4 WhiteBoard - #{data}
