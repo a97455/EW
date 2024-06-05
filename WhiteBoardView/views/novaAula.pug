@@ -1,0 +1,29 @@
+extends layout 
+
+block content
+    .w3-card-4
+        header.w3-container.w3-teal
+            h1 Nova Aula
+
+    form.w3-container(action="/login" method="POST")
+        .w3-section
+            label.w3-text-black(style="font-weight: bold;" for="tipo") Tipo: 
+            select.w3-select.w3-border(name="tipo" id="tipo" required)
+                option(value="T") Teorica
+                option(value="P") Prática
+                option(value="L") Laboratorial
+
+        .w3-section
+            label.w3-text-black(style="font-weight: bold;" for="data") Data: 
+            input.w3-input.w3-border(type="text" name="data" id="data" required pattern="\d{4}-\d{2}-\d{2}" placeholder="yyyy-mm-dd")
+
+        .w3-section
+            label.w3-text-black(style="font-weight: bold;" for="topicos") Sumário: 
+            textarea.w3-input.w3-border(name="topicos" id="topicos" required placeholder="Insira os tópicos do sumário, um por linha")
+
+        .w3-section
+            button.w3-button.w3-teal(type="submit") Submeter
+        
+
+    footer.w3-container.w3-teal
+        h4 WhiteBoard - #{data}
