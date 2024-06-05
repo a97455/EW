@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-teal
+            h2= title
+        .w3-container 
+            ul.w3-ul.w3-hoverable
+                each uc in lista 
+                    li
+                        if aluno
+                            a(href="/ucs/" + uc._id + '/aluno') #{uc.titulo} (#{uc._id})
+                        else
+                            a(href="/ucs/" + uc._id + '/docente') #{uc.titulo} (#{uc._id})
+
+        footer.w3-container.w3-teal
+            h4 WhiteBoard - #{data}

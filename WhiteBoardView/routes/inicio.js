@@ -22,7 +22,15 @@ router.get('/registoDocente', function(req, res) {
 
 router.get('/paginaInicial/:id', function(req, res) {
     var d = new Date().toISOString().substring(0,16)
-    res.render('paginaInicial', {title: "Página inicial", data: d});
+    if (req.body.id[0] == 'd'){
+        let list = []
+        res.render('paginaInicial', {title: "Página inicial", data: d, lista: list, aluno: false});
+    }
+    else if (req.body.id[0] == 'a'){
+        let list = []
+        res.render('paginaInicial', {title: "Página inicial", data: d, lista: list, aluno: true});
+    }
+    else res.render('error', {message: 'Utilizador não encontrado'});
 })
 
 
@@ -46,7 +54,7 @@ router.post('/', function(req, res) {
             res.render('error', {message: 'Não foi possível realizar o login: Aluno não encontrado'})
         })
     }
-    else res.render('error', {message: 'Não foi possível realizar o login:'});
+    else res.render('error', {message: 'Não foi possível realizar o login'});
 })
 
 
