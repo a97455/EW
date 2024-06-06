@@ -94,11 +94,21 @@ router.post('/:id/docente/adicionarAula', function(req, res) {
 
         uc.aulas.push(novaAula);
 
-        console.log(uc);
-
         axios.put('http://localhost:10000/ucs/' + req.params.id, uc)
         .then(function(response) {
-            res.status(200).json({ message: 'Aula adicionada com sucesso' });
+            var listaNomesProfessores = [];
+            
+            for (let i = 0; i < uc.docentes.length; i++){  
+                axios.get('http://localhost:10000/docentes/' + uc.docentes[i])
+                .then(function(responseProfessores) {
+                    listaNomesProfessores.push(responseProfessores.data.nome);
+                    
+                    if (listaNomesProfessores.length === uc.docentes.length) {
+                        var d = new Date().toISOString().substring(0,16);
+                        res.render('informacoesDocenteUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                    }
+                })
+            }
         })
         .catch(function(error) {
             console.error('Erro ao atualizar UC:', error);
