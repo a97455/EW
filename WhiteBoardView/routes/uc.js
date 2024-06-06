@@ -124,6 +124,67 @@ router.get('/:id/docente/editar', function(req, res){
     });
 })
 
+router.post('/:id/docente/editar', function(req, res){
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response) {
+        const uc = response.data;
+
+        const novaAula = {
+            _id: uc._id,
+            codUC: uc.codUC,
+            titulo: uc.titulo,
+            docentes: req.body.docentes.split('\n'),
+            alunos: req.body.alunos.split('\n'),
+            horario: {
+                teoricas: req.body.horarioTeorico.split('\n').map(horario => horario.trim()).filter(horario => horario !== ''),
+                praticas: req.body.horarioPratico.split('\n').map(horario => horario.trim()).filter(horario => horario !== '')
+            },
+            avaliacao: req.body.avaliacao.split('\n'),
+            datas: {
+                teste: req.body.dataTeste,
+                exame: req.body.dataExame,
+                projeto: req.body.dataProjeto
+            },
+            aulas: uc.aulas
+        };
+        console.log(novaAula);
+
+        axios.put('http://localhost:10000/ucs/' + req.params.id, novaAula)
+        .then(function(response) {
+            var listaNomesProfessores = [];
+            
+            for (let i = 0; i < uc.docentes.length; i++){  
+                axios.get('http://localhost:10000/docentes/' + uc.docentes[i])
+                .then(function(responseProfessores) {
+                    listaNomesProfessores.push(responseProfessores.data.nome);
+                    
+                    if (listaNomesProfessores.length === uc.docentes.length) {
+                        var d = new Date().toISOString().substring(0,16);
+                        res.render('informacoesDocenteUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                    }
+                })
+                .catch(function(errorProfessores) {
+                    console.error('Erro ao obter o nome do professor:', errorProfessores);
+                    res.render('error', {message: 'Erro ao obter o nome do professor'});
+                });
+            }
+
+
+
+        })
+        .catch(function(error) {
+            console.error('Erro ao atualizar UC:', error);
+            res.status(500).json({ error: 'Erro ao atualizar a UC' });
+        });
+
+    })
+    .catch(function(error) {
+        console.error('Erro ao obter UC:', error);
+        res.status(500).json({ error: 'Erro ao obter a UC' });
+    });
+});
+
+
 
 
 module.exports = router;

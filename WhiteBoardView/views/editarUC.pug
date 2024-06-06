@@ -15,8 +15,18 @@ block content
             p #{uc.titulo}
 
         .w3-section
+            label.w3-text-black(style="font-weight: bold;") Docentes:
+            textarea.w3-input.w3-border(name="docentes" id="docentes" placeholder="Insira os docentes separados por \\n")
+                | #{uc.docentes.join('\n')}
+
+        .w3-section
+            label.w3-text-black(style="font-weight: bold;") Alunos:
+            textarea.w3-input.w3-border(name="alunos" id="alunos" placeholder="Insira os alunos separados por \\n")
+                | #{uc.alunos.join('\n')}
+
+        .w3-section
             label.w3-text-black(style="font-weight: bold;") Horário Teórico:
-            textarea.w3-input.w3-border(name="horarioTeorico" id="horarioTeorico" placeholder="Insira os horários das aulas teóricas separados por vírgulas")
+            textarea.w3-input.w3-border(name="horarioTeorico" id="horarioTeorico" placeholder="Insira os horários das aulas teóricas separados por \\n")
                 | #{uc.horario.teoricas.join('\n')}
 
         .w3-section
@@ -26,7 +36,7 @@ block content
 
         .w3-section
             label.w3-text-black(style="font-weight: bold;") Avaliação:
-            textarea.w3-input.w3-border(name="avaliacao" id="avaliacao" placeholder="Insira os métodos de avaliação separados por vírgulas")
+            textarea.w3-input.w3-border(name="avaliacao" id="avaliacao" placeholder="Insira os métodos de avaliação separados por \\n")
                 | #{uc.avaliacao.join('\n')}
 
         .w3-section
@@ -43,6 +53,8 @@ block content
 
         .w3-section
             button.w3-button.w3-teal(type="button" onclick=`window.location.href='.'`) Voltar
+            | &nbsp;&nbsp;&nbsp;&nbsp; 
+            button.w3-button.w3-teal(type="submit") Submeter
 
 
 
