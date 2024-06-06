@@ -40,7 +40,7 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 
 /perfil/:id -> perfil (id pode ser docente ou aluno)  
 /perfil/:id/editar -> editar informações do perfil  
-/inscreverUC/:id -> inscrever em UC (id pode ser docente ou aluno)  
+/perfil/:id/inscreverUC -> inscrever em UC (id pode ser docente ou aluno)  
 
 
 # Views

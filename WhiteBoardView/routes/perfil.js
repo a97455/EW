@@ -2,6 +2,17 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios')
 
+router.get('/:id/inscreverUC', function(req, res) {
+  if (req.params.id[0] == 'd'){
+    res.render('inscreverUC', {})
+  }
+  else if (req.params.id[0] == 'a'){
+  }
+  else {
+    res.render('error', {message: 'Formato de ID inválido'})
+  }
+});
+
 router.get('/:id/editar', function(req, res) {
   if (req.params.id[0] == 'd'){
     axios.get('http://localhost:10000/docentes/'+req.params.id)
