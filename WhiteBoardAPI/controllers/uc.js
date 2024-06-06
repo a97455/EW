@@ -24,30 +24,10 @@ module.exports.ucsDocente = function(id){
     return UC.find({docentes: id}).exec()
 }
 
-module.exports.addDocente = async function(idUC, codUC, idDocente) {
-    const uc = await UC.findOne({ _id: idUC, codUC: codUC });
-
-    if (!uc) {
-        throw new Error("UC não existente ou Código UC incorreto.");
-    }
-
-    if (uc.docentes.includes(idDocente)) {
-        throw new Error("Docente já está registado na UC.");
-    }
-
-    await UC.updateOne({_id: idUC }, {$addToSet: {docentes: idDocente}}).exec();
+module.exports.addDocente = function(idUC, codUC, idDocente) {
+    return UC.updateOne({_id: idUC, codUC: codUC }, {$addToSet: {docentes: idDocente}}).exec();
 }
 
-module.exports.addAluno = async function(idUC, codUC, idAluno) {
-    const uc = await UC.findOne({ _id: idUC, codUC: codUC });
-
-    if (!uc) {
-        throw new Error("UC não existente ou Código UC incorreto.");
-    }
-
-    if (uc.alunos.includes(idAluno)) {
-        throw new Error("Aluno já está registado na UC.");
-    }
-
-    await UC.updateOne({_id: idUC }, {$addToSet: {alunos: idAluno}}).exec();
+module.exports.addAluno = function(idUC, codUC, idAluno) {
+    return UC.updateOne({_id: idUC, codUC: codUC }, {$addToSet: {alunos: idAluno}}).exec();
 }
