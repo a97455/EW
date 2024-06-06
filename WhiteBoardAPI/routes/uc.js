@@ -63,4 +63,24 @@ router.get('/docente/:id', function(req, res) {
   })
 });
 
+router.put('/addDocente/:idUC/:idDocente', function(req, res) {
+  UC.addDocente(req.params.idUC, req.params.idDocente)
+  .then(function(data){
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
+
+router.put('/addAluno/:idUC/:idAluno', function(req, res) {
+  UC.addAluno(req.params.idUC, req.params.idAluno)
+  .then(function(data){
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
+
 module.exports = router;

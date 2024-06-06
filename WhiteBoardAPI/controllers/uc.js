@@ -23,3 +23,11 @@ module.exports.ucsAluno = function(id){
 module.exports.ucsDocente = function(id){
     return UC.find({docentes: id}).exec()
 }
+
+module.exports.addDocente = function(idUC, idDocente) {
+    return UC.updateOne({_id: idUC}, {$addToSet: {docentes: idDocente}}).exec();
+}
+
+module.exports.addAluno = function(idUC, idAluno) {
+    return UC.updateOne({_id: idUC}, {$addToSet: {alunos: idAluno}}).exec();
+}
