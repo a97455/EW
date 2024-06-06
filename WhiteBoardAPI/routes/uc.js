@@ -64,7 +64,7 @@ router.get('/docente/:id', function(req, res) {
 });
 
 router.put('/addDocente/:idUC/:idDocente', function(req, res) {
-  UC.addDocente(req.params.idUC, req.params.idDocente)
+  UC.addDocente(req.params.idUC, req.body.codUC, req.params.idDocente)
   .then(function(data){
     res.jsonp(data)
   })
@@ -74,7 +74,7 @@ router.put('/addDocente/:idUC/:idDocente', function(req, res) {
 });
 
 router.put('/addAluno/:idUC/:idAluno', function(req, res) {
-  UC.addAluno(req.params.idUC, req.params.idAluno)
+  UC.addAluno(req.params.idUC, req.body.codUC ,req.params.idAluno)
   .then(function(data){
     res.jsonp(data)
   })

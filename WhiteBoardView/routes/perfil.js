@@ -49,7 +49,7 @@ router.get('/:id/inscreverUC', function(req, res) {
 
 router.post('/:id/inscreverUC', function(req, res) {
   if (req.params.id[0] == 'd'){
-    axios.put('http://localhost:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id)
+    axios.put('http://localhost:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id, req.body)
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
@@ -64,7 +64,7 @@ router.post('/:id/inscreverUC', function(req, res) {
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.put('http://localhost:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id)
+    axios.put('http://localhost:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id, req.body)
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
