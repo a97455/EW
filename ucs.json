@@ -161,6 +161,20 @@
                     "Resolução de uma ficha de aferição."
                 ]
             }
+        ],
+        "notas": [
+            {
+                "aluno": "a1",
+                "teste":"19",
+                "exame": "17",
+                "projeto": "20"
+            },
+            {
+                "aluno": "a2",
+                "teste":"9",
+                "exame": "11",
+                "projeto": "10"
+            }
         ]
     },
     {
@@ -192,6 +206,20 @@
             "projeto": "2024-06-9"
         },
         "aulas": [
+        ],
+        "notas": [
+            {
+                "aluno": "a1",
+                "teste":"10",
+                "exame": "11",
+                "projeto": "10"
+            },
+            {
+                "aluno": "a2",
+                "teste":"12",
+                "exame": "13",
+                "projeto": "11"
+            }
         ]
     },
     {
@@ -223,6 +251,20 @@
             "projeto": "2024-06-9"
         },
         "aulas": [
+        ],
+        "notas": [
+            {
+                "aluno": "a1",
+                "teste":"14",
+                "exame": "12",
+                "projeto": "16"
+            },
+            {
+                "aluno": "a2",
+                "teste":"11",
+                "exame": "16",
+                "projeto": "20"
+            }
         ]
     }
 ]

@@ -33,10 +33,10 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /registoDocente -> registoDocente  
 /paginaInicial/:id -> paginaInicial (id pode ser docente ou aluno)  
 
-/ucs/:id/docente -> Uc de um certo id, versão docente  
-/ucs/:id/aluno -> Uc de um certo id, versão aluno  
-/ucs/:id/docente/editar -> Editar informações de docentes, horários, etc ...  
-/ucs/:id/docente/adicionarAula -> Adicionar aulas à UC  
+/ucs/:idUC/docente/:idDocente -> Uc de um certo id, versão docente  
+/ucs/:idUC/aluno/:idAluno -> Uc de um certo id, versão aluno  
+/ucs/:idUC/docente/:idDocente/editar -> Editar informações de docentes, horários ...  
+/ucs/:idUC/docente/:idAluno/adicionarAula -> Adicionar aulas à UC  
 
 /perfil/:id -> perfil (id pode ser docente ou aluno)  
 /perfil/:id/editar -> editar informações do perfil  

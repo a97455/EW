@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios');
 
-router.get('/:id/aluno', function(req, res) {
+router.get('/:id/aluno/:idAluno', function(req, res) {
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
@@ -38,7 +38,7 @@ router.get('/:id/aluno', function(req, res) {
     });
 });
 
-router.get('/:id/docente', function(req, res) {
+router.get('/:id/docente/:idDocente', function(req, res) {
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
@@ -74,13 +74,13 @@ router.get('/:id/docente', function(req, res) {
     });
 });
 
-router.get('/:id/docente/adicionarAula', function(req, res) {
+router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
   var d = new Date().toISOString().substring(0,16);
   const id = req.params.id;
   res.render('novaAula', {id: id, data: d});
 })
 
-router.post('/:id/docente/adicionarAula', function(req, res) {
+router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
@@ -121,7 +121,7 @@ router.post('/:id/docente/adicionarAula', function(req, res) {
     });
 });
 
-router.get('/:id/docente/editar', function(req, res){
+router.get('/:id/docente/:idDocente/editar', function(req, res){
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
@@ -134,7 +134,7 @@ router.get('/:id/docente/editar', function(req, res){
     });
 })
 
-router.post('/:id/docente/editar', function(req, res){
+router.post('/:id/docente/:idDocente/editar', function(req, res){
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
@@ -157,7 +157,6 @@ router.post('/:id/docente/editar', function(req, res){
             },
             aulas: uc.aulas
         };
-        console.log(novaAula);
 
         axios.put('http://localhost:10000/ucs/' + req.params.id, novaAula)
         .then(function(response) {
@@ -178,9 +177,6 @@ router.post('/:id/docente/editar', function(req, res){
                     res.render('error', {message: 'Erro ao obter o nome do professor'});
                 });
             }
-
-
-
         })
         .catch(function(error) {
             console.error('Erro ao atualizar UC:', error);
@@ -193,8 +189,5 @@ router.post('/:id/docente/editar', function(req, res){
         res.status(500).json({ error: 'Erro ao obter a UC' });
     });
 });
-
-
-
 
 module.exports = router;

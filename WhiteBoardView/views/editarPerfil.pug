@@ -3,7 +3,7 @@ extends layout
 block content
     if isDocente 
         .w3-card-4
-            header.w3-container.w3-indigo
+            header.w3-container.w3-blue-gray
                 h1 Editar Perfil de #{docente.nome}
 
             form.w3-container.w3-margin-bottom.w3-margin-top(method="POST")
@@ -36,15 +36,16 @@ block content
                         label
                             b Página Web:
                         input.w3-input.w3-border(type="text" name="webpage" value=docente.webpage)
-                    
-                button.w3-btn.w3-black.w3-right.w3-margin-top(type="submit") Confirmar 
 
-            footer.w3-container.w3-indigo
+                .w3-section   
+                    button.w3-btn.w3-blue-gray.w3-right.w3-margin-top(type="submit") Confirmar 
+
+            footer.w3-container.w3-blue-gray
                 h4.w3-center WhiteBoard, Jun 2024 - Powered by 
                     a(href="https://www.w3schools.com/w3css/default.asp") w3.css
     else 
         .w3-card-4
-            header.w3-container.w3-indigo
+            header.w3-container.w3-blue-gray
                 h1 Editar Perfil de #{aluno.nome}
 
             form.w3-container.w3-margin-bottom.w3-margin-top(method="POST")
@@ -70,8 +71,8 @@ block content
                             b Curso:
                         input.w3-input.w3-border(type="text" name="curso" value=aluno.curso)
                     
-                button.w3-btn.w3-black.w3-right.w3-margin-top(type="submit") Confirmar 
+                button.w3-btn.w3-blue-gray.w3-right.w3-margin-top(type="submit") Confirmar 
 
-            footer.w3-container.w3-indigo
+            footer.w3-container.w3-blue-gray
                 h4.w3-center WhiteBoard, Jun 2024 - Powered by 
                     a(href="https://www.w3schools.com/w3css/default.asp") w3.css

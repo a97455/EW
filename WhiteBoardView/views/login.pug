@@ -2,22 +2,24 @@ extends layout
 
 block content
     .w3-card-4
-        header.w3-container.w3-teal
-            h2= title
+        header.w3-container.w3-blue-gray
+            h1= title
+
         form.w3-container(action="/login" method="POST")
+            fieldset.w3-light-gray.w3-margin-top
+                .w3-section
+                    label.w3-text-black(for="username") 
+                        b Identificador do utilizador:
+                    input.w3-input.w3-border(type="text" name="id" id="id" required)
+                .w3-section
+                    label.w3-text-black(for="password") 
+                        b Palavra-passe:
+                    input.w3-input.w3-border(type="password" name="password" id="password" required)
+            
             .w3-section
-                label.w3-text-teal(for="username") Identificador do utilizador:
-                input.w3-input.w3-border(type="text" name="id" id="id" required)
-            .w3-section
-                label.w3-text-teal(for="password") Palavra-passe:
-                input.w3-input.w3-border(type="password" name="password" id="password" required)
-            .w3-section
-                input.w3-button.w3-teal(type="submit" value="Entrar")
+                input.w3-button.w3-blue-gray.w3-right.w3-margin-bottom(type="submit" value="Entrar")
 
-        .w3-section
-            a.w3-button.w3-light-gray.w3-block(href="/registoAluno") Registo de Aluno
-        .w3-section
-            a.w3-button.w3-light-gray.w3-block(href="/registoDocente") Registo de Docente
 
-        footer.w3-container.w3-teal
-            h4 WhiteBoard - #{data}
+        footer.w3-container.w3-blue-gray
+            h4.w3-center WhiteBoard, Jun 2024 - Powered by 
+                a(href="https://www.w3schools.com/w3css/default.asp") w3.css

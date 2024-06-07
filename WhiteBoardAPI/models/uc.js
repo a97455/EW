@@ -17,6 +17,13 @@ var aulaSchema = new mongoose.Schema({
     sumario: [String],
 }, {versionKey: false})
 
+var notaSchema = new mongoose.Schema({
+    aluno: String,
+    teste: String,
+    exame: String,
+    projeto: String
+}, {versionKey: false})
+
 var ucSchema = new mongoose.Schema({
     _id : String, 
     codUC: String,
@@ -26,7 +33,8 @@ var ucSchema = new mongoose.Schema({
     horario: horarioSchema,
     avaliacao: [String],
     datas: dataSchema,
-    aulas: [aulaSchema]
+    aulas: [aulaSchema],
+    notas: [notaSchema]
 }, {versionKey: false})
 
 module.exports = mongoose.model('ucs', ucSchema)
