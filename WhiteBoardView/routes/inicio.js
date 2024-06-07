@@ -12,7 +12,13 @@ router.get('/paginaInicial/:id', function(req, res) {
     if (req.params.id[0] == 'd'){
         axios.get('http://localhost:10000/ucs/docente/'+req.params.id)
             .then(function(resposta){
-                res.render('paginaInicial', {title: "Página inicial", user: req.params.id, lista: resposta.data, aluno: false});
+                axios.get('http://localhost:10000/docentes/'+req.params.id)
+                    .then(function(r){
+                        res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
+                    })
+                    .catch(function(){
+                      res.render('error', {message: 'Docente não encontrado'})
+                    })
             })
             .catch(function(){
                 res.render('error', {message: 'Não foi possível apresentar a página pretendida'})

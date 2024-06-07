@@ -4,6 +4,7 @@ block content
     .w3-card-4
         header.w3-container.w3-blue-gray
             h1= title
+            img.w3-margin-bottom.w3-margin-top(src="http://localhost:10000/filestore/"+user.foto alt="Perfil" class="w3-image" style="width:40px; height:40px;")
 
         .w3-container 
             h2
@@ -12,9 +13,9 @@ block content
                 each uc in lista 
                     li
                         if aluno
-                            a.w3-button.w3-block(href="/ucs/" + uc._id + "/aluno/"+ user) #{uc.titulo} (#{uc._id})
+                            a.w3-button.w3-block(href="/ucs/" + uc._id + "/aluno/"+ user._id) #{uc.titulo} (#{uc._id})
                         else
-                            a.w3-button.w3-block(href="/ucs/" + uc._id + "/docente/"+ user) #{uc.titulo} (#{uc._id})
+                            a.w3-button.w3-block(href="/ucs/" + uc._id + "/docente/"+ user._id) #{uc.titulo} (#{uc._id})
 
         footer.w3-container.w3-blue-gray
             h4.w3-center WhiteBoard, Jun 2024 - Powered by 
