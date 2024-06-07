@@ -20,7 +20,7 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
                         var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesAlunoUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                        res.render('informacoesUC', {uc: uc,  idUser: req.params.idAluno, professores: listaNomesProfessores, data: d, docente: false});
                     }
                 })
                 .catch(function(errorProfessores){
@@ -56,7 +56,7 @@ router.get('/:id/docente/:idDocente', function(req, res) {
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
                         var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesDocenteUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                        res.render('informacoesUC', {uc: uc, idUser: req.params.idDocente, professores: listaNomesProfessores, data: d, docente: true});
                     }
                 })
                 .catch(function(errorProfessores){
@@ -105,7 +105,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
                     
                     if (listaNomesProfessores.length === uc.docentes.length) {
                         var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesDocenteUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                        res.render('informacoesUC', {uc: uc, idUser: req.params.idDocente, professores: listaNomesProfessores, data: d, docente:true});
                     }
                 })
             }
@@ -169,7 +169,7 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
                     
                     if (listaNomesProfessores.length === uc.docentes.length) {
                         var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesDocenteUC', {uc: uc, professores: listaNomesProfessores, data: d});
+                        res.render('informacoesUC', {uc: uc,  idUser: req.params.idDocente, professores: listaNomesProfessores, data: d, docente: true});
                     }
                 })
                 .catch(function(errorProfessores) {
