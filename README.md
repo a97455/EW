@@ -38,6 +38,7 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /ucs/:idUC/docente/:idDocente/editar -> Editar informações de docentes, horários ...  
 /ucs/:idUC/docente/:idAluno/adicionarAula -> Adicionar aulas à UC  
 /ucs/:idUC/docente/:idDocente/modificarNotas -> Modifica as notas. Os alunos aparecem ordenados alfabeticamente 
+ucs/:id/docente/:idDocente/eliminarAula/:idAula -> Para eliminar uma aula
 
 /perfil/:id -> perfil (id pode ser docente ou aluno)  
 /perfil/:id/notas -> ver as notas (id aluno)  

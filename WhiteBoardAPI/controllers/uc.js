@@ -33,6 +33,14 @@ module.exports.delete = function(id) {
     return UC.findByIdAndDelete(id).exec()
 }
 
+module.exports.deleteAula = function(idUC,idAula) {
+    return UC.updateOne(
+        { _id: idUC },
+        { $pull: { aulas: { _id: idAula } } }
+    ).exec()
+     
+}
+
 module.exports.ucsAluno = function(id){
     return UC.find({alunos: id}).exec()
 }
