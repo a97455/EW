@@ -157,12 +157,15 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
         
         // Crie um novo objeto para representar a nova aula
         const novaAula = {
+            _id: (uc.contaAula + 1).toString(),
             tipo: req.body.tipo,
             data: req.body.data,
             sumario: req.body.topicos.split('\n')
         };
 
         uc.aulas.push(novaAula);
+
+        uc.contaAula = uc.contaAula + 1
 
         axios.put('http://localhost:10000/ucs/' + req.params.id, uc)
         .then(function(response) {
@@ -212,6 +215,18 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
         res.status(500).json({ error: 'Erro ao obter a UC' });
+    });
+});
+
+router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
+
+    axios.delete("http://localhost:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
+    .then(function() {
+        res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente)
+    })
+    .catch(function(error) {
+        console.error('Erro ao obter UC:', error);
+        res.status(500).json({ error: 'Erro ao eliminar aula' });
     });
 });
 
