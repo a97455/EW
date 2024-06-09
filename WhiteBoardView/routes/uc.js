@@ -157,7 +157,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
         
         // Crie um novo objeto para representar a nova aula
         const novaAula = {
-            _id: (uc.contaAula + 1).toString(),
+            _id: (uc.contaAulas + 1).toString(),
             tipo: req.body.tipo,
             data: req.body.data,
             sumario: req.body.topicos.split('\n')
@@ -165,7 +165,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
 
         uc.aulas.push(novaAula);
 
-        uc.contaAula = uc.contaAula + 1
+        uc.contaAulas = uc.contaAulas + 1
 
         axios.put('http://localhost:10000/ucs/' + req.params.id, uc)
         .then(function(response) {
