@@ -24,9 +24,11 @@ block content
                     .w3-section
                         label.w3-text-black(style="font-weight: bold;") Nota do exame:  
                         input.w3-input.w3-border(name=`notaExame-${aluno}` id=`notaExame-${aluno}` placeholder="Insira a nota do exame" value=alunoNotas ? alunoNotas.exame : "")
-            
+                        
         a(href="/ucs/"+idUC+'/docente/'+idAluno)
-            button.w3-button.w3-blue-gray.w3-margin-left.w3-margin-bottom.w3-margin-top Voltar
+            button.w3-button.w3-blue-gray.w3-margin-left.w3-margin-bottom.w3-margin-top.w3-margin-right Voltar
+
+        button.w3-button.w3-blue-gray.w3-margin-top.w3-margin-bottom(type="submit") Submeter 
 
         footer.w3-container.w3-blue-gray
             h4.w3-center WhiteBoard, Jun 2024 - Powered by 
