@@ -43,12 +43,23 @@ block content
                         each avaliacao in uc.avaliacao
                             li= avaliacao 
         
-        if (uc.aulas.length > 0)
+        if docente
+            .w3-margin.w3-flex-container
+                h2 
+                    b Notas :
+
+                a(href="/ucs/"+uc._id+"/docente/"+idUser+"/notas").w3-margin-right
+                    button.w3-button.w3-blue-gray Ver notas
+
+                a(href="/ucs/"+uc._id+"/docente/"+idUser+"/modificarNotas")
+                    button.w3-button.w3-blue-gray Modificar notas
+
+            if (uc.aulas.length > 0)
             .w3-margin.w3-flex-container
                 .w3-left 
                     h2 
                         b Aulas:
-        if docente 
+
             .w3-margin.w3-flex-container
                 a(href="/ucs/"+uc._id+"/docente/"+idUser+"/adicionarAula").w3-right
                     button.w3-button.w3-blue-gray Adicionar Aula
