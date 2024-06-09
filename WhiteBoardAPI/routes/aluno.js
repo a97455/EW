@@ -1,12 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var Aluno = require('../controllers/aluno');
+var UC = require('../controllers/uc');
 var multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 var fs = require('fs');
 
 router.get('/:id', function(req, res) {
     Aluno.findById(req.params.id)
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
+});
+
+router.get('/:id/notas', function(req, res) {
+    UC.findGradesByID(req.params.id)
     .then(function(data){
         res.jsonp(data);
     })

@@ -1,7 +1,24 @@
-var UC = require('../models/uc')
+const UC = require('../models/uc')
 
 module.exports.findById = function(id){
     return UC.findOne({_id: id}).exec()
+}
+
+module.exports.findGradesByID = function(idAluno){
+    return UC.aggregate([
+        { $unwind: "$notas" },
+        { $match: { "notas.aluno": idAluno } },
+        {
+            $project: {
+                _id: 0,
+                aluno: "$notas.aluno",
+                teste: "$notas.teste",
+                exame: "$notas.exame",
+                projeto: "$notas.projeto",
+                uc: "$titulo"
+            }
+        }
+    ]).exec()
 }
 
 module.exports.insert = function(uc){
