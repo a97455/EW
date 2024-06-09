@@ -19,8 +19,7 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesUC', {uc: uc,  idUser: req.params.idAluno, professores: listaNomesProfessores, data: d, docente: false});
+                        res.render('informacoesUC', {uc: uc,  idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
                     }
                 })
                 .catch(function(errorProfessores){
@@ -55,8 +54,7 @@ router.get('/:id/docente/:idDocente', function(req, res) {
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        var d = new Date().toISOString().substring(0,16);
-                        res.render('informacoesUC', {uc: uc, idUser: req.params.idDocente, professores: listaNomesProfessores, data: d, docente: true});
+                        res.render('informacoesUC', {uc: uc, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
                     }
                 })
                 .catch(function(errorProfessores){
@@ -74,10 +72,33 @@ router.get('/:id/docente/:idDocente', function(req, res) {
     });
 });
 
+router.get('/:id/docente/:idDocente/notas', function(req, res) {
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response){
+        const uc = response.data;
+        res.render('verNotasDocente', {uc: uc, idAluno: req.params.idDocente, idUC: req.params.id});
+    })
+    .catch(function(errorUC){
+        console.error('Erro ao obter os dados da UC:', errorUC);
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+    });
+});
+
+router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response){
+        const uc = response.data;
+        res.render('modificarNotas', {uc: uc, idAluno: req.params.idDocente, idUC: req.params.id});
+    })
+    .catch(function(errorUC){
+        console.error('Erro ao obter os dados da UC:', errorUC);
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+    });
+});
+
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
-  var d = new Date().toISOString().substring(0,16);
   const id = req.params.id;
-  res.render('novaAula', {id: id, data: d});
+  res.render('novaAula', {id: id});
 })
 
 router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
@@ -113,8 +134,7 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
-        var d = new Date().toISOString().substring(0,16);
-        res.render('editarUC', {uc: uc, data: d});
+        res.render('editarUC', {uc: uc});
     })
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
