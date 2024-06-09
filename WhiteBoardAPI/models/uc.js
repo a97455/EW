@@ -12,6 +12,7 @@ var dataSchema = new mongoose.Schema({
 }, {versionKey: false})
 
 var aulaSchema = new mongoose.Schema({
+    _id: String,
     tipo: String,
     data: String,
     sumario: [String],
@@ -33,6 +34,7 @@ var ucSchema = new mongoose.Schema({
     horario: horarioSchema,
     avaliacao: [String],
     datas: dataSchema,
+    contaAulas: Number,
     aulas: [aulaSchema],
     notas: [notaSchema]
 }, {versionKey: false})

@@ -79,6 +79,9 @@ block content
                         ul
                             each linha in aula.sumario
                                 li= linha 
+                    li.w3-light-gray
+                        a(href="/ucs/"+uc._id+"/docente/"+idUser+"/eliminarAula/"+aula._id)
+                            button.w3-button.w3-blue-gray Eliminar Aula
         .w3-container
             button.w3-button.w3-blue-gray.w3-margin-bottom(type='button', onclick=`window.location.href='/paginaInicial/${idUser}'`) Voltar
 

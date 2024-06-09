@@ -83,4 +83,16 @@ router.put('/addAluno/:idUC/:idAluno', function(req, res) {
   })
 });
 
+router.delete('/:id/aula/:idAula', function(req, res) {
+  console.log(req.params.id+'\n')
+  console.log(req.params.idAula+'\n')
+  UC.deleteAula(req.params.id,req.params.idAula)
+  .then(function(data){
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
+
 module.exports = router;
