@@ -122,12 +122,12 @@ router.get('/:id/notas', function(req, res) {
 });
 
 router.get('/:id/autenticar', function(req, res) {
-    auth.authenticateUser(req.body._id, req.body.password, "Aluno")
+    auth.authenticateUser(req.params.id, req.query.password, "Aluno")
     .then(function(data){
         res.jsonp(data);
     })
     .catch(function(erro){
-        res.jsonp(erro);
+        res.status(500).jsonp({ error: erro.message})  
     });
 });
 

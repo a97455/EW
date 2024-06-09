@@ -117,12 +117,12 @@ router.delete('/:id', function(req, res) {
 });
 
 router.get('/:id/autenticar', function(req, res) {
-  auth.authenticateUser(req.body._id, req.body.password, "Docente")
+  auth.authenticateUser(req.params.id, req.query.password, "Docente")
   .then(function(data){
-      res.jsonp(data);
+    res.jsonp(data);
   })
   .catch(function(erro){
-      res.jsonp(erro);
+    res.status(500).jsonp({ error: erro.message})  
   });
 });
 

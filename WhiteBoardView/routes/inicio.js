@@ -8,12 +8,32 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
     if (req.body._id[0] == 'd'){
-        res.redirect("paginaInicial/"+req.body._id)
+        const params = new URLSearchParams();
+        params.append('_id', req.body._id);
+        params.append('password', req.body.password);
+
+        axios.get('http://localhost:10000/docentes/'+req.body._id+"/autenticar", {params: params})
+        .then(function(){
+            res.redirect("paginaInicial/"+req.body._id)
+        })
+        .catch(function(erro){
+            res.render('error', { message: erro.response.data.error});
+        }) 
     }
     else if (req.body._id[0] == 'a'){
-        res.redirect("paginaInicial/"+req.body._id)
+        const params = new URLSearchParams();
+        params.append('_id', req.body._id);
+        params.append('password', req.body.password);
+
+        axios.get('http://localhost:10000/alunos/'+req.body._id+"/autenticar", {params: params})
+        .then(function(){
+            res.redirect("paginaInicial/"+req.body._id)
+        })
+        .catch(function(erro){
+            res.render('error', { message: erro.response.data.error});
+        }) 
     }
-    else res.render('error', {message: 'Não foi possível realizar o login'});
+    else res.render('error', {message: 'Formato de ID inválido'});
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
@@ -35,13 +55,18 @@ router.get('/paginaInicial/:id', function(req, res) {
     else if (req.params.id[0] == 'a'){
         axios.get('http://localhost:10000/ucs/aluno/'+req.params.id)
         .then(function(resposta){
-            res.render('paginaInicial', {title: "Página inicial", user: req.params.id, lista: resposta.data, aluno: true});
-        })
+            axios.get('http://localhost:10000/alunos/'+req.params.id)
+            .then(function(r){
+                res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: true});
+            })
+            .catch(function(){
+                res.render('error', {message: 'Docente não encontrado'})
+            })        })
         .catch(function(){
             res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
         })
     }
-    else res.render('error', {message: 'Utilizador não encontrado'});
+    else res.render('error', {message: 'Formato de ID inválido'});
 })
 
 module.exports = router;
