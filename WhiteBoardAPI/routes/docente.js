@@ -1,12 +1,37 @@
 var express = require('express');
 var router = express.Router();
 var Docente = require('../controllers/docente')
+var auth = require("../auth/auth")
 var fs = require('fs')
-
 var multer = require('multer');
-const { listenerCount } = require('../models/docente');
 const upload = multer({ dest: 'uploads/' })
 
+
+router.post('/', upload.single('foto'), function(req, res) {
+  var docente={
+    _id : req.body._id,
+    nome: req.body.nome,
+    foto: req.body._id + '.' + req.file.mimetype.split('/')[1],
+    categoria: req.body.categoria,
+    filiacao: req.body.filiacao,
+    email: req.body.email,
+    webpage: req.body.webpage,
+    password: req.body.password
+  }
+
+  Docente.insert(docente)
+  .then(function(data){
+    let oldPath = __dirname + '/../' + req.file.path
+    let newPath = __dirname + '/../FileStore/' + req.body._id + '.' + req.file.mimetype.split('/')[1]
+    fs.rename(oldPath, newPath, function(error){
+        if (error) throw error
+    })
+    res.jsonp(data)
+  })
+  .catch(function(erro){
+    res.jsonp(erro)
+  })
+});
 
 router.get('/:id', function(req, res) {
     Docente.findById(req.params.id)
@@ -18,33 +43,7 @@ router.get('/:id', function(req, res) {
     })
 });
 
-router.post('/', upload.single('foto'), function(req, res) {
-    var docente={
-      _id : req.body._id,
-      nome: req.body.nome,
-      foto: req.body._id + '.' + req.file.mimetype.split('/')[1],
-      categoria: req.body.categoria,
-      filiacao: req.body.filiacao,
-      email: req.body.email,
-      webpage: req.body.webpage
-    }
-
-    Docente.insert(docente)
-    .then(function(data){
-      let oldPath = __dirname + '/../' + req.file.path
-      let newPath = __dirname + '/../FileStore/' + req.body._id + '.' + req.file.mimetype.split('/')[1]
-      fs.rename(oldPath, newPath, function(error){
-          if (error) throw error
-      })
-      res.jsonp(data)
-    })
-    .catch(function(erro){
-      res.jsonp(erro)
-    })
-});
-
 router.put('/:id', upload.single('foto'), async function(req, res) {
-
   try {
       // Fetch the existing Docente by ID
       let oldDocente = await Docente.findById(req.params.id);
@@ -66,11 +65,13 @@ router.put('/:id', upload.single('foto'), async function(req, res) {
           categoria: req.body.categoria || oldDocente.categoria,
           filiacao: req.body.filiacao || oldDocente.filiacao,
           email: req.body.email || oldDocente.email,
-          webpage: req.body.webpage || oldDocente.webpage
+          webpage: req.body.webpage || oldDocente.webpage,
+          password: req.body.password || oldDocente.password
       };
 
       // Example: Save updated docente to the database
-      await Docente.update(req.params.id, docente).then(function(data){
+      Docente.update(req.params.id, docente)
+      .then(function(){
         if (req.file) {
           // Delete the old photo
           let oldPath = __dirname + '/../FileStore/' + oldDocente.foto;
@@ -81,20 +82,19 @@ router.put('/:id', upload.single('foto'), async function(req, res) {
           // Set new photo
           let newFilePath = __dirname + '/../FileStore/' + docente.foto;
           fs.rename(__dirname + '/../' + req.file.path, newFilePath, function(error) {
-              if (error) throw error;
+            if (error) throw error;
           });
         }
         res.jsonp(docente);
       })
       .catch(function(erro){
-          res.jsonp(erro)
+        res.jsonp(erro)
       })
-
-  } catch (err) {
+  } 
+  catch (err) {
       console.error(err);
       res.status(500).json({ error: "Não foi  possível atualizar as informações do docente" });
-  }
-    
+  }  
 });
 
 router.delete('/:id', function(req, res) {
@@ -115,6 +115,15 @@ router.delete('/:id', function(req, res) {
         res.jsonp(erro)
     })
 });
-  
+
+router.get('/:id/autenticar', function(req, res) {
+  auth.authenticateUser(req.body._id, req.body.password, "Docente")
+  .then(function(data){
+      res.jsonp(data);
+  })
+  .catch(function(erro){
+      res.jsonp(erro);
+  });
+});
 
 module.exports = router;

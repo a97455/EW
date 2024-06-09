@@ -2,29 +2,11 @@ var express = require('express');
 var router = express.Router();
 var Aluno = require('../controllers/aluno');
 var UC = require('../controllers/uc');
+var auth = require("../auth/auth")
+var fs = require('fs');
 var multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-var fs = require('fs');
 
-router.get('/:id', function(req, res) {
-    Aluno.findById(req.params.id)
-    .then(function(data){
-        res.jsonp(data);
-    })
-    .catch(function(erro){
-        res.jsonp(erro);
-    });
-});
-
-router.get('/:id/notas', function(req, res) {
-    UC.findGradesByID(req.params.id)
-    .then(function(data){
-        res.jsonp(data);
-    })
-    .catch(function(erro){
-        res.jsonp(erro);
-    });
-});
 
 router.post('/', upload.single('foto'), function(req, res){
     var aluno = {
@@ -32,7 +14,8 @@ router.post('/', upload.single('foto'), function(req, res){
         nome: req.body.nome,
         foto: req.body._id + '.' + req.file.mimetype.split('/')[1],
         email: req.body.email,
-        curso: req.body.curso
+        curso: req.body.curso,
+        password: req.body.password
     };
     Aluno.insert(aluno)
     .then(data => {
@@ -44,6 +27,55 @@ router.post('/', upload.single('foto'), function(req, res){
         });
     })
     .catch(erro => res.jsonp(erro));
+});
+
+router.get('/:id', function(req, res) {
+    Aluno.findById(req.params.id)
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
+});
+
+router.put('/:id', upload.single('foto'), async function(req, res) {
+    const alunoId = req.params.id;
+
+    try {
+        let aluno = await Aluno.findById(alunoId);
+
+        if (!aluno) {
+            return res.status(404).jsonp({ error: 'Aluno not found' });
+        }
+
+        if (req.body.nome) aluno.nome = req.body.nome;
+        if (req.body.email) aluno.email = req.body.email;
+        if (req.body.curso) aluno.curso = req.body.curso;
+        if (req.body.password) aluno.password = req.body.passowrd;
+        
+        if (req.file) {
+            // Delete the old photo
+            const oldFilePath = __dirname + '/../FileStore/' + aluno.foto;
+            fs.unlink(oldFilePath, function(error) {
+                if (error) console.error('Old file deletion error:', error);
+            });
+
+            // Set new photo
+            aluno.foto = aluno._id + '.' + req.file.mimetype.split('/')[1];
+            let newFilePath = __dirname + '/../FileStore/' + aluno.foto;
+            fs.rename(__dirname + '/../' + req.file.path, newFilePath, function(error) {
+                if (error) throw error;
+            });
+        }
+
+        Aluno.update({ _id: alunoId }, aluno)
+        .then(data => res.jsonp(data))
+        .catch(res.status(500).jsonp({error: 'Database update error' }));
+
+    } catch (err) {
+        res.status(500).jsonp({ error: 'Database find error' });
+    }
 });
 
 router.delete('/:id', async function(req, res) {
@@ -79,42 +111,24 @@ router.delete('/:id', async function(req, res) {
     }
 });
 
-router.put('/:id', upload.single('foto'), async function(req, res) {
-    const alunoId = req.params.id;
+router.get('/:id/notas', function(req, res) {
+    UC.findGradesByID(req.params.id)
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
+});
 
-    try {
-        let aluno = await Aluno.findById(alunoId);
-
-        if (!aluno) {
-            return res.status(404).jsonp({ error: 'Aluno not found' });
-        }
-
-        if (req.body.nome) aluno.nome = req.body.nome;
-        if (req.body.email) aluno.email = req.body.email;
-        if (req.body.curso) aluno.curso = req.body.curso;
-        
-        if (req.file) {
-            // Delete the old photo
-            const oldFilePath = __dirname + '/../FileStore/' + aluno.foto;
-            fs.unlink(oldFilePath, function(error) {
-                if (error) console.error('Old file deletion error:', error);
-            });
-
-            // Set new photo
-            aluno.foto = aluno._id + '.' + req.file.mimetype.split('/')[1];
-            let newFilePath = __dirname + '/../FileStore/' + aluno.foto;
-            fs.rename(__dirname + '/../' + req.file.path, newFilePath, function(error) {
-                if (error) throw error;
-            });
-        }
-
-        Aluno.update({ _id: alunoId }, aluno)
-        .then(data => res.jsonp(data))
-        .catch(erro => res.status(500).jsonp({ error: 'Database update error' }));
-
-    } catch (err) {
-        res.status(500).jsonp({ error: 'Database find error' });
-    }
+router.get('/:id/autenticar', function(req, res) {
+    auth.authenticateUser(req.body._id, req.body.password, "Aluno")
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
 });
 
 module.exports = router;

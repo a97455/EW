@@ -3,7 +3,7 @@ db name -> WhiteBoard
 
 collections names -> docentes, alunos, ucs
 
-# Rotas CRUD
+# Rotas CRUD (Faltam bastantes rotas que foram adicionadas posteriormente)
 /docentes {post}
 /docentes/:id {get, put, delete} -> Marta
 
