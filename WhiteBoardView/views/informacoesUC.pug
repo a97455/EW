@@ -54,32 +54,31 @@ block content
                 a(href="/ucs/"+uc._id+"/docente/"+idUser+"/modificarNotas")
                     button.w3-button.w3-blue-gray Modificar notas
 
-            if (uc.aulas.length > 0)
-            .w3-margin.w3-flex-container
-                .w3-left 
-                    h2 
-                        b Aulas:
+        if (uc.aulas.length > 0)
+        .w3-margin.w3-flex-container
+            .w3-left 
+                h2 
+                    b Aulas:
 
+        if docente
             .w3-margin.w3-flex-container
                 a(href="/ucs/"+uc._id+"/docente/"+idUser+"/adicionarAula").w3-right
                     button.w3-button.w3-blue-gray Adicionar Aula
 
-            .w3-container.w3-margin-bottom.w3-margin-top
-                each aula in uc.aulas.sort((a, b) => new Date(b.data) - new Date(a.data))
-                    ul.w3-ul.w3-border.w3-margin-bottom
-                        li.w3-light-gray
-                            b Tipo:
-                            |  #{aula.tipo}
-                        li.w3-light-gray
-                            b Data:
-                            |  #{aula.data}
-                        li.w3-light-gray
-                            b Sumário:
-                            ul
-                                each linha in aula.sumario
-                                    li= linha 
-
-      
+        .w3-container.w3-margin-bottom.w3-margin-top
+            each aula in uc.aulas.sort((a, b) => new Date(b.data) - new Date(a.data))
+                ul.w3-ul.w3-border.w3-margin-bottom
+                    li.w3-light-gray
+                        b Tipo:
+                        |  #{aula.tipo}
+                    li.w3-light-gray
+                        b Data:
+                        |  #{aula.data}
+                    li.w3-light-gray
+                        b Sumário:
+                        ul
+                            each linha in aula.sumario
+                                li= linha 
         .w3-container
             button.w3-button.w3-blue-gray.w3-margin-bottom(type='button', onclick=`window.location.href='/paginaInicial/${idUser}'`) Voltar
 
