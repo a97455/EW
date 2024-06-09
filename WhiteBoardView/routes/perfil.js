@@ -38,6 +38,18 @@ router.get('/:id', function(req, res) {
   }
 });
 
+router.get('/:id/verNotas', function(req, res){
+  axios.get('http://localhost:10000/alunos/'+req.params.id+"/notas")
+    .then(function(resposta){
+      const notas = resposta.data
+      res.render('alunoVerNotas', {notasAlunos: notas})
+    })
+    .catch(function(){
+      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    })
+  
+});
+
 router.get('/:id/inscreverUC', function(req, res) {
   if (req.params.id[0] == 'd' || req.params.id[0] == 'a'){
     res.render('inscreverUC', {})
