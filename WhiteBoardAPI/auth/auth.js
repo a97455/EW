@@ -1,7 +1,6 @@
 var Docente = require('../models/docente');
 var Aluno = require('../models/aluno');
 var Token = require('../models/token');
-var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var secretKey = 'EW2024';
 
@@ -52,7 +51,7 @@ module.exports.authenticateUser = async function(userId, password, userType) {
         throw new Error("Tipo de usuário inválido!");
     }
 
-    if (user && bcrypt.compare(password, user.password)) {
+    if (user && (password == user.password)) {
         return this.generateAndStoreToken(userId, userType);
     } else {
         throw new Error("ID ou PassWord inválidos!");
