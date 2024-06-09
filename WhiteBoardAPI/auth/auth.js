@@ -26,12 +26,10 @@ module.exports.generateAndStoreToken = async function(userId, userType) {
 module.exports.verificaAcesso = function(req, res, next) {
     var myToken = req.query.token || req.body.token;
     if (myToken) {
-        console.log(myToken);
-        jwt.verify(myToken, secretKey, function(e, payload) {
+        jwt.verify(myToken, secretKey, function(e) {
             if (e) {
                 res.status(401).jsonp({error: e});
             } else {
-                console.log(payload);
                 next();
             }
         });

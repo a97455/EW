@@ -101,7 +101,6 @@ router.delete('/:id', function(req, res) {
     Docente.delete(req.params.id)
     .then(function(data){
       const filePath = __dirname + '/../FileStore/' + data.foto;
-      console.log(filePath)
       fs.unlink(filePath, function(error) {
         if (error) {
           // Handle the error if the file does not exist

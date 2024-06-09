@@ -90,7 +90,6 @@ router.delete('/:id', async function(req, res) {
 
         // Delete the file associated with the aluno
         const filePath = __dirname + '/../FileStore/' + aluno.foto;
-        console.log(filePath);
         fs.unlink(filePath, async function(error) {
             if (error) {
                 // Handle the error if the file does not exist
