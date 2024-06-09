@@ -3,8 +3,66 @@ extends layout
 block content
     .w3-card-4
         header.w3-container.w3-blue-gray
-            h1 Notas
+            h1 Notas 
 
+        h2.w3-margin-left Informações sobre as notas dos alunos
+        // Tabela de médias e % de reprovação por tipo de avaliação
+        fieldset.w3-light-gray.w3-margin
+            table.w3-table
+                thead
+                    tr
+                        th Avaliação
+                        th Média
+                        th % de Reprovados
+                        th % de Alunos sem Avaliação
+                tbody
+                    // Projeto
+                    - var totalNotasProjeto = 0;
+                    - var numAlunosProjeto = uc.notas.length;
+                    - var numReprovadosProjeto = 0;
+                    - for(var i = 0; i < numAlunosProjeto; i++) {
+                    -     totalNotasProjeto += parseFloat(uc.notas[i].projeto);
+                    -     if(parseFloat(uc.notas[i].projeto) < 10) {
+                    -         numReprovadosProjeto++;
+                    -     }
+                    - }
+                    tr
+                        td Projeto
+                        td #{(totalNotasProjeto / numAlunosProjeto).toFixed(2)}
+                        td #{((numReprovadosProjeto / numAlunosProjeto) * 100).toFixed(2)}%
+                        td #{(((uc.alunos.length - numAlunosProjeto) / uc.alunos.length) * 100).toFixed(2)}%
+
+                    // Teste
+                    - var totalNotasTeste = 0;
+                    - var numAlunosTeste = uc.notas.length;
+                    - var numReprovadosTeste = 0;
+                    - for(var i = 0; i < numAlunosTeste; i++) {
+                    -     totalNotasTeste += parseFloat(uc.notas[i].teste);
+                    -     if(parseFloat(uc.notas[i].teste) < 10) {
+                    -         numReprovadosTeste++;
+                    -     }
+                    - }
+                    tr
+                        td Teste
+                        td #{(totalNotasTeste / numAlunosTeste).toFixed(2)}
+                        td #{((numReprovadosTeste / numAlunosTeste) * 100).toFixed(2)}%
+                        td #{(((uc.alunos.length - numAlunosTeste) / uc.alunos.length) * 100).toFixed(2)}%
+
+                    // Exame
+                    - var totalNotasExame = 0;
+                    - var numAlunosExame = uc.notas.length;
+                    - var numReprovadosExame = 0;
+                    - for(var i = 0; i < numAlunosExame; i++) {
+                    -     totalNotasExame += parseFloat(uc.notas[i].exame);
+                    -     if(parseFloat(uc.notas[i].exame) < 10) {
+                    -         numReprovadosExame++;
+                    -     }
+                    - }
+                    tr
+                        td Exame
+                        td #{(totalNotasExame / numAlunosExame).toFixed(2)}
+                        td #{((numReprovadosExame / numAlunosExame) * 100).toFixed(2)}%
+                        td #{(((uc.alunos.length - numAlunosExame) / uc.alunos.length) * 100).toFixed(2)}%
 
         h2.w3-margin-left Notas dos alunos
         // Tabela de notas
@@ -25,61 +83,7 @@ block content
                             td #{avaliacao.teste} 
                             td #{avaliacao.exame}
 
-        h2.w3-margin-left Informações sobre as notas dos alunos
-        // Tabela de médias e % de reprovação por tipo de avaliação
-        fieldset.w3-light-gray.w3-margin
-            table.w3-table
-                thead
-                    tr
-                        th Avaliação
-                        th Média
-                        th % de Reprovados
-                tbody
-                    // Projeto
-                    - var totalNotasProjeto = 0;
-                    - var numAlunosProjeto = uc.notas.length;
-                    - var numReprovadosProjeto = 0;
-                    - for(var i = 0; i < numAlunosProjeto; i++) {
-                    -     totalNotasProjeto += parseFloat(uc.notas[i].projeto);
-                    -     if(parseFloat(uc.notas[i].projeto) < 10) {
-                    -         numReprovadosProjeto++;
-                    -     }
-                    - }
-                    tr
-                        td Projeto
-                        td #{(totalNotasProjeto / numAlunosProjeto).toFixed(2)}
-                        td #{((numReprovadosProjeto / numAlunosProjeto) * 100).toFixed(2)}%
-
-                    // Teste
-                    - var totalNotasTeste = 0;
-                    - var numAlunosTeste = uc.notas.length;
-                    - var numReprovadosTeste = 0;
-                    - for(var i = 0; i < numAlunosTeste; i++) {
-                    -     totalNotasTeste += parseFloat(uc.notas[i].teste);
-                    -     if(parseFloat(uc.notas[i].teste) < 10) {
-                    -         numReprovadosTeste++;
-                    -     }
-                    - }
-                    tr
-                        td Teste
-                        td #{(totalNotasTeste / numAlunosTeste).toFixed(2)}
-                        td #{((numReprovadosTeste / numAlunosTeste) * 100).toFixed(2)}%
-
-
-                    // Exame
-                    - var totalNotasExame = 0;
-                    - var numAlunosExame = uc.notas.length;
-                    - var numReprovadosExame = 0;
-                    - for(var i = 0; i < numAlunosExame; i++) {
-                    -     totalNotasExame += parseFloat(uc.notas[i].exame);
-                    -     if(parseFloat(uc.notas[i].exame) < 10) {
-                    -         numReprovadosExame++;
-                    -     }
-                    - }
-                    tr
-                        td Exame
-                        td #{(totalNotasExame / numAlunosExame).toFixed(2)}
-                        td #{((numReprovadosExame / numAlunosExame) * 100).toFixed(2)}%
+        
         
         a(href="/ucs/"+idUC+'/docente/'+idAluno)
             button.w3-button.w3-blue-gray.w3-margin-left.w3-margin-bottom Voltar
