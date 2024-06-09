@@ -84,6 +84,18 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
     });
 });
 
+router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response){
+        const uc = response.data;
+        res.render('modificarNotas', {uc: uc, idAluno: req.params.idDocente, idUC: req.params.id});
+    })
+    .catch(function(errorUC){
+        console.error('Erro ao obter os dados da UC:', errorUC);
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+    });
+});
+
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
   const id = req.params.id;
   res.render('novaAula', {id: id});
