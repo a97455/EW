@@ -39,6 +39,7 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /ucs/:idUC/docente/:idAluno/adicionarAula -> Adicionar aulas à UC  
 
 /perfil/:id -> perfil (id pode ser docente ou aluno)  
+/perfil/:id/notas -> ver as notas (id aluno)  
 /perfil/:id/editar -> editar informações do perfil  
 /perfil/:id/inscreverUC -> inscrever em UC (id pode ser docente ou aluno)  
 
