@@ -52,7 +52,7 @@ router.get('/:id/notas', function(req, res){
 
 router.get('/:id/inscreverUC', function(req, res) {
   if (req.params.id[0] == 'd' || req.params.id[0] == 'a'){
-    res.render('inscreverUC', {})
+    res.render('inscreverUC', {userID: req.params.id})
   }
   else {
     res.render('error', {message: 'Formato de ID inválido'})
