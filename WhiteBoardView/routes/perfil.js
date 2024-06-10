@@ -184,8 +184,7 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
         if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
       });
     })
-    .catch(function(erro){
-      console.log(erro)
+    .catch(function(){
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
     })
   }
