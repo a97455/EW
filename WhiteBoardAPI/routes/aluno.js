@@ -40,42 +40,55 @@ router.get('/:id', function(req, res) {
 });
 
 router.put('/:id', upload.single('foto'), async function(req, res) {
-    const alunoId = req.params.id;
-
     try {
-        let aluno = await Aluno.findById(alunoId);
-
-        if (!aluno) {
-            return res.status(404).jsonp({ error: 'Aluno not found' });
+        // Fetch the existing Aluno by ID
+        let oldAluno = await Aluno.findById(req.params.id);
+  
+        // If no oldAluno found, return an error
+        if (!oldAluno) {
+            return res.status(404).json({ error: "Aluno não encontrado" });
         }
-
-        if (req.body.nome) aluno.nome = req.body.nome;
-        if (req.body.email) aluno.email = req.body.email;
-        if (req.body.curso) aluno.curso = req.body.curso;
-        if (req.body.password) aluno.password = req.body.passowrd;
-        
-        if (req.file) {
+  
+        // Determine the new file name if a new file is uploaded
+        if (req.file) var newFileName = req.params.id + '.' + req.file.mimetype.split('/')[1]
+        else newFileName = oldAluno.foto;
+  
+        // Construct the new aluno object
+        const aluno = {
+            _id: req.body._id || oldAluno._id,
+            nome: req.body.nome || oldAluno.nome,
+            foto: newFileName,
+            email: req.body.email || oldAluno.email,
+            curso: req.body.curso || oldAluno.curso,
+            password: req.body.password || oldAluno.password
+        };
+  
+        // Example: Save updated aluno to the database
+        Aluno.update(req.params.id, aluno)
+        .then(function(){
+          if (req.file) {
             // Delete the old photo
-            const oldFilePath = __dirname + '/../FileStore/' + aluno.foto;
-            fs.unlink(oldFilePath, function(error) {
-                if (error) console.error('Old file deletion error:', error);
+            let oldPath = __dirname + '/../FileStore/' + oldAluno.foto;
+            fs.unlink(oldPath, function(error) {
+                if (error) console.error('Erro ao eliminar o ficheiro antigo:', error);
             });
-
+      
             // Set new photo
-            aluno.foto = aluno._id + '.' + req.file.mimetype.split('/')[1];
             let newFilePath = __dirname + '/../FileStore/' + aluno.foto;
             fs.rename(__dirname + '/../' + req.file.path, newFilePath, function(error) {
-                if (error) throw error;
+              if (error) throw error;
             });
-        }
-
-        Aluno.update({ _id: alunoId }, aluno)
-        .then(data => res.jsonp(data))
-        .catch(res.status(500).jsonp({error: 'Database update error' }));
-
-    } catch (err) {
-        res.status(500).jsonp({ error: 'Database find error' });
-    }
+          }
+          res.jsonp(aluno);
+        })
+        .catch(function(erro){
+          res.jsonp(erro)
+        })
+    } 
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Não foi  possível atualizar as informações do aluno" });
+    }  
 });
 
 router.delete('/:id', async function(req, res) {

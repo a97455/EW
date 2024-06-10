@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios')
 
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
+const FormData = require('form-data');
+const fs = require('fs');
+
+
 router.get('/:id', function(req, res) {
   if (req.params.id[0] == 'd'){
     axios.get('http://localhost:10000/docentes/'+req.params.id)
@@ -129,9 +135,23 @@ router.get('/:id/editar', function(req, res) {
   }
 });
 
-router.post('/:id/editar', function(req, res) {
+router.post('/:id/editar', upload.single('foto'), function(req, res) {
+  // Cria um form para enviar para o WhiteBoardAPI (body e file)
+  const form = new FormData();
+    
+  for (const key in req.body) {
+    form.append(key, req.body[key]);
+  }
+  
+  if (req.file) {
+    form.append('foto', fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+  }
+
   if (req.params.id[0] == 'd'){
-    axios.put('http://localhost:10000/docentes/'+req.body._id, req.body)
+    axios.put('http://localhost:10000/docentes/'+req.body._id, form, {headers: {...form.getHeaders()}})
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
@@ -140,13 +160,17 @@ router.post('/:id/editar', function(req, res) {
       else{
         res.render('error', {message: 'Docente não registado na WhiteBoard'})
       }
+
+      fs.unlink(req.file.path, function(error) {
+        if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
+      });
     })
     .catch(function(){
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.put('http://localhost:10000/alunos/'+req.body._id, req.body)
+    axios.put('http://localhost:10000/alunos/'+req.body._id, form, {headers: {...form.getHeaders()}})
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
@@ -155,8 +179,13 @@ router.post('/:id/editar', function(req, res) {
       else{
         res.render('error', {message: 'Aluno não registado na WhiteBoard'})
       }
+
+      fs.unlink(req.file.path, function(error) {
+        if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
+      });
     })
-    .catch(function(){
+    .catch(function(erro){
+      console.log(erro)
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
     })
   }

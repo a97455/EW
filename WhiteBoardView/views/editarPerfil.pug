@@ -7,7 +7,7 @@ block content
                 h1 Editar Perfil de #{docente.nome}
             
             .w3-container
-                form.w3-margin-bottom.w3-margin-top(method="POST")
+                form.w3-margin-bottom.w3-margin-top(method="POST" enctype="multipart/form-data")
                     fieldset.w3-light-gray
                         .w3-section
                             label
@@ -53,7 +53,7 @@ block content
                 h1 Editar Perfil de #{aluno.nome}
 
             .w3-container
-                form.w3-margin-bottom.w3-margin-top(method="POST")
+                form.w3-margin-bottom.w3-margin-top(method="POST" enctype="multipart/form-data")
                     fieldset.w3-light-gray
                         .w3-section
                             label
