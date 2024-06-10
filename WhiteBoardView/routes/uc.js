@@ -27,7 +27,14 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        res.render('informacoesUC', {uc: uc,  idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
+                        axios.get('http://localhost:10000/alunos/' + req.params.idAluno)
+                        .then(function(response){
+                            const user = response.data
+                            res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
+                        })
+                        .catch(function(){
+                            res.render('error', {message: 'Docente não existente'});
+                        })
                     }
                 })
                 .catch(function(errorProfessores){
@@ -61,7 +68,6 @@ router.get('/:id/docente/:idDocente', function(req, res) {
             
             // Loop através dos docentes da UC
             for (var i = 0; i < uc.docentes.length; i++) {
-                
                 // Faz a solicitação para obter o nome do professor
                 axios.get('http://localhost:10000/docentes/' + uc.docentes[i])
                 .then(function(responseProfessores){
@@ -69,7 +75,14 @@ router.get('/:id/docente/:idDocente', function(req, res) {
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        res.render('informacoesUC', {uc: uc, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
+                        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+                        .then(function(response){
+                            const user = response.data
+                            res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
+                        })
+                        .catch(function(){
+                            res.render('error', {message: 'Docente não existente'});
+                        })
                     }
                 })
                 .catch(function(errorProfessores){
@@ -198,10 +211,21 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
 });
 
 router.get('/:id/docente/:idDocente/editar', function(req, res){
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
-        res.render('editarUC', {uc: uc});
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.render('editarUC', {docente: resposta.data, idDocente: req.params.idDocente, uc: uc});
+        })
+
     })
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
@@ -225,7 +249,13 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
 
     axios.put('http://localhost:10000/ucs/' + req.params.id, novaAula)
     .then(function() {
-        res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente)
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+        })
+        .catch(function(){
+            res.render('error', {message: 'Docente não existente'});
+        })
     })
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
