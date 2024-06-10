@@ -43,8 +43,7 @@ block content
                     input.w3-input.w3-border(name="dataProjeto" id="dataProjeto" type="text" placeholder="Insira a data do projeto" value=uc.datas.projeto)
 
             .w3-section
-                a(href="/ucs/"+uc._id+"/docente/"+idDocente+"?token="+user.token).w3-left.w3-margin-bottom
-                    button.w3-button.w3-blue-gray Voltar  
+                button.w3-button.w3-blue-gray.w3-margin-right(type="button" onclick=`window.location.href='.'`) Voltar
                 button.w3-button.w3-blue-gray.w3-right(type="submit") Submeter
 
         footer.w3-container.w3-blue-gray
