@@ -36,6 +36,9 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 
 /ucs/:idUC/docente/:idDocente?token=tokenDocente -> Uc de um certo id, versão docente. As aulas aparecem ordenadas ao contrário temporalmente 
 /ucs/:idUC/aluno/:idAluno?token=tokenAluno -> Uc de um certo id, versão aluno.As aulas aparecem ordenadas ao contrário temporalmente 
+
+
+## Faltam meter as rotas com tokens
 /ucs/:idUC/docente/:idDocente/editar?token=tokenDocente -> Editar informações de docentes, horários ...  
 /ucs/:idUC/docente/:idDocente/adicionarAula?token=tokenDocente -> Adicionar aulas à UC  
 /ucs/:idUC/docente/:idDocente/notas?token=tokenDocente -> Vê notas dos alunos numa determinada UC
@@ -43,10 +46,10 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /ucs/:idUC/docente/:idDocente/adicionarAula?token=tokenDocente -> Adiciona aula a uma determinada UC.
 ucs/:id/docente/:idDocente/eliminarAula/:idAula?token=tokenDocente -> Para eliminar uma aula
 
-/perfil/:id -> perfil (id pode ser docente ou aluno)  
-/perfil/:id/notas -> ver as notas (id aluno)  
-/perfil/:id/editar -> editar informações do perfil  
-/perfil/:id/inscreverUC -> inscrever em UC (id pode ser docente ou aluno)  
+/perfil/:id?token=tokenUser -> perfil (id pode ser docente ou aluno)  
+/perfil/:id/notas?token=tokenUser -> ver as notas (id aluno)  
+/perfil/:id/editar?token=tokenUser -> editar informações do perfil  
+/perfil/:id/inscreverUC?token=tokenUser -> inscrever em UC (id pode ser docente ou aluno)  
 
 
 # Views

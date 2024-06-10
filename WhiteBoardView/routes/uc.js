@@ -1,8 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
+var auth = require('../auth/auth')
 
 router.get('/:id/aluno/:idAluno', function(req, res) {
+    auth.verifyToken(req.params.idAluno, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
@@ -38,6 +46,13 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
 });
 
 router.get('/:id/docente/:idDocente', function(req, res) {
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
