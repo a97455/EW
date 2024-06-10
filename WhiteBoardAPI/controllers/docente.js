@@ -15,3 +15,7 @@ module.exports.update = function(id,docente){
 module.exports.delete = function(id) {
     return Docente.findByIdAndDelete(id).exec()
 }
+
+module.exports.insertToken = function(id, token) {
+    return Docente.updateOne({_id: id}, {$set: {token: token}})
+}

@@ -1,5 +1,7 @@
 var Docente = require('../models/docente');
 var Aluno = require('../models/aluno');
+var DocenteController = require('../controllers/docente');
+var AlunoController = require('../controllers/aluno');
 var Token = require('../models/token');
 var jwt = require('jsonwebtoken');
 var secretKey = 'EW2024';
@@ -19,7 +21,18 @@ module.exports.generateAndStoreToken = async function(userId, userType) {
         userType: userType
     });
 
-    return tokenDocument.save();
+    if (userType=='Aluno'){
+        AlunoController.insertToken(userId,token)
+        .then(function(){
+            return tokenDocument.save()
+        })
+    }
+    else if (userType=='Docente'){
+        DocenteController.insertToken(userId,token)
+        .then(function(){
+            return tokenDocument.save()
+        })
+    }
 }
 
 // Função para verificar o acesso com base no token

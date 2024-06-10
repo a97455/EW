@@ -21,4 +21,15 @@ var tokenSchema = new mongoose.Schema({
     }
 });
 
+// Apaga o token (caso exista) de um aluno ou docente antes de adicionar o novo
+tokenSchema.pre('save', function (next) {
+    this.constructor.deleteMany({ userId: this.userId })
+    .then(function(){
+        next();
+    })
+    .catch(function(erro){
+        next(erro);
+    })
+});
+
 module.exports = mongoose.model('tokens', tokenSchema)

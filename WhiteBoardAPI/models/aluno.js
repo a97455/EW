@@ -6,7 +6,8 @@ var aluno = new mongoose.Schema({
     foto: String,
     email: String,
     curso: String,
-    password: String 
+    password: String,
+    token: String 
 }, {versionKey: false})
 
 module.exports = mongoose.model('alunos', aluno)

@@ -7,7 +7,8 @@
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "jcr@di.uminho.pt",
         "webpage": "http://www.di.uminho.pt/~jcr",
-        "password": "9999"
+        "password": "9999",
+        "token": ""
     },
     {
         "_id": "d13753",
@@ -16,6 +17,7 @@
         "categoria": "Professor Convidado",
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "d13753@di.uminho.pt",
-        "password": "6666"
+        "password": "6666",
+        "token": ""
     }
 ]

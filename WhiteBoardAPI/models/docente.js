@@ -8,7 +8,8 @@ var docente = new mongoose.Schema({
     filiacao: String,
     email: String,
     webpage: String,
-    password: String 
+    password: String,
+    token: String 
 }, {versionKey: false})
 
 module.exports = mongoose.model('docentes', docente)

@@ -15,3 +15,7 @@ module.exports.update = function(id,aluno){
 module.exports.delete = function(id) {
     return Aluno.findByIdAndDelete(id).exec()
 }
+
+module.exports.insertToken = function(id, token) {
+    return Aluno.updateOne({_id: id}, {$set: {token: token}})
+}
