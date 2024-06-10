@@ -7,8 +7,12 @@ block content
         h1 Perfil de #{docente.nome}
 
       .w3-container.w3-margin-bottom.w3-margin-top
-        img(src="http://localhost:10000/filestore/"+docente.foto alt="FotoPerfil" class="w3-image" style="width:200px; height:200px; margin-bottom: 20px;")
+        div(style="display: flex; justify-content: space-between;")
+          img(src="http://localhost:10000/filestore/"+docente.foto alt="FotoPerfil" class="w3-image" style="width:200px; height:200px; margin-bottom: 20px;")
         
+          a(href="/")
+            button.w3-button.w3-blue-gray Sair 
+
         ul.w3-ul.w3-border.w3-margin-bottom
           li.w3-light-gray
             b Identificador: 

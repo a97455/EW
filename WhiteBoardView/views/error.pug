@@ -1,4 +1,16 @@
 extends layout
 
 block content
-  h1= message
+  .w3-card-4
+    header.w3-container.w3-blue-gray
+      h1 Erro
+  
+    div.w3-light-gray(style="display: flex; justify-content: space-between; align-items: center;")
+      h2.w3-margin-left
+        b #{message}
+
+      button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'`) Voltar
+
+    footer.w3-container.w3-blue-gray
+      h4.w3-center WhiteBoard, Jun 2024 - Powered by 
+          a(href="https://www.w3schools.com/w3css/default.asp") w3.css

@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
             res.redirect("paginaInicial/"+req.body._id)
         })
         .catch(function(erro){
-            res.render('error', { message: erro.response.data.error});
+            res.render('error', {message: erro.response.data.error});
         }) 
     }
     else if (req.body._id[0] == 'a'){
@@ -30,7 +30,7 @@ router.post('/', function(req, res) {
             res.redirect("paginaInicial/"+req.body._id)
         })
         .catch(function(erro){
-            res.render('error', { message: erro.response.data.error});
+            res.render('error', {message: erro.response.data.error});
         }) 
     }
     else res.render('error', {message: 'Formato de ID inválido'});

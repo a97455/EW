@@ -71,7 +71,7 @@ router.post('/:id/inscreverUC', function(req, res) {
       }
     })
     .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      res.render('error', {message: 'ID de UC não existente'})
     })
   }
   else if (req.params.id[0] == 'a'){
@@ -85,7 +85,7 @@ router.post('/:id/inscreverUC', function(req, res) {
       }
     })
     .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      res.render('error', {message: 'ID de UC não existente'})
     })
   }
   else {

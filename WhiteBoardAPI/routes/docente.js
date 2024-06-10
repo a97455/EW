@@ -121,7 +121,7 @@ router.get('/:id/autenticar', function(req, res) {
     res.jsonp(data);
   })
   .catch(function(erro){
-    res.status(500).jsonp({ error: erro.message})  
+    res.status(500).jsonp({error: erro.message})  
   });
 });
 

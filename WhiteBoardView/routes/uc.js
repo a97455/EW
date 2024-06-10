@@ -219,7 +219,6 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
 });
 
 router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
-
     axios.delete("http://localhost:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
     .then(function() {
         res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente)
