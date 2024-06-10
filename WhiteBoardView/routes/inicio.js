@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios')
+var auth = require('../auth/auth')
 
 router.get('/', function(req, res) {
     res.render('login', {title: "Autenticação"});
@@ -49,15 +50,19 @@ router.post('/', function(req, res) {
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
-    if (!req.query.token){
-        res.render('error', {message: 'Realize a Autenticação'})
-    }
+    auth.verifyToken(req.params.id, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
 
     if (req.params.id[0] == 'd'){
         axios.get('http://localhost:10000/ucs/docente/'+req.params.id)
         .then(function(resposta){
             axios.get('http://localhost:10000/docentes/'+req.params.id)
             .then(function(r){
+
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
             })
             .catch(function(){

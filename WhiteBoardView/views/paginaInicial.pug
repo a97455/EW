@@ -16,11 +16,11 @@ block content
                 each uc in lista 
                     li(style="border-bottom: none;")
                         if aluno
-                            a.w3-button.w3-block.w3-light-gray(style="height: 100px;" href="/ucs/" + uc._id + "/aluno/"+ user._id)
+                            a.w3-button.w3-block.w3-light-gray(style="height: 100px;" href="/ucs/" + uc._id + "/aluno/"+ user._id+"?token="+user.token)
                                 p #{uc.titulo}
                                 p (#{uc._id})
                         else
-                            a.w3-button.w3-block.w3-light-gray(style="height: 100px;" href="/ucs/" + uc._id + "/docente/"+ user._id)
+                            a.w3-button.w3-block.w3-light-gray(style="height: 100px;" href="/ucs/" + uc._id + "/docente/"+ user._id+"?token="+user.token)
                                 p #{uc.titulo}
                                 p (#{uc._id})
 
