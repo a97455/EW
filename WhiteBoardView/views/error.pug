@@ -9,7 +9,11 @@ block content
       h2.w3-margin-left
         b #{message}
 
-      button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'`) Voltar
+      if (message == "Realize a Autenticação")
+        a(href="/")
+          button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
+      else 
+        button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'`) Voltar
 
     footer.w3-container.w3-blue-gray
       h4.w3-center WhiteBoard, Jun 2024 - Powered by 

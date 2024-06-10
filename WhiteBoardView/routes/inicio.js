@@ -14,7 +14,13 @@ router.post('/', function(req, res) {
 
         axios.get('http://localhost:10000/docentes/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            res.redirect("paginaInicial/"+req.body._id)
+            axios.get('http://localhost:10000/docentes/'+req.body._id)
+            .then(function(resposta){
+                res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
+            })
+            .catch(function(){
+                res.render('error', {message: "Docente não existente"});
+            })
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -27,7 +33,13 @@ router.post('/', function(req, res) {
 
         axios.get('http://localhost:10000/alunos/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            res.redirect("paginaInicial/"+req.body._id)
+            axios.get('http://localhost:10000/alunos/'+req.body._id)
+            .then(function(resposta){
+                res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
+            })
+            .catch(function(){
+                res.render('error', {message: "Aluno não existente"});
+            })
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -37,6 +49,10 @@ router.post('/', function(req, res) {
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
+    if (!req.query.token){
+        res.render('error', {message: 'Realize a Autenticação'})
+    }
+
     if (req.params.id[0] == 'd'){
         axios.get('http://localhost:10000/ucs/docente/'+req.params.id)
         .then(function(resposta){
