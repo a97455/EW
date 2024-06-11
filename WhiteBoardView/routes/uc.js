@@ -100,11 +100,74 @@ router.get('/:id/docente/:idDocente', function(req, res) {
     });
 });
 
+router.get('/:id/docente/:idDocente/editar', function(req, res){
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
+    axios.get('http://localhost:10000/ucs/' + req.params.id)
+    .then(function(response) {
+        const uc = response.data;
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.render('editarUC', {docente: resposta.data, idDocente: req.params.idDocente, uc: uc});
+        })
+
+    })
+    .catch(function(error) {
+        console.error('Erro ao obter UC:', error);
+        res.status(500).json({ error: 'Erro ao obter a UC' });
+    });
+})
+
+router.post('/:id/docente/:idDocente/editar', function(req, res){
+    const novaAula = {
+        horario: {
+            teoricas: req.body.horarioTeorico.split('\n').map(horario => horario.trim()).filter(horario => horario !== ''),
+            praticas: req.body.horarioPratico.split('\n').map(horario => horario.trim()).filter(horario => horario !== '')
+        },
+        avaliacao: req.body.avaliacao.split('\n'),
+        datas: {
+            teste: req.body.dataTeste,
+            exame: req.body.dataExame,
+            projeto: req.body.dataProjeto
+        },
+    };
+
+    axios.put('http://localhost:10000/ucs/' + req.params.id, novaAula)
+    .then(function() {
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+        })
+        .catch(function(){
+            res.render('error', {message: 'Docente não existente'});
+        })
+    })
+    .catch(function(error) {
+        console.error('Erro ao obter UC:', error);
+        res.status(500).json({ error: 'Erro ao obter a UC' });
+    });
+});
+
 router.get('/:id/docente/:idDocente/notas', function(req, res) {
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        res.render('verNotasDocente', {uc: uc, idAluno: req.params.idDocente, idUC: req.params.id});
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.render('verNotasDocente', {uc: uc, docente: resposta.data, idAluno: req.params.idDocente, idUC: req.params.id});
+        })
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
@@ -172,7 +235,6 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
         });
 });
 
-
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
   const id = req.params.id;
   res.render('novaAula', {id: id});
@@ -203,59 +265,6 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             console.error('Erro ao atualizar UC:', error);
             res.status(500).json({ error: 'Erro ao atualizar a UC' });
         });
-    })
-    .catch(function(error) {
-        console.error('Erro ao obter UC:', error);
-        res.status(500).json({ error: 'Erro ao obter a UC' });
-    });
-});
-
-router.get('/:id/docente/:idDocente/editar', function(req, res){
-    auth.verifyToken(req.params.idDocente, req.query.token)
-    .then(function(response){
-        if (!response){
-            res.render('error', {message: 'Realize a Autenticação'})
-        }
-    })
-
-    axios.get('http://localhost:10000/ucs/' + req.params.id)
-    .then(function(response) {
-        const uc = response.data;
-        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
-        .then(function(resposta){
-            res.render('editarUC', {docente: resposta.data, idDocente: req.params.idDocente, uc: uc});
-        })
-
-    })
-    .catch(function(error) {
-        console.error('Erro ao obter UC:', error);
-        res.status(500).json({ error: 'Erro ao obter a UC' });
-    });
-})
-
-router.post('/:id/docente/:idDocente/editar', function(req, res){
-    const novaAula = {
-        horario: {
-            teoricas: req.body.horarioTeorico.split('\n').map(horario => horario.trim()).filter(horario => horario !== ''),
-            praticas: req.body.horarioPratico.split('\n').map(horario => horario.trim()).filter(horario => horario !== '')
-        },
-        avaliacao: req.body.avaliacao.split('\n'),
-        datas: {
-            teste: req.body.dataTeste,
-            exame: req.body.dataExame,
-            projeto: req.body.dataProjeto
-        },
-    };
-
-    axios.put('http://localhost:10000/ucs/' + req.params.id, novaAula)
-    .then(function() {
-        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
-        .then(function(resposta){
-            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
-        })
-        .catch(function(){
-            res.render('error', {message: 'Docente não existente'});
-        })
     })
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
