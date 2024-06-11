@@ -64,41 +64,63 @@ router.get('/:id/notas', function(req, res){
 });
 
 router.get('/:id/inscreverUC', function(req, res) {
-  if (req.params.id[0] == 'd' || req.params.id[0] == 'a'){
-    res.render('inscreverUC', {userID: req.params.id})
-  }
-  else {
-    res.render('error', {message: 'Formato de ID inválido'})
-  }
+  auth.verifyToken(req.params.id, req.query.token)
+  .then(function(response){
+      if (!response){
+          res.render('error', {message: 'Realize a Autenticação'})
+      }
+
+      if (req.params.id[0] == 'd'){
+        axios.get('http://localhost:10000/docentes/' + req.params.id)
+        .then(function(response){
+          res.render('inscreverUC', {user: response.data, userID: req.params.id})
+        })
+      }
+      else if (req.params.id[0] == 'a'){
+        axios.get('http://localhost:10000/alunos/' + req.params.id)
+        .then(function(response){
+          res.render('inscreverUC', {user: response.data, userID: req.params.id})
+        })
+      }
+      else {
+        res.render('error', {message: 'Formato de ID inválido'})
+      }
+  })
 });
 
 router.post('/:id/inscreverUC', function(req, res) {
   if (req.params.id[0] == 'd'){
-    axios.put('http://localhost:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id, req.body)
-    .then(function(resposta){
-      if (resposta.data.modifiedCount == 1){
-        res.redirect("/perfil/"+req.params.id)
-      } 
-      else{
-        res.render('error', {message: 'Inscrição na UC inválida'})
-      }
-    })
-    .catch(function(){
-      res.render('error', {message: 'ID de UC não existente'})
+    axios.get('http://localhost:10000/docentes/' + req.params.id)
+    .then(function(response){
+      axios.put('http://localhost:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id, req.body)
+      .then(function(resposta){
+        if (resposta.data.modifiedCount == 1){
+          res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
+        } 
+        else{
+          res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
+        }
+        })
+      .catch(function(){
+        res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+      })
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.put('http://localhost:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id, req.body)
-    .then(function(resposta){
-      if (resposta.data.modifiedCount == 1){
-        res.redirect("/perfil/"+req.params.id)
-      } 
-      else{
-        res.render('error', {message: 'Inscrição na UC inválida'})
-      }
-    })
-    .catch(function(){
-      res.render('error', {message: 'ID de UC não existente'})
+    axios.get('http://localhost:10000/alunos/' + req.params.id)
+    .then(function(response){
+      axios.put('http://localhost:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id, req.body)
+      .then(function(resposta){
+        if (resposta.data.modifiedCount == 1){
+          res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
+        } 
+        else{
+          res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
+        }
+        })
+      .catch(function(){
+        res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+      })
     })
   }
   else {
