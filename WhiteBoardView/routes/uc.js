@@ -176,10 +176,20 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
 });
 
 router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.get('http://localhost:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        res.render('modificarNotas', {uc: uc, idAluno: req.params.idDocente, idUC: req.params.id});
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.render('modificarNotas', {uc: uc, docente: resposta.data, idDocente: req.params.idDocente, idUC: req.params.id});
+        })
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
@@ -227,7 +237,10 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
 
     axios.put('http://localhost:10000/ucs/' + req.params.id, notasNovas)
         .then(function() {
-            res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente);
+            axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+            .then(function(resposta){
+                res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+resposta.data.token);
+            })
         })
         .catch(function(error) {
             console.error('Erro ao atualizar UC:', error);
