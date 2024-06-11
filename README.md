@@ -41,10 +41,10 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /ucs/:idUC/docente/:idDocente/modificarNotas?token=tokenDocente -> Modifica as notas. Os alunos aparecem ordenados alfabeticamente  
 /ucs/:idUC/docente/:idDocente/adicionarAula?token=tokenDocente -> Adiciona aula a uma determinada UC.  
 /ucs/:idUC/docente/:idDocente/eliminarAula/:idAula?token=tokenDocente -> Para eliminar uma aula  
+/perfil/:idUser?token=tokenUser -> perfil (idUser pode ser docente ou aluno)  
 
 ## Faltam meter as rotas com tokens
 
-/perfil/:idUser?token=tokenUser -> perfil (idUser pode ser docente ou aluno)  
 /perfil/:idUser/editar?token=tokenUser -> editar informações do perfil (idUser pode ser docente ou aluno)  
 /perfil/:idUser/inscreverUC?token=tokenUser -> inscrever em UC (idUser pode ser docente ou aluno)    
 /perfil/:idAluno/notas?token=tokenUser -> ver as notas (id aluno)  

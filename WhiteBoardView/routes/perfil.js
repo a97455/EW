@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios')
-
+var auth = require('../auth/auth')
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
 const FormData = require('form-data');
@@ -9,6 +9,13 @@ const fs = require('fs');
 
 
 router.get('/:id', function(req, res) {
+  auth.verifyToken(req.params.id, req.query.token)
+  .then(function(response){
+      if (!response){
+          res.render('error', {message: 'Realize a Autenticação'})
+      }
+  })
+
   if (req.params.id[0] == 'd'){
     axios.get('http://localhost:10000/docentes/'+req.params.id)
     .then(function(resposta){

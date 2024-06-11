@@ -6,7 +6,7 @@ block content
             .title-container(style="display: flex; align-items: center; justify-content: space-between;")
                 h1= title
                 .image-container.w3-right
-                    a(href="/perfil/"+user._id)
+                    a(href="/perfil/"+user._id+"?token="+user.token)
                         img(src="http://localhost:10000/filestore/"+user.foto alt="Perfil" class="w3-image" style="width:50px; height:50px;")
 
         .w3-container 
