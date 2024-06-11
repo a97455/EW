@@ -5,7 +5,7 @@ var logger = require('morgan');
 
 //MongoDB conection
 var mongoose = require('mongoose')
-var mongoDB = 'mongodb://127.0.0.1/WhiteBoard'
+var mongoDB = 'mongodb://WhiteBoardMongo:27017/WhiteBoard'
 mongoose.connect(mongoDB)
 var db = mongoose.connection
 db.on('error',console.error.bind(console,'Erro de conexão ao MongoDB'))

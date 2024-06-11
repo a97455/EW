@@ -17,7 +17,7 @@ router.get('/:id', function(req, res) {
   })
 
   if (req.params.id[0] == 'd'){
-    axios.get('http://localhost:10000/docentes/'+req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.params.id)
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
@@ -32,7 +32,7 @@ router.get('/:id', function(req, res) {
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.get('http://localhost:10000/alunos/'+req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.params.id)
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
@@ -59,10 +59,10 @@ router.get('/:id/notas', function(req, res){
       }
   })
 
-  axios.get('http://localhost:10000/alunos/'+req.params.id+"/notas")
+  axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.params.id+"/notas")
     .then(function(resposta){
       const notas = resposta.data
-      axios.get('http://localhost:10000/alunos/' + req.params.id)
+      axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/' + req.params.id)
       .then(function(response){
         res.render('alunoVerNotas', {aluno: response.data, notasAlunos: notas, alunoID: req.params.id})
       })
@@ -81,13 +81,13 @@ router.get('/:id/inscreverUC', function(req, res) {
       }
 
       if (req.params.id[0] == 'd'){
-        axios.get('http://localhost:10000/docentes/' + req.params.id)
+        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.id)
         .then(function(response){
           res.render('inscreverUC', {user: response.data, userID: req.params.id})
         })
       }
       else if (req.params.id[0] == 'a'){
-        axios.get('http://localhost:10000/alunos/' + req.params.id)
+        axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/' + req.params.id)
         .then(function(response){
           res.render('inscreverUC', {user: response.data, userID: req.params.id})
         })
@@ -100,9 +100,9 @@ router.get('/:id/inscreverUC', function(req, res) {
 
 router.post('/:id/inscreverUC', function(req, res) {
   if (req.params.id[0] == 'd'){
-    axios.get('http://localhost:10000/docentes/' + req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.id)
     .then(function(response){
-      axios.put('http://localhost:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id, req.body)
+      axios.put('whiteboardapi://WhiteBoardAPI:10000/ucs/addDocente/'+req.body._id+"/"+req.params.id, req.body)
       .then(function(resposta){
         if (resposta.data.modifiedCount == 1){
           res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
@@ -117,9 +117,9 @@ router.post('/:id/inscreverUC', function(req, res) {
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.get('http://localhost:10000/alunos/' + req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/' + req.params.id)
     .then(function(response){
-      axios.put('http://localhost:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id, req.body)
+      axios.put('whiteboardapi://WhiteBoardAPI:10000/ucs/addAluno/'+req.body._id+"/"+req.params.id, req.body)
       .then(function(resposta){
         if (resposta.data.modifiedCount == 1){
           res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
@@ -147,7 +147,7 @@ router.get('/:id/editar', function(req, res) {
   })
 
   if (req.params.id[0] == 'd'){
-    axios.get('http://localhost:10000/docentes/'+req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.params.id)
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
@@ -162,7 +162,7 @@ router.get('/:id/editar', function(req, res) {
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.get('http://localhost:10000/alunos/'+req.params.id)
+    axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.params.id)
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
@@ -197,11 +197,11 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
   }
 
   if (req.params.id[0] == 'd'){
-    axios.put('http://localhost:10000/docentes/'+req.body._id, form, {headers: {...form.getHeaders()}})
+    axios.put('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.body._id, form, {headers: {...form.getHeaders()}})
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
-        axios.get('http://localhost:10000/docentes/' + req.params.id)
+        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.id)
         .then(function(response){
           res.redirect("/perfil/"+req.body._id+"?token="+response.data.token)
           
@@ -221,11 +221,11 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
     })
   }
   else if (req.params.id[0] == 'a'){
-    axios.put('http://localhost:10000/alunos/'+req.body._id, form, {headers: {...form.getHeaders()}})
+    axios.put('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.body._id, form, {headers: {...form.getHeaders()}})
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
-        axios.get('http://localhost:10000/alunos/' + req.params.id)
+        axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/' + req.params.id)
         .then(function(response){
           res.redirect("/perfil/"+req.body._id+"?token="+response.data.token)
 
