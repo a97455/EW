@@ -249,8 +249,19 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
 });
 
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
-  const id = req.params.id;
-  res.render('novaAula', {id: id});
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+        else{
+            axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+            .then(function(resposta){
+                const idUC = req.params.id;
+                res.render('novaAula', {docente: resposta.data, idUC: idUC, idDocente: req.params.idDocente});
+            })
+        }
+    })
 })
 
 router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
@@ -271,8 +282,11 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
         uc.contaAulas = uc.contaAulas + 1
 
         axios.put('http://localhost:10000/ucs/' + req.params.id, uc)
-        .then(function(response) {
-            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente)
+        .then(function() {
+            axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+            .then(function(resposta){
+                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+            })
         })
         .catch(function(error) {
             console.error('Erro ao atualizar UC:', error);

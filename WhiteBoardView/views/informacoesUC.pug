@@ -62,7 +62,7 @@ block content
 
         if docente
             .w3-margin.w3-flex-container
-                a(href="/ucs/"+uc._id+"/docente/"+idUser+"/adicionarAula").w3-right
+                a(href="/ucs/"+uc._id+"/docente/"+idUser+"/adicionarAula?token="+user.token).w3-right
                     button.w3-button.w3-blue-gray Adicionar Aula
 
         .w3-container.w3-margin-bottom.w3-margin-top
