@@ -81,7 +81,7 @@ block content
                                 li= linha 
                     if docente
                         li.w3-light-gray
-                            form(action=`/ucs/${uc._id}/docente/${idUser}/eliminarAula/${aula._id}`, method='post')
+                            form(action=`/ucs/${uc._id}/docente/${idUser}/eliminarAula/${aula._id}?token=${user.token}`, method='post')
                                 button.w3-button.w3-blue-gray(type='submit') Eliminar Aula
 
         .w3-container

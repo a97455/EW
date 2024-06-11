@@ -300,9 +300,19 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
 });
 
 router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
     axios.delete("http://localhost:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
     .then(function() {
-        res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente)
+        axios.get('http://localhost:10000/docentes/' + req.params.idDocente)
+        .then(function(resposta){
+            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+        })
     })
     .catch(function(error) {
         console.error('Erro ao obter UC:', error);
