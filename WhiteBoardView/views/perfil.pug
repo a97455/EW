@@ -34,7 +34,7 @@ block content
               b Webpage: 
               a(href=docente.webpage) #{docente.webpage}
               
-        a(href="/perfil/"+docente._id+"/editar").w3-right
+        a(href="/perfil/"+docente._id+"/editar?token="+docente.token).w3-right
           button.w3-button.w3-blue-gray Editar Perfil
 
         a(href="/perfil/"+docente._id+"/inscreverUC").w3-right.w3-margin-right
@@ -73,7 +73,7 @@ block content
             b Curso: 
             | #{aluno.curso}
 
-        a(href="/perfil/"+aluno._id+"/editar").w3-right
+        a(href="/perfil/"+aluno._id+"/editar?token="+aluno.token).w3-right
           button.w3-button.w3-blue-gray Editar Perfil
 
         a(href="/perfil/"+aluno._id+"/inscreverUC").w3-right.w3-margin-right

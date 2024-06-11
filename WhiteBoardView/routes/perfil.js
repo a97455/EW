@@ -107,6 +107,13 @@ router.post('/:id/inscreverUC', function(req, res) {
 });
 
 router.get('/:id/editar', function(req, res) {
+  auth.verifyToken(req.params.id, req.query.token)
+  .then(function(response){
+      if (!response){
+          res.render('error', {message: 'Realize a Autenticação'})
+      }
+  })
+
   if (req.params.id[0] == 'd'){
     axios.get('http://localhost:10000/docentes/'+req.params.id)
     .then(function(resposta){
@@ -162,15 +169,20 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
     .then(function(resposta){
       const docente = resposta.data
       if (docente != null){
-        res.redirect("/perfil/"+req.body._id)
+        axios.get('http://localhost:10000/docentes/' + req.params.id)
+        .then(function(response){
+          res.redirect("/perfil/"+req.body._id+"?token="+response.data.token)
+          
+          if (req.file){
+            fs.unlink(req.file.path, function(error) {
+              if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
+            });
+          }
+        })
       } 
       else{
         res.render('error', {message: 'Docente não registado na WhiteBoard'})
       }
-
-      fs.unlink(req.file.path, function(error) {
-        if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
-      });
     })
     .catch(function(){
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
@@ -181,15 +193,20 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
     .then(function(resposta){
       const aluno = resposta.data
       if (aluno != null){
-        res.redirect("/perfil/"+req.body._id)
+        axios.get('http://localhost:10000/alunos/' + req.params.id)
+        .then(function(response){
+          res.redirect("/perfil/"+req.body._id+"?token="+response.data.token)
+
+          if (req.file){
+            fs.unlink(req.file.path, function(error) {
+              if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
+            });
+          }
+        })
       } 
       else{
         res.render('error', {message: 'Aluno não registado na WhiteBoard'})
       }
-
-      fs.unlink(req.file.path, function(error) {
-        if (error) console.error('Erro ao eliminar o ficheiro temporario', error);
-      });
     })
     .catch(function(){
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
