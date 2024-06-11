@@ -44,9 +44,6 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 /perfil/:idUser?token=tokenUser -> perfil (idUser pode ser docente ou aluno)  
 /perfil/:idUser/editar?token=tokenUser -> editar informações do perfil (idUser pode ser docente ou aluno)  
 /perfil/:idUser/inscreverUC?token=tokenUser -> inscrever em UC (idUser pode ser docente ou aluno)    
-
-## Faltam meter as rotas com tokens
-
 /perfil/:idAluno/notas?token=tokenUser -> ver as notas (id aluno)  
 
 # Views

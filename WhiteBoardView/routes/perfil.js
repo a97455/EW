@@ -52,10 +52,20 @@ router.get('/:id', function(req, res) {
 });
 
 router.get('/:id/notas', function(req, res){
+  auth.verifyToken(req.params.id, req.query.token)
+  .then(function(response){
+      if (!response){
+          res.render('error', {message: 'Realize a Autenticação'})
+      }
+  })
+
   axios.get('http://localhost:10000/alunos/'+req.params.id+"/notas")
     .then(function(resposta){
       const notas = resposta.data
-      res.render('alunoVerNotas', {notasAlunos: notas, alunoID: req.params.id})
+      axios.get('http://localhost:10000/alunos/' + req.params.id)
+      .then(function(response){
+        res.render('alunoVerNotas', {aluno: response.data, notasAlunos: notas, alunoID: req.params.id})
+      })
     })
     .catch(function(){
       res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
