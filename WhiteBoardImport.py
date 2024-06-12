@@ -3,10 +3,12 @@ import json
 import sys
 import requests
 import mimetypes
+import time
 
 def load_json(file_path):
     with open(file_path, 'r') as f:
         return json.load(f)
+
 
 def validate_json_structure(data, required_keys, optional_keys):
     option = ""
@@ -23,69 +25,105 @@ def validate_json_structure(data, required_keys, optional_keys):
 
     return option
 
+
 def post_docente(url, docente, image_path):
-    mimetype = mimetypes.guess_type(image_path)[0]
-
-    with open(image_path, 'rb') as img:
-        files = {
-            'foto': (image_path, img, mimetype)
-        }
-        data = {key: value for key, value in docente.items() if key != 'foto'}
-        response = requests.post(url, files=files, data=data)
-
-    return response.status_code == 200
-
-def put_docente(url, aluno, image_path):
-    data = {key: value for key, value in aluno.items() if key != 'foto'}
-    
-    if image_path:
+    try:
         mimetype = mimetypes.guess_type(image_path)[0]
+
         with open(image_path, 'rb') as img:
             files = {
                 'foto': (image_path, img, mimetype)
             }
-            response = requests.put(url, files=files, data=data)
-    else:
-        response = requests.put(url, data=data)
+            data = {key: value for key, value in docente.items() if key != 'foto'}
+            response = requests.post(url, files=files, data=data)
 
-    return response.status_code == 200
+        return response.status_code == 200
+    
+    except Exception:
+        time.sleep(1)
+        post_docente(url,docente,image_path)
+
+
+def put_docente(url, docente, image_path):
+    try:
+        data = {key: value for key, value in docente.items() if key != 'foto'}
+        
+        if image_path:
+            mimetype = mimetypes.guess_type(image_path)[0]
+            with open(image_path, 'rb') as img:
+                files = {
+                    'foto': (image_path, img, mimetype)
+                }
+                response = requests.put(url, files=files, data=data)
+        else:
+            response = requests.put(url, data=data)
+
+        return response.status_code == 200
+    
+    except Exception:
+        time.sleep(1)
+        put_docente(url,docente,image_path)
+
 
 def post_aluno(url, aluno, image_path):
-    mimetype = mimetypes.guess_type(image_path)[0]
+    try:
+        mimetype = mimetypes.guess_type(image_path)[0]
 
-    with open(image_path, 'rb') as img:
-        files = {
-            'foto': (image_path, img, mimetype)
-        }
-        data = {key: value for key, value in aluno.items() if key != 'foto'}
-        response = requests.post(url, files=files, data=data)
-
-    return response.status_code == 200
-
-def put_aluno(url, aluno, image_path):
-    data = {key: value for key, value in aluno.items() if key != 'foto'}
-    
-    if image_path:
         with open(image_path, 'rb') as img:
-            mimetype = mimetypes.guess_type(image_path)[0]
             files = {
                 'foto': (image_path, img, mimetype)
-                }
-            response = requests.put(url, files=files, data=data)
-    else:
-        response = requests.put(url, data=data)
+            }
+            data = {key: value for key, value in aluno.items() if key != 'foto'}
+            response = requests.post(url, files=files, data=data)
 
-    return response.status_code == 200
+        return response.status_code == 200
+    
+    except Exception:
+        time.sleep(1)
+        post_docente(url,aluno,image_path)
+
+
+def put_aluno(url, aluno, image_path):
+    try:
+        data = {key: value for key, value in aluno.items() if key != 'foto'}
+        
+        if image_path:
+            with open(image_path, 'rb') as img:
+                mimetype = mimetypes.guess_type(image_path)[0]
+                files = {
+                    'foto': (image_path, img, mimetype)
+                    }
+                response = requests.put(url, files=files, data=data)
+        else:
+            response = requests.put(url, data=data)
+
+        return response.status_code == 200
+
+    except Exception:
+        time.sleep(1)
+        post_docente(url,aluno,image_path)
+
 
 def post_uc(url, uc):
-    response = requests.post(url, json=uc)
+    try:
+        response = requests.post(url, json=uc)
 
-    return response.status_code == 200
+        return response.status_code == 200
+    
+    except Exception:
+        time.sleep(1)
+        post_docente(url,uc)
 
 def put_uc(url, uc):
-    response = requests.put(url, json=uc)
+    try:
+        response = requests.put(url, json=uc)
 
-    return response.status_code == 200
+        return response.status_code == 200
+   
+    except Exception:
+        time.sleep(1)
+        post_docente(url,uc)
+
 
 def validate_structure(urlBase, folder_path):
     # Load JSON files
@@ -186,6 +224,7 @@ def validate_structure(urlBase, folder_path):
                   print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
             else:
                 print(f"UC {uc['_id']} não se encontra num formato válido!!")
+   
     
 if __name__ == "__main__":
     if len(sys.argv) != 3:
