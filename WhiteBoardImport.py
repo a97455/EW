@@ -189,7 +189,7 @@ def validate_structure(folder_path):
     
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Uso: python3 verifyData.py <pastaData>")
+        print("Uso: python3 WhiteBoardImport.py <pastaData>")
         sys.exit(1)
     
     validate_structure(sys.argv[1])
