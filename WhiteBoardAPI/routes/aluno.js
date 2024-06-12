@@ -27,7 +27,7 @@ router.post('/', upload.single('foto'), function(req, res){
             res.jsonp(data); 
         });
     })
-    .catch(erro => res.jsonp(erro));
+    .catch(erro => res.status(422).jsonp(erro));
 });
 
 router.get('/:id', function(req, res) {
