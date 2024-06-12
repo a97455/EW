@@ -53,5 +53,9 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 3 -> Henrique  
 
 # WhiteBoardImport
+O docker-compose faz um setup inicial de informação.
+No entanto, se desejarmos adicionar mais informação, ou alterar informação previamente importada, podemos fazer essa mesma importação:
 
-python3 WhiteBoardImport.py data (data é a pasta com os .json e as imagens)
+~~~
+python3 WhiteBoardImport.py data import (data é a pasta com os .json e as imagens)
+~~~
