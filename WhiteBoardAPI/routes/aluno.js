@@ -133,6 +133,16 @@ router.get('/:id/notas', function(req, res) {
     });
 });
 
+router.get('/:id/notas/:idAluno', function(req, res) {
+    UC.findGradesByIDAndUC(req.params.idAluno,req.params.id)
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
+});
+
 router.get('/:id/autenticar', function(req, res) {
     auth.authenticateUser(req.params.id, req.query.password, "Aluno")
     .then(function(data){
