@@ -5,6 +5,16 @@ block content
         header.w3-container.w3-blue-gray
             h1 Modificar Notas
 
+        section.w3-container.w3-margin-top
+            .w3-row
+                .w3-col(style="width:auto; display: flex; align-items: center;")
+                    a(href="/ucs/"+idUC+"/docente/"+idDocente+"?token="+docente.token)
+                        button.w3-button.w3-blue-gray.w3-margin-right Procurar aluno 
+                .w3-rest
+                    input.w3-input.w3-border(type="text" placeholder="axxxxx")
+
+
+
         form.w3-container(action="./modificarNotas" method="POST")
             each aluno in uc.alunos.sort()
                 - var alunoNotas = uc.notas.find(nota => nota.aluno === aluno)
