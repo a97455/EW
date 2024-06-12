@@ -16,7 +16,10 @@ def validate_json_structure(data, required_keys, optional_keys):
     optional_keys_set = set(optional_keys)
 
     if item_keys.issubset(required_keys_set.union(optional_keys_set)) and required_keys_set.issubset(item_keys):
-        option = "POST"
+        option = "Entrada Completa"
+
+    elif item_keys.issubset(required_keys_set.union(optional_keys_set)):
+        option = "Entrada Parcial"
 
     return option
 
@@ -100,18 +103,30 @@ def validate_structure(folder_path):
         for aluno in alunos:
             if aluno['_id'].startswith('a'):
                 option = validate_json_structure(aluno, required_keys_alunos, [])
-                if option == "POST":
+                if option == "Entrada Completa":
                     image_path = os.path.join(images_folder_path, aluno['foto'])
                     if post_aluno('http://localhost:10000/alunos', aluno, image_path):
                         print(f"POST ALUNO {aluno['_id']}")
                     else: # Aluno já existe
                         if aluno['foto']:
                             image_path = os.path.join(images_folder_path, aluno['foto'])
-                            put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, image_path)
-                            print(f"PUT ALUNO {aluno['_id']}")
+                            if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, image_path):
+                                print(f"PUT ALUNO {aluno['_id']}")
                         else:
                             put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, None)
                             print(f"PUT ALUNO {aluno['_id']}")
+                elif option == "Entrada Parcial":
+                    if aluno['foto']:
+                        image_path = os.path.join(images_folder_path, aluno['foto'])
+                        if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, image_path):
+                            print(f"PUT ALUNO {aluno['_id']}")
+                        else: 
+                            print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
+                    else:
+                        if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, None):
+                            print(f"PUT ALUNO {aluno['_id']}")
+                        else:
+                            print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
                 else:
                     print(f"Aluno {aluno['_id']} não se encontra num formato válido!!")
 
@@ -124,7 +139,7 @@ def validate_structure(folder_path):
         for docente in docentes:
             if docente['_id'].startswith('d'):
                 option = validate_json_structure(docente, required_keys_docentes, optional_keys_docentes)
-                if option == "POST":
+                if option == "Entrada Completa":
                     image_path = os.path.join(images_folder_path, docente['foto'])
                     if post_docente('http://localhost:10000/docentes', docente, image_path):
                         print(f"POST DOCENTE {docente['_id']}")
@@ -136,6 +151,18 @@ def validate_structure(folder_path):
                         else:
                             put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, None)
                             print(f"PUT DOCENTE {docente['_id']}")
+                elif option == "Entrada Parcial":
+                    if docente['foto']:
+                        image_path = os.path.join(images_folder_path, docente['foto'])
+                        if put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, image_path):
+                            print(f"PUT DOCENTE {docente['_id']}")
+                        else: 
+                            print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")
+                    else:
+                        if put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, None):
+                            print(f"PUT DOCENTE {docente['_id']}")
+                        else:
+                            print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")        
                 else:
                     print(f"Docente {docente['_id']} não se encontra num formato válido!!")
 
@@ -146,12 +173,17 @@ def validate_structure(folder_path):
 
         for uc in ucs:
             option = validate_json_structure(uc, required_keys_ucs, [])
-            if option == "POST":
+            if option == "Entrada Completa":
                 if post_uc('http://localhost:10000/ucs', uc):
                     print(f"POST UC {uc['_id']}")
                 else: # UC já existe
                     put_uc('http://localhost:10000/ucs/'+uc['_id'], uc)
                     print(f"PUT DOCENTE {uc['_id']}")
+            elif option == "Entrada Parcial":
+                if put_uc('http://localhost:10000/ucs/'+uc['_id'], uc):
+                  print(f"PUT DOCENTE {uc['_id']}")
+                else: 
+                  print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
             else:
                 print(f"UC {uc['_id']} não se encontra num formato válido!!")
     
