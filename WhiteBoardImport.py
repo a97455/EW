@@ -87,7 +87,7 @@ def put_uc(url, uc):
 
     return response.status_code == 200
 
-def validate_structure(folder_path):
+def validate_structure(urlBase, folder_path):
     # Load JSON files
     alunos_path = os.path.join(folder_path, 'alunos.json')
     docentes_path = os.path.join(folder_path, 'docentes.json')
@@ -105,25 +105,25 @@ def validate_structure(folder_path):
                 option = validate_json_structure(aluno, required_keys_alunos, [])
                 if option == "Entrada Completa":
                     image_path = os.path.join(images_folder_path, aluno['foto'])
-                    if post_aluno('http://localhost:10000/alunos', aluno, image_path):
+                    if post_aluno(urlBase+'/alunos', aluno, image_path):
                         print(f"POST ALUNO {aluno['_id']}")
                     else: # Aluno já existe
                         if aluno['foto']:
                             image_path = os.path.join(images_folder_path, aluno['foto'])
-                            if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, image_path):
+                            if put_aluno(urlBase+'/alunos/'+aluno['_id'], aluno, image_path):
                                 print(f"PUT ALUNO {aluno['_id']}")
                         else:
-                            put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, None)
+                            put_aluno(urlBase+'/alunos/'+aluno['_id'], aluno, None)
                             print(f"PUT ALUNO {aluno['_id']}")
                 elif option == "Entrada Parcial":
                     if aluno['foto']:
                         image_path = os.path.join(images_folder_path, aluno['foto'])
-                        if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, image_path):
+                        if put_aluno(urlBase+'/alunos/'+aluno['_id'], aluno, image_path):
                             print(f"PUT ALUNO {aluno['_id']}")
                         else: 
                             print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
                     else:
-                        if put_aluno('http://localhost:10000/alunos/'+aluno['_id'], aluno, None):
+                        if put_aluno(urlBase+'/alunos/'+aluno['_id'], aluno, None):
                             print(f"PUT ALUNO {aluno['_id']}")
                         else:
                             print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
@@ -141,25 +141,25 @@ def validate_structure(folder_path):
                 option = validate_json_structure(docente, required_keys_docentes, optional_keys_docentes)
                 if option == "Entrada Completa":
                     image_path = os.path.join(images_folder_path, docente['foto'])
-                    if post_docente('http://localhost:10000/docentes', docente, image_path):
+                    if post_docente(urlBase+'/docentes', docente, image_path):
                         print(f"POST DOCENTE {docente['_id']}")
                     else: # Docente já existe
                         if docente['foto']:
                             image_path = os.path.join(images_folder_path, docente['foto'])
-                            put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, image_path)
+                            put_docente(urlBase+'/docentes/'+docente['_id'], docente, image_path)
                             print(f"PUT DOCENTE {docente['_id']}")
                         else:
-                            put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, None)
+                            put_docente(urlBase+'/docentes/'+docente['_id'], docente, None)
                             print(f"PUT DOCENTE {docente['_id']}")
                 elif option == "Entrada Parcial":
                     if docente['foto']:
                         image_path = os.path.join(images_folder_path, docente['foto'])
-                        if put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, image_path):
+                        if put_docente(urlBase+'/docentes/'+docente['_id'], docente, image_path):
                             print(f"PUT DOCENTE {docente['_id']}")
                         else: 
                             print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")
                     else:
-                        if put_docente('http://localhost:10000/docentes/'+docente['_id'], docente, None):
+                        if put_docente(urlBase+'/docentes/'+docente['_id'], docente, None):
                             print(f"PUT DOCENTE {docente['_id']}")
                         else:
                             print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")        
@@ -174,13 +174,13 @@ def validate_structure(folder_path):
         for uc in ucs:
             option = validate_json_structure(uc, required_keys_ucs, [])
             if option == "Entrada Completa":
-                if post_uc('http://localhost:10000/ucs', uc):
+                if post_uc(urlBase+'/ucs', uc):
                     print(f"POST UC {uc['_id']}")
                 else: # UC já existe
-                    put_uc('http://localhost:10000/ucs/'+uc['_id'], uc)
+                    put_uc(urlBase+'/ucs/'+uc['_id'], uc)
                     print(f"PUT DOCENTE {uc['_id']}")
             elif option == "Entrada Parcial":
-                if put_uc('http://localhost:10000/ucs/'+uc['_id'], uc):
+                if put_uc(urlBase+'/ucs/'+uc['_id'], uc):
                   print(f"PUT DOCENTE {uc['_id']}")
                 else: 
                   print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
@@ -188,8 +188,16 @@ def validate_structure(folder_path):
                 print(f"UC {uc['_id']} não se encontra num formato válido!!")
     
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Uso: python3 WhiteBoardImport.py <pastaData>")
+    if len(sys.argv) != 3:
+        print("Uso: python3 WhiteBoardImport.py <pastaData> <mode>")
         sys.exit(1)
-    
-    validate_structure(sys.argv[1])
+
+    if sys.argv[2] == "setup":
+        urlBase = 'http://WhiteBoardAPI:10000'
+    elif sys.argv[2] == "import":
+        urlBase = 'http://localhost:10000'
+    else:
+        print("Introduza um <mode> correto -> setup ou import")
+        sys.exit(1)
+
+    validate_structure(urlBase,sys.argv[1])

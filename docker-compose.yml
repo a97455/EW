@@ -22,3 +22,13 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+  
+  whiteboardimport:
+    container_name: WhiteBoardImport
+    build:
+      context: ./
+    volumes:
+      - ./data:/data
+    command: python3 WhiteBoardImport.py /data setup
+    depends_on:
+      - whiteboardapi
