@@ -41,7 +41,7 @@ def post_docente(url, docente, image_path):
     
     except Exception:
         time.sleep(1)
-        post_docente(url,docente,image_path)
+        return post_docente(url,docente,image_path)
 
 
 def put_docente(url, docente, image_path):
@@ -62,7 +62,7 @@ def put_docente(url, docente, image_path):
     
     except Exception:
         time.sleep(1)
-        put_docente(url,docente,image_path)
+        return put_docente(url,docente,image_path)
 
 
 def post_aluno(url, aluno, image_path):
@@ -80,7 +80,7 @@ def post_aluno(url, aluno, image_path):
     
     except Exception:
         time.sleep(1)
-        post_docente(url,aluno,image_path)
+        return post_docente(url,aluno,image_path)
 
 
 def put_aluno(url, aluno, image_path):
@@ -101,7 +101,7 @@ def put_aluno(url, aluno, image_path):
 
     except Exception:
         time.sleep(1)
-        post_docente(url,aluno,image_path)
+        return post_docente(url,aluno,image_path)
 
 
 def post_uc(url, uc):
@@ -112,7 +112,7 @@ def post_uc(url, uc):
     
     except Exception:
         time.sleep(1)
-        post_docente(url,uc)
+        return post_docente(url,uc)
 
 def put_uc(url, uc):
     try:
@@ -122,7 +122,7 @@ def put_uc(url, uc):
    
     except Exception:
         time.sleep(1)
-        post_docente(url,uc)
+        return post_docente(url,uc)
 
 
 def validate_structure(urlBase, folder_path):
