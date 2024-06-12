@@ -15,7 +15,8 @@ router.post('/', upload.single('foto'), function(req, res){
         foto: req.body._id + '.' + req.file.mimetype.split('/')[1],
         email: req.body.email,
         curso: req.body.curso,
-        password: req.body.password
+        password: req.body.password,
+        token: ""
     };
     Aluno.insert(aluno)
     .then(data => {
@@ -26,7 +27,7 @@ router.post('/', upload.single('foto'), function(req, res){
             res.jsonp(data); 
         });
     })
-    .catch(erro => res.jsonp(erro));
+    .catch(erro => res.status(422).jsonp(erro));
 });
 
 router.get('/:id', function(req, res) {
@@ -125,6 +126,16 @@ router.delete('/:id', async function(req, res) {
 
 router.get('/:id/notas', function(req, res) {
     UC.findGradesByID(req.params.id)
+    .then(function(data){
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.jsonp(erro);
+    });
+});
+
+router.get('/:id/notas/:idAluno', function(req, res) {
+    UC.findGradesByIDAndUC(req.params.idAluno,req.params.id)
     .then(function(data){
         res.jsonp(data);
     })

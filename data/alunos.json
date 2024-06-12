@@ -5,8 +5,7 @@
         "foto": "a1.jpeg",
         "email": "a1@alunos.uminho.pt",
         "curso": "Engenharia Biomédica - LEBIOM",
-        "password": "1234",
-        "token": ""
+        "password": "1234"
     },
     {
         "_id": "a2",
@@ -14,7 +13,6 @@
         "foto": "a2.jpeg",
         "email": "a2@alunos.uminho.pt",
         "curso": "Estudos Portugueses e Lusófonos - LEPL",
-        "password": "1111",
-        "token": ""
+        "password": "1111"
     }
 ]

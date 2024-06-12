@@ -21,6 +21,23 @@ module.exports.findGradesByID = function(idAluno){
     ]).exec()
 }
 
+module.exports.findGradesByIDAndUC = function(idAluno, idUC) {
+    return UC.aggregate([
+        { $unwind: "$notas" },
+        { $match: { "notas.aluno": idAluno, _id: idUC } },
+        {
+            $project: {
+                _id: 0,
+                aluno: "$notas.aluno",
+                teste: "$notas.teste",
+                exame: "$notas.exame",
+                projeto: "$notas.projeto",
+                uc: "$titulo"
+            }
+        }
+    ]).exec();
+}
+
 module.exports.insert = function(uc){
     return UC.create(uc)
 }

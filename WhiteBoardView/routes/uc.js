@@ -11,7 +11,7 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
         }
     })
 
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
         if (uc != null){
@@ -21,13 +21,13 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
             for (var i = 0; i < uc.docentes.length; i++) {
                 
                 // Faz a solicitação para obter o nome do professor
-                axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
                 .then(function(responseProfessores){
                     listaNomesProfessores.push(responseProfessores.data.nome);
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/' + req.params.idAluno)
+                        axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno)
                         .then(function(response){
                             const user = response.data
                             res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
@@ -60,7 +60,7 @@ router.get('/:id/docente/:idDocente', function(req, res) {
         }
     })
 
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
         if (uc != null){
@@ -69,13 +69,13 @@ router.get('/:id/docente/:idDocente', function(req, res) {
             // Loop através dos docentes da UC
             for (var i = 0; i < uc.docentes.length; i++) {
                 // Faz a solicitação para obter o nome do professor
-                axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
                 .then(function(responseProfessores){
                     listaNomesProfessores.push(responseProfessores.data.nome);
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+                        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
                         .then(function(response){
                             const user = response.data
                             res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
@@ -108,10 +108,10 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
         }
     })
 
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response) {
         const uc = response.data;
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
         .then(function(resposta){
             res.render('editarUC', {docente: resposta.data, idDocente: req.params.idDocente, uc: uc});
         })
@@ -124,33 +124,40 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
 })
 
 router.post('/:id/docente/:idDocente/editar', function(req, res){
-    const novaAula = {
-        horario: {
-            teoricas: req.body.horarioTeorico.split('\n').map(horario => horario.trim()).filter(horario => horario !== ''),
-            praticas: req.body.horarioPratico.split('\n').map(horario => horario.trim()).filter(horario => horario !== '')
-        },
-        avaliacao: req.body.avaliacao.split('\n'),
-        datas: {
-            teste: req.body.dataTeste,
-            exame: req.body.dataExame,
-            projeto: req.body.dataProjeto
-        },
-    };
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
 
-    axios.put('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id, novaAula)
-    .then(function() {
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-        .then(function(resposta){
-            res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+        const novaAula = {
+            horario: {
+                teoricas: req.body.horarioTeorico.split('\n').map(horario => horario.trim()).filter(horario => horario !== ''),
+                praticas: req.body.horarioPratico.split('\n').map(horario => horario.trim()).filter(horario => horario !== '')
+            },
+            avaliacao: req.body.avaliacao.split('\n'),
+            datas: {
+                teste: req.body.dataTeste,
+                exame: req.body.dataExame,
+                projeto: req.body.dataProjeto
+            },
+        };
+    
+        axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, novaAula)
+        .then(function() {
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            .then(function(resposta){
+                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+            })
+            .catch(function(){
+                res.render('error', {message: 'Docente não existente'});
+            })
         })
-        .catch(function(){
-            res.render('error', {message: 'Docente não existente'});
-        })
+        .catch(function(error) {
+            console.error('Erro ao obter UC:', error);
+            res.status(500).json({ error: 'Erro ao obter a UC' });
+        });
     })
-    .catch(function(error) {
-        console.error('Erro ao obter UC:', error);
-        res.status(500).json({ error: 'Erro ao obter a UC' });
-    });
 });
 
 router.get('/:id/docente/:idDocente/notas', function(req, res) {
@@ -161,10 +168,10 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
         }
     })
 
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
         .then(function(resposta){
             res.render('verNotasDocente', {uc: uc, docente: resposta.data, idAluno: req.params.idDocente, idUC: req.params.id});
         })
@@ -183,10 +190,10 @@ router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
         }
     })
 
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
         .then(function(resposta){
             res.render('modificarNotas', {uc: uc, docente: resposta.data, idDocente: req.params.idDocente, idUC: req.params.id});
         })
@@ -198,55 +205,98 @@ router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
 });
 
 router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
-    const notas = req.body;
-    const notasPorAluno = {}; // objeto para armazenar as notas por aluno
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
 
-    for (const key in notas) {
-        // Divide a chave para obter o tipo de nota e o aluno
-        const [notaTipo, aluno] = key.split('-');
+    const formType = req.body.formType;
 
-        // Se a chave não estiver bem formada, pule para a próxima iteração
-        if (!notaTipo || !aluno) {
-            continue;
+    if (formType === "form1") {
+        const notas = req.body;
+        const notasPorAluno = {}; // objeto para armazenar as notas por aluno
+
+        for (const key in notas) {
+            // Divide a chave para obter o tipo de nota e o aluno
+            const [notaTipo, aluno] = key.split('-');
+
+            // Se a chave não estiver bem formada, pule para a próxima iteração
+            if (!notaTipo || !aluno) {
+                continue;
+            }
+
+            // Se não houver uma entrada para o aluno, criar
+            if (!notasPorAluno[aluno]) {
+                notasPorAluno[aluno] = { aluno };
+            }
+
+            switch (notaTipo) {
+                case 'notaTeste':
+                    notasPorAluno[aluno]['teste'] = notas[key];
+                    break;
+                case 'notaExame':
+                    notasPorAluno[aluno]['exame'] = notas[key];
+                    break;
+                case 'notaProjeto':
+                    notasPorAluno[aluno]['projeto'] = notas[key];
+                    break;
+            }
         }
 
-        // Se não houver uma entrada para o aluno, criar
-        if (!notasPorAluno[aluno]) {
-            notasPorAluno[aluno] = { aluno };
-        }
+        // Converta o objeto de notas por aluno em uma lista de notas
+        const listaDeNotas = Object.values(notasPorAluno);
 
-        switch (notaTipo) {
-            case 'notaTeste':
-                notasPorAluno[aluno]['teste'] = notas[key];
-                break;
-            case 'notaExame':
-                notasPorAluno[aluno]['exame'] = notas[key];
-                break;
-            case 'notaProjeto':
-                notasPorAluno[aluno]['projeto'] = notas[key];
-                break;
-        }
-    }
+        const notasNovas = {
+            notas: listaDeNotas
+        };
 
-    // Converta o objeto de notas por aluno em uma lista de notas
-    const listaDeNotas = Object.values(notasPorAluno);
-
-    const notasNovas = {
-        notas: listaDeNotas
-    };
-
-    axios.put('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
-        .then(function() {
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-            .then(function(resposta){
-                res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+resposta.data.token);
+        axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
+            .then(function() {
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+                .then(function(resposta){
+                    res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+resposta.data.token);
+                })
             })
-        })
-        .catch(function(error) {
-            console.error('Erro ao atualizar UC:', error);
-            res.status(500).json({ error: 'Erro ao atualizar a UC' });
-        });
+            .catch(function(error) {
+                console.error('Erro ao atualizar UC:', error);
+                res.status(500).json({ error: 'Erro ao atualizar a UC' });
+            });
+    } else if (formType === "form2") {
+        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            .then(function(resposta){
+                res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas/aluno/${req.body.studentIdInput}?token=${resposta.data.token}`);
+            })
+            .catch(function(error) {
+                console.error('Erro ao atualizar UC:', error);
+                res.status(500).json({ error: 'Erro ao atualizar a UC' });
+            });
+    } else {
+        res.status(400).json({ error: 'Formulário desconhecido' });
+    } 
 });
+
+router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req, res) {
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
+    axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
+    .then(function(response){
+        const notas = response.data;
+        console.log(notas+"\n")
+        res.render('notasAluno', {notas: notas, aluno: req.params.idAluno});
+    })
+    .catch(function(errorUC){
+        console.error('Erro ao obter os dados da UC:', errorUC);
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+    });
+
+})
 
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
     auth.verifyToken(req.params.idDocente, req.query.token)
@@ -255,7 +305,7 @@ router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             res.render('error', {message: 'Realize a Autenticação'})
         }
         else{
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
             .then(function(resposta){
                 const idUC = req.params.id;
                 res.render('novaAula', {docente: resposta.data, idUC: idUC, idDocente: req.params.idDocente});
@@ -265,38 +315,45 @@ router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
 })
 
 router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
-    axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id)
-    .then(function(response) {
-        const uc = response.data;
-        
-        // Crie um novo objeto para representar a nova aula
-        const novaAula = {
-            _id: (uc.contaAulas + 1).toString(),
-            tipo: req.body.tipo,
-            data: req.body.data,
-            sumario: req.body.topicos.split('\n')
-        };
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
 
-        uc.aulas.push(novaAula);
-
-        uc.contaAulas = uc.contaAulas + 1
-
-        axios.put('whiteboardapi://WhiteBoardAPI:10000/ucs/' + req.params.id, uc)
-        .then(function() {
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-            .then(function(resposta){
-                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+        axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+        .then(function(response) {
+            const uc = response.data;
+            
+            // Crie um novo objeto para representar a nova aula
+            const novaAula = {
+                _id: (uc.contaAulas + 1).toString(),
+                tipo: req.body.tipo,
+                data: req.body.data,
+                sumario: req.body.topicos.split('\n')
+            };
+    
+            uc.aulas.push(novaAula);
+    
+            uc.contaAulas = uc.contaAulas + 1
+    
+            axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, uc)
+            .then(function() {
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+                .then(function(resposta){
+                    res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
+                })
             })
+            .catch(function(error) {
+                console.error('Erro ao atualizar UC:', error);
+                res.status(500).json({ error: 'Erro ao atualizar a UC' });
+            });
         })
         .catch(function(error) {
-            console.error('Erro ao atualizar UC:', error);
-            res.status(500).json({ error: 'Erro ao atualizar a UC' });
+            console.error('Erro ao obter UC:', error);
+            res.status(500).json({ error: 'Erro ao obter a UC' });
         });
     })
-    .catch(function(error) {
-        console.error('Erro ao obter UC:', error);
-        res.status(500).json({ error: 'Erro ao obter a UC' });
-    });
 });
 
 router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
@@ -307,9 +364,9 @@ router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
         }
     })
 
-    axios.delete("whiteboardapi://WhiteBoardAPI:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
+    axios.delete("http://WhiteBoardAPI:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
     .then(function() {
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
         .then(function(resposta){
             res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
         })

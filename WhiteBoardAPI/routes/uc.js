@@ -8,7 +8,7 @@ router.post('/', function(req, res) {
     res.jsonp(data)
   })
   .catch(function(erro){
-    res.jsonp(erro)
+    res.status(422).jsonp(erro)
   })
 });
 

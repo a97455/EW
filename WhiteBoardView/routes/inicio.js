@@ -13,9 +13,9 @@ router.post('/', function(req, res) {
         params.append('_id', req.body._id);
         params.append('password', req.body.password);
 
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.body._id+"/autenticar", {params: params})
+        axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.body._id)
+            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id)
             .then(function(resposta){
                 res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
             })
@@ -32,9 +32,9 @@ router.post('/', function(req, res) {
         params.append('_id', req.body._id);
         params.append('password', req.body.password);
 
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
+        axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.body._id)
+            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id)
             .then(function(resposta){
                 res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
             })
@@ -58,9 +58,9 @@ router.get('/paginaInicial/:id', function(req, res) {
     })
 
     if (req.params.id[0] == 'd'){
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/docente/'+req.params.id)
+        axios.get('http://WhiteBoardAPI:10000/ucs/docente/'+req.params.id)
         .then(function(resposta){
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/docentes/'+req.params.id)
+            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.params.id)
             .then(function(r){
 
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
@@ -74,9 +74,9 @@ router.get('/paginaInicial/:id', function(req, res) {
         }) 
     }
     else if (req.params.id[0] == 'a'){
-        axios.get('whiteboardapi://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id)
+        axios.get('http://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id)
         .then(function(resposta){
-            axios.get('whiteboardapi://WhiteBoardAPI:10000/alunos/'+req.params.id)
+            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id)
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: true});
             })

@@ -4,9 +4,9 @@ module.exports.verifyToken = async function(userID, token) {
     try {
         let url;
         if (userID[0] === 'd') {
-            url = 'whiteboardapi://WhiteBoardAPI:10000/docentes/' + userID;
+            url = 'http://WhiteBoardAPI:10000/docentes/' + userID;
         } else if (userID[0] === 'a') {
-            url = 'whiteboardapi://WhiteBoardAPI:10000/alunos/' + userID;
+            url = 'http://WhiteBoardAPI:10000/alunos/' + userID;
         } else {
             throw new Error('Invalid userID');
         }
