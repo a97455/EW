@@ -284,12 +284,12 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
             res.render('error', {message: 'Realize a Autenticação'})
         }
     })
-    console.log("dksnfksdnkvnxk\n")
 
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
     .then(function(response){
         const notas = response.data;
-        res.render('notasAluno', {notas: notas});
+        console.log(notas+"\n")
+        res.render('notasAluno', {notas: notas, aluno: req.params.idAluno});
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
