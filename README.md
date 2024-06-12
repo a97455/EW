@@ -48,6 +48,10 @@ Aula: tipo, data e sumario (lista strings) -> Henrique
 
 # Views
 
-1 -> Marta
-2 -> Ema
-3 -> Henrique
+1 -> Marta  
+2 -> Ema  
+3 -> Henrique  
+
+# WhiteBoardImport
+
+python3 WhiteBoardImport.py data (data é a pasta com os .json e as imagens)

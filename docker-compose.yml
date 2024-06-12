@@ -22,28 +22,13 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-    depends_on:
-      - seed_docentes
-      - seed_alunos
-      - seed_ucs
   
-  seed_docentes:
-    container_name: SEED_DOCENTES
-    image: mongo
+  whiteboardimport:
+    container_name: WhiteBoardImport
+    build:
+      context: ./
     volumes:
-      - ./data/docentes.json:/docentes.json
-    command: mongoimport --host mongodb -d WhiteBoard -c docentes --type json --file docentes.json --jsonArray
-
-  seed_alunos:
-    container_name: SEED_ALUNOS
-    image: mongo
-    volumes:
-      - ./data/alunos.json:/alunos.json
-    command: mongoimport --host mongodb -d WhiteBoard -c alunos --type json --file alunos.json --jsonArray
-
-  seed_ucs:
-    container_name: SEED_UCS
-    image: mongo
-    volumes:
-      - ./data/ucs.json:/ucs.json
-    command: mongoimport --host mongodb -d WhiteBoard -c ucs --type json --file ucs.json --jsonArray
+      - ./data:/data
+    command: python3 WhiteBoardImport.py /data setup
+    depends_on:
+      - whiteboardapi
