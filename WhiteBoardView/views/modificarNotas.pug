@@ -13,9 +13,7 @@ block content
                 .w3-rest
                     input.w3-input.w3-border(type="text" placeholder="axxxxx")
 
-
-
-        form.w3-container(action="./modificarNotas" method="POST")
+        form.w3-container(method="POST")
             each aluno in uc.alunos.sort()
                 - var alunoNotas = uc.notas.find(nota => nota.aluno === aluno)
                 fieldset.w3-light-gray.w3-margin-top
