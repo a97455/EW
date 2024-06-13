@@ -301,7 +301,7 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         console.log("1")
         let notas = response.data.notas
