@@ -278,8 +278,12 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
     .then(function(response){
         const notas = response.data[0];
-        const token = req.query.token;
-        res.render('modificarNotasAluno', {notas: notas, uc:req.params.id, aluno: req.params.idAluno, docente:req.params.idDocente, token:token});
+        if (notas == {}){
+            const token = req.query.token;
+            res.render('modificarNotasAluno', {notas: notas, uc:req.params.id, aluno: req.params.idAluno, docente:req.params.idDocente, token:token});
+        }else{
+            res.render('error', {message: 'ID de aluno inválido', idUC:req.params.id, idUser:req.params.idDocente,token:req.query.token});
+        }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);

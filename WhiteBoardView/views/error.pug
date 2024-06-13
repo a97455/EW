@@ -15,6 +15,9 @@ block content
       else if (message == "Inscrição na UC inválida" || message == "ID de UC não existente")
         a(href="/perfil/"+idUser+"/inscreverUC/?token="+user.token)
           button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
+      else if (message == "ID de aluno inválido")
+        a(href="/ucs/"+idUC+"/docente/"+idUser+"/modificarNotas?token="+token)
+          button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
       else 
         button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'`) Voltar
 
