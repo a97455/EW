@@ -13,15 +13,15 @@ block content
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do projeto:  
-                input.w3-input.w3-border(name=`notaProjeto-${notas.projeto}` id=`notaProjeto-${notas.projeto}` placeholder="Insira a nota do projeto")
+                input.w3-input.w3-border(name=`notaProjeto-${notas.projeto}` id=`notaProjeto-${notas.projeto}` placeholder="Insira a nota do projeto" value=notas.projeto)
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do teste:  
-                input.w3-input.w3-border(name=`notaTeste-${notas.teste}` id=`notaTeste-${notas.teste}` placeholder="Insira a nota do teste")
+                input.w3-input.w3-border(name=`notaTeste-${notas.teste}` id=`notaTeste-${notas.teste}` placeholder="Insira a nota do teste" value=notas.teste)
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do exame:  
-                input.w3-input.w3-border(name=`notaExame-${notas.exame}` id=`notaExame-${notas.exame}` placeholder="Insira a nota do exame")
+                input.w3-input.w3-border(name=`notaExame-${notas.exame}` id=`notaExame-${notas.exame}` placeholder="Insira a nota do exame" value=notas.exame)
 
                 button.w3-button.w3-blue-gray.w3-right(type="submit") Submeter 
 

@@ -287,8 +287,7 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
 
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
     .then(function(response){
-        const notas = response.data;
-        console.log(notas+"\n")
+        const notas = response.data[0];
         res.render('notasAluno', {notas: notas, aluno: req.params.idAluno});
     })
     .catch(function(errorUC){

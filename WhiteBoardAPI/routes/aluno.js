@@ -134,8 +134,8 @@ router.get('/:id/notas', function(req, res) {
     });
 });
 
-router.get('/:id/notas/:idAluno', function(req, res) {
-    UC.findGradesByIDAndUC(req.params.idAluno,req.params.id)
+router.get('/:id/notas/:idUC', function(req, res) {
+    UC.findGradesByIDAndUC(req.params.id,req.params.idUC)
     .then(function(data){
         res.jsonp(data);
     })
