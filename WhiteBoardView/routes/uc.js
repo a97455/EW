@@ -275,7 +275,7 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+'/nota/aluno/'+req.params.idAluno)
     .then(function(response){
         const notas = response.data[0];
         console.log(notas)
@@ -303,33 +303,25 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
 
     axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
-        console.log("1")
         let notas = response.data.notas
-        console.log("2")
         notas = notas.filter(nota => nota.aluno !== req.params.idAluno);
-        console.log("3")
 
         const notasAlunoX = req.body;
-        console.log("4")
         const notasNovas = {
             aluno: req.params.idAluno,
             teste: notasAlunoX[`notaTeste`],
             exame: notasAlunoX[`notaExame`],
             projeto: notasAlunoX[`notaProjeto`]
         };
-        console.log("5")
 
         notas.push(notasNovas)
-        console.log("6")
 
         const notasNovasFinais = {
             notas: notas
         }
-        console.log("7")
 
         axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovasFinais)
         .then(function(){
-            console.log("u3y274673")
             res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas?token=${req.query.token}`);
         })
         .catch(function(errorUC){

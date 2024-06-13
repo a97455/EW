@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Aluno = require('../controllers/aluno');
-var UC = require('../controllers/uc');
 var auth = require("../auth/auth")
 var fs = require('fs');
 var multer = require('multer');
@@ -122,26 +121,6 @@ router.delete('/:id', async function(req, res) {
     } catch (err) {
         return res.status(500).jsonp({ error: 'Database find error' });
     }
-});
-
-router.get('/:id/notas', function(req, res) {
-    UC.findGradesByID(req.params.id)
-    .then(function(data){
-        res.jsonp(data);
-    })
-    .catch(function(erro){
-        res.jsonp(erro);
-    });
-});
-
-router.get('/:id/notas/:idUC', function(req, res) {
-    UC.findGradesByIDAndUC(req.params.id,req.params.idUC)
-    .then(function(data){
-        res.jsonp(data);
-    })
-    .catch(function(erro){
-        res.jsonp(erro);
-    });
 });
 
 router.get('/:id/autenticar', function(req, res) {

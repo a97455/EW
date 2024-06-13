@@ -59,7 +59,7 @@ router.get('/:id/notas', function(req, res){
       }
   })
 
-  axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id+"/notas")
+  axios.get("http://WhiteBoardAPI:10000/ucs/notas/aluno/"+req.params.id)
     .then(function(resposta){
       const notas = resposta.data
       axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.id)
