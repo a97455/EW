@@ -21,8 +21,9 @@ block content
                     - var numAlunosProjeto = uc.notas.length;
                     - var numReprovadosProjeto = 0;
                     - for(var i = 0; i < numAlunosProjeto; i++) {
-                    -     totalNotasProjeto += parseFloat(uc.notas[i].projeto);
-                    -     if(parseFloat(uc.notas[i].projeto) < 10) {
+                    -     var notaProjeto = parseFloat(uc.notas[i].projeto.replace(',', '.'));
+                    -     totalNotasProjeto += notaProjeto;
+                    -     if(notaProjeto < 10) {
                     -         numReprovadosProjeto++;
                     -     }
                     - }
@@ -37,8 +38,9 @@ block content
                     - var numAlunosTeste = uc.notas.length;
                     - var numReprovadosTeste = 0;
                     - for(var i = 0; i < numAlunosTeste; i++) {
-                    -     totalNotasTeste += parseFloat(uc.notas[i].teste);
-                    -     if(parseFloat(uc.notas[i].teste) < 10) {
+                    -     var notaTeste = parseFloat(uc.notas[i].teste.replace(',', '.'));
+                    -     totalNotasTeste += notaTeste;
+                    -     if(notaTeste < 10) {
                     -         numReprovadosTeste++;
                     -     }
                     - }
@@ -53,8 +55,9 @@ block content
                     - var numAlunosExame = uc.notas.length;
                     - var numReprovadosExame = 0;
                     - for(var i = 0; i < numAlunosExame; i++) {
-                    -     totalNotasExame += parseFloat(uc.notas[i].exame);
-                    -     if(parseFloat(uc.notas[i].exame) < 10) {
+                    -     var notaExame = parseFloat(uc.notas[i].exame.replace(',', '.'));
+                    -     totalNotasExame += notaExame;
+                    -     if(notaExame < 10) {
                     -         numReprovadosExame++;
                     -     }
                     - }
@@ -79,9 +82,9 @@ block content
                     each avaliacao in uc.notas 
                         tr
                             td #{avaliacao.aluno}
-                            td #{avaliacao.projeto}
-                            td #{avaliacao.teste} 
-                            td #{avaliacao.exame}
+                            td #{parseFloat(avaliacao.projeto.replace(',', '.')).toFixed(2)}
+                            td #{parseFloat(avaliacao.teste.replace(',', '.')).toFixed(2)}
+                            td #{parseFloat(avaliacao.exame.replace(',', '.')).toFixed(2)}
 
         
         
