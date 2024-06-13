@@ -5,29 +5,29 @@ block content
         header.w3-container.w3-blue-gray
             h1 Modificar Notas
 
-    form.w3-container(id="searchForm1" method="POST")
+    form.w3-container(method="POST")
         fieldset.w3-light-gray.w3-margin-top
             .w3-section
-                label.w3-text-black(style="font-weight: bold;") ID da Aluno: 
+                label.w3-text-black(style="font-weight: bold;") ID do Aluno: 
                 |  #{aluno}  
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do projeto:  
-                input.w3-input.w3-border(name=`notaProjeto-${notas.projeto}` id=`notaProjeto-${notas.projeto}` placeholder="Insira a nota do projeto" value=notas.projeto)
+                input.w3-input.w3-border(name=`notaProjeto` id=`notaProjeto` placeholder="Insira a nota do projeto" value=notas.projeto)
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do teste:  
-                input.w3-input.w3-border(name=`notaTeste-${notas.teste}` id=`notaTeste-${notas.teste}` placeholder="Insira a nota do teste" value=notas.teste)
+                input.w3-input.w3-border(name=`notaTeste` id=`notaTeste` placeholder="Insira a nota do teste" value=notas.teste)
 
             .w3-section
                 label.w3-text-black(style="font-weight: bold;") Nota do exame:  
-                input.w3-input.w3-border(name=`notaExame-${notas.exame}` id=`notaExame-${notas.exame}` placeholder="Insira a nota do exame" value=notas.exame)
+                input.w3-input.w3-border(name=`notaExame` id=`notaExame` placeholder="Insira a nota do exame" value=notas.exame)
 
-    .w3-section.w3-margin-right.w3-margin-left   
-        a(href="/ucs/"+uc+"/docente/"+docente+"/modificarNotas?token="+token)
-            button.w3-button.w3-blue-gray Voltar
+        .w3-section 
+            a(href=`/ucs/${uc}/docente/${docente}/modificarNotas?token=${token}`)
+                button.w3-button.w3-blue-gray Voltar
 
-        button.w3-button.w3-blue-gray.w3-right(type="submit") Submeter 
+            button.w3-button.w3-blue-gray.w3-right(type="submit") Submeter 
 
     footer.w3-container.w3-blue-gray
         h4.w3-center WhiteBoard, Jun 2024 - Powered by 

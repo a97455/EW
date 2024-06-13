@@ -254,24 +254,14 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
 
         axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
             .then(function() {
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-                .then(function(resposta){
-                    res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+resposta.data.token);
-                })
+                res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+req.query.token);
             })
             .catch(function(error) {
                 console.error('Erro ao atualizar UC:', error);
                 res.status(500).json({ error: 'Erro ao atualizar a UC' });
             });
     } else if (formType === "form2") {
-        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-            .then(function(resposta){
-                res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas/aluno/${req.body.studentIdInput}?token=${resposta.data.token}`);
-            })
-            .catch(function(error) {
-                console.error('Erro ao atualizar UC:', error);
-                res.status(500).json({ error: 'Erro ao atualizar a UC' });
-            });
+        res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas/aluno/${req.body.studentIdInput}?token=${req.query.token}`);
     } else {
         res.status(400).json({ error: 'Formulário desconhecido' });
     } 
@@ -289,7 +279,6 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
     .then(function(response){
         const notas = response.data[0];
         const token = req.query.token;
-        console.log(token)
         res.render('modificarNotasAluno', {notas: notas, uc:req.params.id, aluno: req.params.idAluno, docente:req.params.idDocente, token:token});
     })
     .catch(function(errorUC){
@@ -297,6 +286,39 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
         res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
     });
 
+})
+
+router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req, res) {
+    auth.verifyToken(req.params.idDocente, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.render('error', {message: 'Realize a Autenticação'})
+        }
+    })
+
+    const notas = req.body;
+
+    const notasAluno = {
+        aluno: req.params.idAluno,
+        teste: notas[`notaTeste`],
+        exame: notas[`notaExame`],
+        projeto: notas[`notaProjeto`]
+    };
+
+    const listaDeNotas = [notasAluno];
+
+    const notasNovas = {
+        notas: listaDeNotas
+    }
+
+    axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
+    .then(function(){
+        res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas?token=${req.query.token}`);
+    })
+    .catch(function(errorUC){
+        console.error('Erro ao obter os dados da UC:', errorUC);
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+    });
 })
 
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
@@ -340,10 +362,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
     
             axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, uc)
             .then(function() {
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-                .then(function(resposta){
-                    res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
-                })
+                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+req.query.token)
             })
             .catch(function(error) {
                 console.error('Erro ao atualizar UC:', error);
