@@ -13,8 +13,7 @@ Proposta 5: Gerador de websites para UC
 
 ## Introdução
 
-Explicar o que decidimos implementar
-
+Para este projeto decidimos implementar a WhiteBoard, uma plataforma inspirada na BlackBoard que conta com um processo de autenticação de alunos e docentes, dando-lhes depois acesso a informações sobre as Unidades Curriculares em que estão inscritos. Os docentes de cada UC conseguem alterar as informações acerca da mesma ou acrescentar conteúdo novo, como as aulas ou as notas dos alunos. Os alunos podem consultar as suas notas e as informações disponibilizadas nas UCs em que estão inscritos.
 
 ## Modelo de dados
 
@@ -30,7 +29,19 @@ Estes dados estão no formato jsonArray de forma a serem importados para o mongo
 
 ### Importação de dados 
 
-#### Verificações
+A importação de dados é feita através de um script python `WhiteBoardImport`.py por um administrador. Para isso espera-se ter uma pasta (data) que pode conter os ficheiros `alunos.json`, `docentes.json` e `ucs.json`. As imagens necessárias devem estar guardadas numa pasta images na diretoria data.
+
+O script formulado tenta realizar o POST ou PUT das informações após realizar diversas verificações:
+
+- Ids dos alunos começam por 'a' e dos docentes começam por 'd' já que é um critério utilizado na implementação para distinguis alunos de docentes;
+
+- Estrutura json válida, percebendo-se se a estrutura recebida corresponde a uma entrada completa daquele tipo, a uma entrada parcial ou se não está de acordo com as informações pretendidas. Para isso utilizam-se arrays de chaves obrigatórias e opcionais tentando-se perceber se as informações correspondem ou não ao que era esperado;
+
+- O parâmetro foto, existindo, tem uma correspondência com esse nome na pasta images.
+
+Após todas estas verificações tenta-se fazer um POST no caso de a entrada ser completa ou um PUT caso a entrada seja apenas parcial ou o POST não funcione, de forma a substituir a informação já existente pois damos prioridade à informação importada sobre a que já se encontra no mongo.
+
+O script dá ainda algum feedback sobre a importação e possíveis erros que possam ter ocorrido, permitindo ao administrador identificar os problemas e corrigi-los mais facilmente se necessário.
 
 ### Exportação de dados
 
@@ -50,13 +61,15 @@ A WhiteBoardAPI recebe estes pedidos através da porta 10000.
 
 ## WhiteBoardView
 
-
+A WhiteBoardView disponibiliza a nossa interface a partir da porta 10001, fazendo pedidos à WhiteBoardAPI sempre que há necessidade de obter informações sobre os alunos, os docentes ou as ucs.
 
 ### Autenticação
 
 ### Páginas
 
 ## Docker
+
+### Como correr
 
 
 
