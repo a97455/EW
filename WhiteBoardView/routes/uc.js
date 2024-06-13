@@ -278,7 +278,8 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+'/notas/'+req.params.id)
     .then(function(response){
         const notas = response.data[0];
-        if (notas == {}){
+        console.log(notas)
+        if (notas != undefined){
             const token = req.query.token;
             res.render('modificarNotasAluno', {notas: notas, uc:req.params.id, aluno: req.params.idAluno, docente:req.params.idDocente, token:token});
         }else{
@@ -300,29 +301,48 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
         }
     })
 
-    const notas = req.body;
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
+    .then(function(response){
+        console.log("1")
+        let notas = response.data.notas
+        console.log("2")
+        notas = notas.filter(nota => nota.aluno !== req.params.idAluno);
+        console.log("3")
 
-    const notasAluno = {
-        aluno: req.params.idAluno,
-        teste: notas[`notaTeste`],
-        exame: notas[`notaExame`],
-        projeto: notas[`notaProjeto`]
-    };
+        const notasAlunoX = req.body;
+        console.log("4")
+        const notasNovas = {
+            aluno: req.params.idAluno,
+            teste: notasAlunoX[`notaTeste`],
+            exame: notasAlunoX[`notaExame`],
+            projeto: notasAlunoX[`notaProjeto`]
+        };
+        console.log("5")
 
-    const listaDeNotas = [notasAluno];
+        notas.push(notasNovas)
+        console.log("6")
 
-    const notasNovas = {
-        notas: listaDeNotas
-    }
+        const notasNovasFinais = {
+            notas: notas
+        }
+        console.log("7")
 
-    axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
-    .then(function(){
-        res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas?token=${req.query.token}`);
+        axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovasFinais)
+        .then(function(){
+            console.log("u3y274673")
+            res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas?token=${req.query.token}`);
+        })
+        .catch(function(errorUC){
+            console.error('Erro ao obter os dados da UC:', errorUC);
+            res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+        });
+
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
         res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
     });
+
 })
 
 router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
