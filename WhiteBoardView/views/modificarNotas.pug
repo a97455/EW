@@ -5,14 +5,13 @@ block content
         header.w3-container.w3-blue-gray
             h1 Modificar Notas
 
-        section.w3-container.w3-margin-top
-            form.w3-container(id="searchForm2" method="POST")
-                .w3-row
-                    .w3-col(style="width:auto; display: flex; align-items: center;")
-                        button.w3-button.w3-blue-gray.w3-margin-right(type="submit") Procurar aluno  
-                    .w3-rest
-                        input.w3-input.w3-border(type="text" placeholder="axxx" id="studentIdInput" name="studentIdInput")
-                input(type="hidden" name="formType" value="form2")
+        form.w3-container.w3-margin-top(id="searchForm2" method="POST")
+            .w3-row
+                .w3-col(style="width:auto; display: flex; align-items: center;")
+                    button.w3-button.w3-blue-gray.w3-margin-right(type="submit") Procurar aluno  
+                .w3-rest
+                    input.w3-input.w3-border(type="text" placeholder="axxx" id="studentIdInput" name="studentIdInput")
+            input(type="hidden" name="formType" value="form2")
 
 
 
