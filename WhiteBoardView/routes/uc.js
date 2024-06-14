@@ -11,7 +11,7 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idAluno+"&token="+global.token)
     .then(function(response){
         const uc = response.data;
 
@@ -23,13 +23,13 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
             for (var i = 0; i < uc.docentes.length; i++) {
                 
                 // Faz a solicitação para obter o nome do professor
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i]+"?userID="+req.params.idAluno+"&token="+global.token)
                 .then(function(responseProfessores){
                     listaNomesProfessores.push(responseProfessores.data.nome);
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno)
+                        axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno+"?userID="+req.params.idAluno+"&token="+global.token)
                         .then(function(response){
                             const user = response.data
                             res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
@@ -63,7 +63,7 @@ router.get('/:id/docente/:idDocente', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response){
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
@@ -73,13 +73,13 @@ router.get('/:id/docente/:idDocente', function(req, res) {
             // Loop através dos docentes da UC
             for (var i = 0; i < uc.docentes.length; i++) {
                 // Faz a solicitação para obter o nome do professor
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i]+"?userID="+req.params.idDocente+"&token="+global.token)
                 .then(function(responseProfessores){
                     listaNomesProfessores.push(responseProfessores.data.nome);
                     
                     // Verifica se todos os nomes dos professores foram obtidos
                     if (listaNomesProfessores.length === uc.docentes.length) {
-                        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+                        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente+"?userID="+req.params.idDocente+"&token="+global.token)
                         .then(function(response){
                             const user = response.data
                             res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
@@ -113,11 +113,11 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
-            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function(resposta){
                 res.render('editarUC', {docente: resposta.data, idDocente: req.params.idDocente, uc: uc});
             })
@@ -141,7 +141,7 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
         }
     })
     
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
@@ -158,15 +158,9 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
                 },
             };
         
-            axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, novaAula)
+            axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token, novaAula)
             .then(function() {
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-                .then(function(resposta){
-                    res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
-                })
-                .catch(function(){
-                    res.render('error', {message: 'Docente não existente'});
-                })
+                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+global.token)
             })
             .catch(function(error) {
                 console.error('Erro ao obter UC:', error);
@@ -191,11 +185,11 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response){
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
-            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function(resposta){
                 res.render('verNotasDocente', {uc: uc, docente: resposta.data, idAluno: req.params.idDocente, idUC: req.params.id});
             })
@@ -218,11 +212,11 @@ router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response){
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
-            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function(resposta){
                 res.render('modificarNotas', {uc: uc, docente: resposta.data, idDocente: req.params.idDocente, idUC: req.params.id});
             })
@@ -246,7 +240,7 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
@@ -290,7 +284,7 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
                     notas: listaDeNotas
                 };
 
-                axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovas)
+                axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token, notasNovas)
                     .then(function() {
                         res.redirect("/ucs/" + req.params.id + "/docente/" + req.params.idDocente+"?token="+req.query.token);
                     })
@@ -322,12 +316,12 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
 
-            axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+'/nota/aluno/'+req.params.idAluno)
+            axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+'/nota/aluno/'+req.params.idAluno+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function(response){
                 const notas = response.data[0];
                 if (notas != undefined){
@@ -360,7 +354,7 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response){
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
@@ -381,7 +375,7 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
                 notas: notas
             }
 
-            axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, notasNovasFinais)
+            axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token, notasNovasFinais)
             .then(function(){
                 res.redirect(`/ucs/${req.params.id}/docente/${req.params.idDocente}/modificarNotas?token=${req.query.token}`);
             })
@@ -410,11 +404,11 @@ router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
-            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function(resposta){
                 const idUC = req.params.id;
                 res.render('novaAula', {docente: resposta.data, idUC: idUC, idDocente: req.params.idDocente});
@@ -437,7 +431,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             res.render('error', {message: 'Realize a Autenticação'})
         }
 
-        axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+        axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
         .then(function(response) {
             const uc = response.data;
             if (uc.docentes.includes(String(req.params.idDocente))) {
@@ -453,7 +447,7 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
         
                 uc.contaAulas = uc.contaAulas + 1
         
-                axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id, uc)
+                axios.put('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token, uc)
                 .then(function() {
                     res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+req.query.token)
                 })
@@ -481,16 +475,13 @@ router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
         }
     })
 
-    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
+    axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id+"?userID="+req.params.idDocente+"&token="+global.token)
     .then(function(response) {
         const uc = response.data;
         if (uc.docentes.includes(String(req.params.idDocente))) {
-            axios.delete("http://WhiteBoardAPI:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula)
+            axios.delete("http://WhiteBoardAPI:10000/ucs/" + req.params.id + "/aula/" + req.params.idAula+"?userID="+req.params.idDocente+"&token="+global.token)
             .then(function() {
-                axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-                .then(function(resposta){
-                    res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+resposta.data.token)
-                })
+                res.redirect("/ucs/"+req.params.id+"/docente/"+req.params.idDocente+"?token="+global.token)
             })
             .catch(function(error) {
                 console.error('Erro ao obter UC:', error);
