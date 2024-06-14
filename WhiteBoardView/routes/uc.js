@@ -51,7 +51,7 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idAluno, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
