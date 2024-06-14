@@ -1,5 +1,18 @@
+# Relatório do trabalho de Engenharia Web 2024
+Trabalho escolhido:
+- Proposta 5: Gerador de websites para UC
+
+Equipa:
+- CRUDers
+
+Membros:
+- Ema Maria Monteiro Martins (A97678)
+- Henrique Nuno Marinho Malheiro (A97455)
+- Marta Sofia Matos Castela Queirós Gonçalves (A100593)
+
+
 # Introdução
-Este trabalho tem como objetivo construir uma aplicação web que se assemelha à BlackBoard. A BlackBoard é uma aplicação que é usada para exibir as várias informações das UCS e dos alunos. Assim, durante o projeto, o nosso grupo desenvolveu a WhiteBoard.
+Para este projeto decidimos implementar a WhiteBoard, uma plataforma inspirada na BlackBoard que conta com um processo de autenticação de alunos e docentes, dando-lhes depois acesso a informações sobre as Unidades Curriculares em que estão inscritos. Os docentes de cada UC conseguem alterar as informações acerca da mesma ou acrescentar conteúdo novo, como as aulas ou as notas dos alunos. Os alunos podem consultar as suas notas e as informações disponibilizadas nas UCs em que estão inscritos.
 
 # Mongo
 A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **base de dados** denominada **WhiteBoard**, que é composta por **três coleções**, sendo estas a colecção **docentes**, a coleção **alunos** e a coleção **ucs**(unidades curriculares).
@@ -7,8 +20,12 @@ A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **bas
 # WhiteBoardAPI
 Esta aplicação é responsável por realizar pedidos à base de dados e as colocar disponíveis para posterior solicitação por parte da **WhiteBoardView**.
 
+A nossa API de dados (WhiteBoardAPI) conecta-se à base de dados WhiteBoard do container WhiteBoardMongo através do mongoose.
+
+A aplicação fica disponível na **porta 10000**.
+
 ---
-### Models / Controllers
+### Models
 O nosso trabalho contém quatro **models**, sendo eles o model do **aluno**, do **docente** da **uc** e do **token**.
 
 O model do aluno contém o **alunoSchema** que representa a informação relativa a um aluno.
@@ -99,11 +116,16 @@ O model token contém o **tokenSchema** que representa como um token é constitu
 | userType  | String        | Enum: ['Docente', 'Aluno'], Obrigatório        |
 | createdAt | Date          | Default: Date.now, Expira em 1 dia             |
 
+Os dados estão no formato jsonArray de forma a serem importados para o mongo, sendo que as fotos são guardadas nestes modelos apenas através de uma string que corresponde ao nome do ficheiro. Optamos por guardar as imagens com um nome que corresponde ao identificador do utilizador seguido do mimetype da imagem de forma a garantir que não aparecem imagens com nomes repetidos. As imagens em si são guardadas na pasta FileStore e através do nome conseguimos acesso às mesmas.
+
 ---
-### Rotas 
+
+### Controllers 
+
 Existem três controlers, sendo eles o **aluno**, **docente** e **uc**, que farão queries à base de dados.
 
 O controler do aluno contém as seguintes funções:
+
 - **findByID:** Devolve o aluno com o id passado como argumento.
 
 - **insert:** Insere um aluno na base de dados.
@@ -117,6 +139,7 @@ O controler do aluno contém as seguintes funções:
 O controler do docente contém as seguintes funções exatamente as mesma funções que o controler do aluno, sendo apenas relativo ao docente ao invés do aluno
 
 O controler da UC contém as funções apresentadas no controler do aluno, ajustadas para serem relativas às UCs. Contém ainda as seguintes funções:
+
 - **findGradesByID:** Dado o id de um aluno, devolve as notas do mesmo a todas as UCs em que está inscrito.
 
 - **findGradesByIDAndUC:** Dado o id de um aluno e o id de uma UC, devolve as notas do aluno a essa UC.
@@ -145,7 +168,7 @@ As notas estáo vidididas em
 
 
 # WhiteBoardView
-Esta aplicação é responsável por realizar pedidos à WhiteBoardAPI e representar os dados obtidos em páginas web.
+Esta aplicação é responsável por realizar pedidos à WhiteBoardAPI e disponibiliza os resultados a partir de uma interface. Essa aplicação pode ser acedida na **porta 10001**.
 
 ---
 
@@ -196,10 +219,36 @@ A **error** é a página que é exibida quando algum erro ocorre. Essa página e
 /perfil/:idUser/inscreverUC?token=tokenUser -> inscrever em UC (idUser pode ser docente ou aluno)    
 /perfil/:idAluno/notas?token=tokenUser -> ver as notas (id aluno)  
 
-# WhiteBoardImport
-O docker-compose faz um setup inicial de informação.
-No entanto, se desejarmos adicionar mais informação, ou alterar informação previamente importada, podemos fazer essa mesma importação:
+# Importação de dados 
 
+A importação de dados é feita através de um script python `WhiteBoardImport`.py por um administrador. Para isso espera-se ter uma pasta (data) que pode conter os ficheiros `alunos.json`, `docentes.json` e `ucs.json`. As imagens necessárias devem estar guardadas numa pasta images na diretoria data.
+
+O script formulado tenta realizar o POST ou PUT das informações após realizar diversas verificações:
+
+- Ids dos alunos começam por 'a' e dos docentes começam por 'd' já que é um critério utilizado na implementação para distinguis alunos de docentes;
+
+- Estrutura json válida, percebendo-se se a estrutura recebida corresponde a uma entrada completa daquele tipo, a uma entrada parcial ou se não está de acordo com as informações pretendidas. Para isso utilizam-se arrays de chaves obrigatórias e opcionais tentando-se perceber se as informações correspondem ou não ao que era esperado;
+
+- O parâmetro foto, existindo, tem uma correspondência com esse nome na pasta images.
+
+Após todas estas verificações tenta-se fazer um POST no caso de a entrada ser completa ou um PUT caso a entrada seja apenas parcial ou o POST não funcione, de forma a substituir a informação já existente pois damos prioridade à informação importada sobre a que já se encontra no mongo.
+
+O script dá ainda algum feedback sobre a importação e possíveis erros que possam ter ocorrido, permitindo ao administrador identificar os problemas e corrigi-los mais facilmente se necessário.
+
+# Exportação de dados FALTA FAZERRRRRRRR
+
+# Autenticação FALTA FAZERRRR
+
+# Docker FALTA FAZERRRRRR
+
+# Como correr COMPLETARRRRRR
+Para colocar a aplicação a correr, deve se executar o seguinte comando, dentro da pasta EW:
 ~~~
-python3 WhiteBoardImport.py data import (data é a pasta com os .json e as imagens)
+docker compose up --build -d
 ~~~
+Para parar os containers e os remover automáticamente, basta correr o seguinte comando na pasta EW
+~~~
+ ./dropDocker.sh
+~~~
+
+# Conlusão
