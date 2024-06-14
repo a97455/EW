@@ -62,7 +62,7 @@ module.exports.verifyToken = async function(userID, token) {
         } 
 
         token = token.replace(/^"(.*)"$/, '$1');
-        return token == global.token
+        return token == global.token && userID == global.userID
     } catch (error) {
         return false;
     }

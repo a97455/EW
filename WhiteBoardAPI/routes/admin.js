@@ -26,7 +26,7 @@ router.get('/:id', function(req, res) {
     auth.verifyToken(req.query.userID, req.query.token)
     .then(function(response){
         if (!response){
-            res.jsonp({message: 'Realize a Autenticação'})
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
         }
         else{
             Admin.findById(req.params.id)
@@ -39,7 +39,7 @@ router.get('/:id', function(req, res) {
         }
     })
     .catch(function(){
-      res.jsonp({message: 'Realize a Autenticação'})
+      res.status(401).jsonp({message: 'Realize a Autenticação'})
     })
 });
 
@@ -47,7 +47,7 @@ router.put('/:id', async function(req, res) {
     auth.verifyToken(req.query.userID, req.query.token)
     .then(async function(response){
         if (!response){
-            res.jsonp({message: 'Realize a Autenticação'})
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
         }
         else{
             Admin.update(req.params.id, req.body)
@@ -60,7 +60,7 @@ router.put('/:id', async function(req, res) {
         }
     })
     .catch(function(){
-      res.jsonp({message: 'Realize a Autenticação'})
+      res.status(401).jsonp({message: 'Realize a Autenticação'})
     })
 });
 
@@ -68,7 +68,7 @@ router.delete('/:id', async function(req, res) {
     auth.verifyToken(req.query.userID, req.query.token)
     .then(async function(response){
         if (!response){
-            res.jsonp({message: 'Realize a Autenticação'})
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
         }
         else{
             Admin.delete(req.params.id)
@@ -81,7 +81,7 @@ router.delete('/:id', async function(req, res) {
         }
     })
     .catch(function(){
-      res.jsonp({message: 'Realize a Autenticação'})
+      res.status(401).jsonp({message: 'Realize a Autenticação'})
     })
 });
 
@@ -90,6 +90,7 @@ router.get('/:id/autenticar', function(req, res) {
     auth.authenticateUser(req.params.id, req.query.password, "Admin")
     .then(function(data){
         global.token = data
+        global.userID = req.params.id
         res.jsonp(data);
     })
     .catch(function(erro){

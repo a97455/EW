@@ -49,7 +49,7 @@ router.get('/:id', function(req, res) {
   auth.verifyToken(req.query.userID, req.query.token)
   .then(function(response){
       if (!response){
-          res.jsonp({message: 'Realize a Autenticação'})
+          res.status(401).jsonp({message: 'Realize a Autenticação'})
       }
       else{
         Docente.findById(req.params.id)
@@ -62,7 +62,7 @@ router.get('/:id', function(req, res) {
       }
   })
   .catch(function(){
-    res.jsonp({message: 'Realize a Autenticação'})
+    res.status(401).jsonp({message: 'Realize a Autenticação'})
   })
 });
 
@@ -70,7 +70,7 @@ router.put('/:id', upload.single('foto'), async function(req, res) {
   auth.verifyToken(req.query.userID, req.query.token)
   .then(async function(response){
       if (!response){
-          res.jsonp({message: 'Realize a Autenticação'})
+          res.status(401).jsonp({message: 'Realize a Autenticação'})
       }
       else{
         try {
@@ -127,7 +127,7 @@ router.put('/:id', upload.single('foto'), async function(req, res) {
       }
   })
   .catch(function(){
-    res.jsonp({message: 'Realize a Autenticação'})
+    res.status(401).jsonp({message: 'Realize a Autenticação'})
   })
 });
 
@@ -135,7 +135,7 @@ router.delete('/:id', function(req, res) {
   auth.verifyToken(req.query.userID, req.query.token)
   .then(function(response){
       if (!response){
-          res.jsonp({message: 'Realize a Autenticação'})
+          res.status(401).jsonp({message: 'Realize a Autenticação'})
       }
       else{
         Docente.delete(req.params.id)
@@ -156,7 +156,7 @@ router.delete('/:id', function(req, res) {
       }
   })
   .catch(function(){
-    res.jsonp({message: 'Realize a Autenticação'})
+    res.status(401).jsonp({message: 'Realize a Autenticação'})
   })
 });
 
@@ -165,6 +165,7 @@ router.get('/:id/autenticar', function(req, res) {
   auth.authenticateUser(req.params.id, req.query.password, "Docente")
   .then(function(data){
     global.token = data
+    global.userID = req.params.id
     res.jsonp(data);
   })
   .catch(function(erro){

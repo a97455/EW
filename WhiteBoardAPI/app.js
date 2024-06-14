@@ -13,8 +13,9 @@ db.once('open', function(){
   console.log('Conexão ao MongoDB realizado com sucesso')
 })
 
-// token do docente/aluno/admin autenticado
+// token e id do docente/aluno/admin autenticado
 global.token = "";
+global.userID = "";
 
 // Password de admin
 global.adminPasse = "WhiteBoard1234"
