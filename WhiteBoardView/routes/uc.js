@@ -14,49 +14,44 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
     axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        if (uc != null){
-            
-            if (uc.alunos.includes(String(req.params.idAluno))) {
 
-                var listaNomesProfessores = [];
+        if (uc.alunos.includes(String(req.params.idAluno))) {
 
-                // Loop através dos docentes da UC
-                for (var i = 0; i < uc.docentes.length; i++) {
+            var listaNomesProfessores = [];
+
+            // Loop através dos docentes da UC
+            for (var i = 0; i < uc.docentes.length; i++) {
+                
+                // Faz a solicitação para obter o nome do professor
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                .then(function(responseProfessores){
+                    listaNomesProfessores.push(responseProfessores.data.nome);
                     
-                    // Faz a solicitação para obter o nome do professor
-                    axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
-                    .then(function(responseProfessores){
-                        listaNomesProfessores.push(responseProfessores.data.nome);
-                        
-                        // Verifica se todos os nomes dos professores foram obtidos
-                        if (listaNomesProfessores.length === uc.docentes.length) {
-                            axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno)
-                            .then(function(response){
-                                const user = response.data
-                                res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
-                            })
-                            .catch(function(){
-                                res.render('error', {message: 'Docente não existente'});
-                            })
-                        }
-                    })
-                    .catch(function(errorProfessores){
-                        console.error('Erro ao obter o nome do professor:', errorProfessores);
-                        res.render('error', {message: 'Erro ao obter o nome do professor'});
-                    });
-                }
+                    // Verifica se todos os nomes dos professores foram obtidos
+                    if (listaNomesProfessores.length === uc.docentes.length) {
+                        axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.idAluno)
+                        .then(function(response){
+                            const user = response.data
+                            res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idAluno, professores: listaNomesProfessores, docente: false});
+                        })
+                        .catch(function(){
+                            res.render('error', {message: 'Aluno não existente'});
+                        })
+                    }
+                })
+                .catch(function(errorProfessores){
+                    console.error('Erro ao obter o nome do professor:', errorProfessores);
+                    res.render('error', {message: 'Erro ao obter o nome do professor'});
+                });
             }
-            else {
-                res.render('error', {message: 'Aluno não inscrito na UC'});
-            }
-            
-        } else {
-            res.render('error', {message: 'UC não encontrada na WhiteBoard'});
+        }
+        else {
+            res.render('error', {idUser: req.params.idAluno, token:req.query.token, message: 'Aluno não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -71,47 +66,42 @@ router.get('/:id/docente/:idDocente', function(req, res) {
     axios.get('http://WhiteBoardAPI:10000/ucs/' + req.params.id)
     .then(function(response){
         const uc = response.data;
-        if (uc != null){
+        if (uc.docentes.includes(String(req.params.idDocente))) {
 
-            if (uc.docentes.includes(String(req.params.idDocente))) {
-
-                var listaNomesProfessores = [];
-                
-                // Loop através dos docentes da UC
-                for (var i = 0; i < uc.docentes.length; i++) {
-                    // Faz a solicitação para obter o nome do professor
-                    axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
-                    .then(function(responseProfessores){
-                        listaNomesProfessores.push(responseProfessores.data.nome);
-                        
-                        // Verifica se todos os nomes dos professores foram obtidos
-                        if (listaNomesProfessores.length === uc.docentes.length) {
-                            axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
-                            .then(function(response){
-                                const user = response.data
-                                res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
-                            })
-                            .catch(function(){
-                                res.render('error', {message: 'Docente não existente'});
-                            })
-                        }
-                    })
-                    .catch(function(errorProfessores){
-                        console.error('Erro ao obter o nome do professor:', errorProfessores);
-                        res.render('error', {message: 'Erro ao obter o nome do professor'});
-                    });
-                }
+            var listaNomesProfessores = [];
+            
+            // Loop através dos docentes da UC
+            for (var i = 0; i < uc.docentes.length; i++) {
+                // Faz a solicitação para obter o nome do professor
+                axios.get('http://WhiteBoardAPI:10000/docentes/' + uc.docentes[i])
+                .then(function(responseProfessores){
+                    listaNomesProfessores.push(responseProfessores.data.nome);
+                    
+                    // Verifica se todos os nomes dos professores foram obtidos
+                    if (listaNomesProfessores.length === uc.docentes.length) {
+                        axios.get('http://WhiteBoardAPI:10000/docentes/' + req.params.idDocente)
+                        .then(function(response){
+                            const user = response.data
+                            res.render('informacoesUC', {uc: uc, user: user, idUser: req.params.idDocente, professores: listaNomesProfessores, docente: true});
+                        })
+                        .catch(function(){
+                            res.render('error', {message: 'Docente não existente'});
+                        })
+                    }
+                })
+                .catch(function(errorProfessores){
+                    console.error('Erro ao obter o nome do professor:', errorProfessores);
+                    res.render('error', {message: 'Erro ao obter o nome do professor'});
+                });
             }
-            else {
-                res.render('error', {message: 'Docente não inscrito na UC'});
-            }
-        } else {
-            res.render('error', {message: 'Docente não registrado na WhiteBoard'});
+        }
+        else {
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -133,13 +123,13 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
             })
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 })
 
@@ -184,12 +174,12 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
             });
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -211,12 +201,12 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
             })
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -238,13 +228,13 @@ router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
             })
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -315,12 +305,12 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
             }
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
@@ -350,16 +340,16 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
             })
             .catch(function(errorUC){
                 console.error('Erro ao obter os dados da UC:', errorUC);
-                res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+                res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
             });
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 })
 
@@ -398,17 +388,17 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
             })
             .catch(function(errorUC){
                 console.error('Erro ao obter os dados da UC:', errorUC);
-                res.render('error', {message: 'Rota não existente na WhiteBoardAPI'});
+                res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
             });
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 
 })
@@ -432,12 +422,12 @@ router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             })            
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 })
 
@@ -474,12 +464,12 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
                 });
             }
             else {
-                res.render('error', {message: 'Docente não inscrito na UC'});
+                res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
             }
         })
         .catch(function(errorUC){
             console.error('Erro ao obter os dados da UC:', errorUC);
-            res.render('error', {message: 'Erro ao obter os dados da UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
         });
     })
 });
@@ -509,12 +499,12 @@ router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
             });
         }
         else {
-            res.render('error', {message: 'Docente não inscrito na UC'});
+            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(errorUC){
         console.error('Erro ao obter os dados da UC:', errorUC);
-        res.render('error', {message: 'Erro ao obter os dados da UC'});
+        res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
     });
 });
 
