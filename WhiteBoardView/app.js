@@ -9,8 +9,9 @@ var inicioRouter = require('./routes/inicio');
 
 var app = express();
 
-// token do docente/aluno autenticado
+// token e id do docente/aluno autenticado
 global.token = "";
+global.userID = "";
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

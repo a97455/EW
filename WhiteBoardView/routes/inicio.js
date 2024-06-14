@@ -16,6 +16,7 @@ router.post('/', function(req, res) {
         axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id+"/autenticar", {params: params})
         .then(function(resposta){
             global.token=resposta.data
+            global.userID = req.body._id
             res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)   
         })
         .catch(function(erro){
@@ -30,6 +31,7 @@ router.post('/', function(req, res) {
         axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
             global.token=resposta.data
+            global.userID = req.body._id
             res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)
         })
         .catch(function(erro){

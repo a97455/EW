@@ -90,7 +90,6 @@ router.get('/:id/autenticar', function(req, res) {
     auth.authenticateUser(req.params.id, req.query.password, "Admin")
     .then(function(data){
         global.token = data
-        global.userID = req.params.id
         res.jsonp(data);
     })
     .catch(function(erro){
