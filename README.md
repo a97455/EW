@@ -1,3 +1,6 @@
+# Introdução
+Este trabalho tem como objetico contruir uma aplicação web que se assemelha à BlackBoard. A BlackBoard é uma aplicação que é usada para exibir as várias informações das UCS e dos alunos. Assim, durante o projeto, o nosso grupo desensolveu a WhiteBoard.
+
 # Mongo
 A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **base de dados** denominada **WhiteBoard**, que é composta por **três coleções**, sendo estas a colecção **docentes**, a coleção **alunos** e a coleção **ucs**(unidades curriculares).
 
