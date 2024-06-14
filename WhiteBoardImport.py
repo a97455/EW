@@ -216,10 +216,10 @@ def validate_structure(urlBase, folder_path):
                     print(f"POST UC {uc['_id']}")
                 else: # UC já existe
                     put_uc(urlBase+'/ucs/'+uc['_id'], uc)
-                    print(f"PUT DOCENTE {uc['_id']}")
+                    print(f"PUT UC {uc['_id']}")
             elif option == "Entrada Parcial":
                 if put_uc(urlBase+'/ucs/'+uc['_id'], uc):
-                  print(f"PUT DOCENTE {uc['_id']}")
+                  print(f"PUT UC {uc['_id']}")
                 else: 
                   print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
             else:
