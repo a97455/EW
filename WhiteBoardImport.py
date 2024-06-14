@@ -180,7 +180,7 @@ def validate_structure(urlBase, folder_path):
         for admin in admins:
             option = validate_json_structure(admin, required_keys_admins, [])
             if option == "Entrada Completa":
-                if post_admin(urlBase+'/admins', admin):
+                if post_admin(urlBase+'/admins?adminPasse=WhiteBoard1234', admin):
                     tokenAdmin = autenticar_admin(urlBase+'/admins/'+admin['_id']+'/autenticar?password='+admin['password'])
                     print(f"POST ADMIN {admin['_id']}")
                 else: # ADMIN já existe

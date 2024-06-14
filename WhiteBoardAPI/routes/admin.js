@@ -3,6 +3,25 @@ var router = express.Router();
 var Admin = require('../controllers/admin');
 var auth = require("../auth/auth")
 
+router.post('/', function(req, res){
+    if (req.query.adminPasse == global.adminPasse){
+        var admin = {
+            _id : req.body._id,
+            password: req.body.password,
+            token: ""
+        };
+        Admin.insert(admin)
+        .then(function (data){
+            res.jsonp(data); 
+        })
+        .catch(erro => 
+            res.status(422).jsonp(erro)
+        );
+    }else{
+        res.status(401).jsonp({message: 'Passe de Admin errada'})
+    }
+});
+
 router.get('/:id', function(req, res) {
     auth.verifyToken(req.query.userID, req.query.token)
     .then(function(response){
@@ -22,33 +41,6 @@ router.get('/:id', function(req, res) {
     .catch(function(){
       res.jsonp({message: 'Realize a Autenticação'})
     })
-});
-
-// Adição e autenticação dos admin não podem ser protegidas pelos tokens
-router.post('/', function(req, res){
-    var admin = {
-        _id : req.body._id,
-        password: req.body.password,
-        token: ""
-    };
-    Admin.insert(admin)
-    .then(function (data){
-        res.jsonp(data); 
-    })
-    .catch(erro => 
-        res.status(422).jsonp(erro)
-    );
-});
-
-router.get('/:id/autenticar', function(req, res) {
-    auth.authenticateUser(req.params.id, req.query.password, "Admin")
-    .then(function(data){
-        global.token = data
-        res.jsonp(data);
-    })
-    .catch(function(erro){
-        res.status(500).jsonp({error: erro.message})  
-    });
 });
 
 router.put('/:id', async function(req, res) {
@@ -85,11 +77,24 @@ router.delete('/:id', async function(req, res) {
             })
             .catch(function(erro){
               res.jsonp(erro)
-            })        }
+            })        
+        }
     })
     .catch(function(){
       res.jsonp({message: 'Realize a Autenticação'})
     })
+});
+
+// Autenticação não pode ser protegida pelos tokens
+router.get('/:id/autenticar', function(req, res) {
+    auth.authenticateUser(req.params.id, req.query.password, "Admin")
+    .then(function(data){
+        global.token = data
+        res.jsonp(data);
+    })
+    .catch(function(erro){
+        res.status(500).jsonp({error: erro.message})  
+    });
 });
 
 module.exports = router;

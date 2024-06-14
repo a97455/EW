@@ -16,6 +16,9 @@ db.once('open', function(){
 // token do docente/aluno/admin autenticado
 global.token = "";
 
+// Password de admin
+global.adminPasse = "WhiteBoard1234"
+
 var ucRouter = require('./routes/uc');
 var alunoRouter = require('./routes/aluno');
 var docenteRouter = require('./routes/docente');
