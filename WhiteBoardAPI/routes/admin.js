@@ -3,6 +3,27 @@ var router = express.Router();
 var Admin = require('../controllers/admin');
 var auth = require("../auth/auth")
 
+router.get('/', function(req, res) {
+    auth.verifyToken(req.query.userID, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
+        }
+        else{
+            Admin.find()
+            .then(function(data){
+                res.jsonp(data);
+            })
+            .catch(function(erro){
+                res.jsonp(erro);
+            });
+        }
+    })
+    .catch(function(){
+      res.status(401).jsonp({message: 'Realize a Autenticação'})
+    })
+});
+
 router.post('/', function(req, res){
     if (req.query.adminPasse == global.adminPasse){
         var admin = {

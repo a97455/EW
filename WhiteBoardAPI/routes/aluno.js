@@ -7,6 +7,27 @@ var multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 
+router.get('/', function(req, res) {
+    auth.verifyToken(req.query.userID, req.query.token)
+    .then(function(response){
+        if (!response){
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
+        }
+        else{
+            Aluno.find()
+            .then(function(data){
+                res.jsonp(data);
+            })
+            .catch(function(erro){
+                res.jsonp(erro);
+            });
+        }
+    })
+    .catch(function(){
+      res.status(401).jsonp({message: 'Realize a Autenticação'})
+    })
+});
+
 router.post('/', upload.single('foto'), function(req, res){
     auth.verifyToken(req.query.userID, req.query.token)
     .then(function(response){

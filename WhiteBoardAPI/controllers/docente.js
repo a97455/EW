@@ -1,5 +1,9 @@
 var Docente = require('../models/docente')
 
+module.exports.find = function(){
+    return Docente.find().exec()
+}
+
 module.exports.findById = function(id){
     return Docente.findOne({_id: id}).exec()
 }

@@ -1,5 +1,9 @@
 const UC = require('../models/uc')
 
+module.exports.find = function(){
+    return UC.find().exec()
+}
+
 module.exports.findById = function(id){
     return UC.findOne({_id: id}).exec()
 }

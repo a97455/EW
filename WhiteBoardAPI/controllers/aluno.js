@@ -1,5 +1,9 @@
 var Aluno = require('../models/aluno')
 
+module.exports.find = function(){
+    return Aluno.find().exec()
+}
+
 module.exports.findById = function(id){
     return Aluno.findOne({_id: id}).exec()
 }

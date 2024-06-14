@@ -3,6 +3,28 @@ var router = express.Router();
 var UC = require('../controllers/uc')
 var auth = require("../auth/auth")
 
+
+router.get('/', function(req, res) {
+  auth.verifyToken(req.query.userID, req.query.token)
+  .then(function(response){
+      if (!response){
+          res.status(401).jsonp({message: 'Realize a Autenticação'})
+      }
+      else{
+          UC.find()
+          .then(function(data){
+              res.jsonp(data);
+          })
+          .catch(function(erro){
+              res.jsonp(erro);
+          });
+      }
+  })
+  .catch(function(){
+    res.status(401).jsonp({message: 'Realize a Autenticação'})
+  })
+});
+
 router.post('/', function(req, res) {
   auth.verifyToken(req.query.userID, req.query.token)
   .then(function(response){

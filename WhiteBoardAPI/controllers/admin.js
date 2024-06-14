@@ -1,5 +1,9 @@
 var Admin = require('../models/admin')
 
+module.exports.find = function(){
+    return Admin.find().exec()
+}
+
 module.exports.findById = function(id){
     return Admin.findOne({_id: id}).exec()
 }
