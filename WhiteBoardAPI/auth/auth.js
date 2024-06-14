@@ -1,3 +1,4 @@
+var axios = require('axios')
 var Docente = require('../models/docente');
 var Aluno = require('../models/aluno');
 var DocenteController = require('../controllers/docente');
@@ -7,7 +8,7 @@ var jwt = require('jsonwebtoken');
 var secretKey = 'EW2024';
 
 // Função para gerar e armazenar o token
-module.exports.generateAndStoreToken = async function(userId, userType) {
+const generateAndStoreToken = async function(userId, userType) {
     const payload = {
         userId: userId,
         userType: userType
@@ -35,22 +36,6 @@ module.exports.generateAndStoreToken = async function(userId, userType) {
     }
 }
 
-// Função para verificar o acesso com base no token
-module.exports.verificaAcesso = function(req, res, next) {
-    var myToken = req.query.token || req.body.token;
-    if (myToken) {
-        jwt.verify(myToken, secretKey, function(e) {
-            if (e) {
-                res.status(401).jsonp({error: e});
-            } else {
-                next();
-            }
-        });
-    } else {
-        res.status(401).jsonp({error: "Token inexistente!"});
-    }
-}
-
 // Função para autenticar user
 module.exports.authenticateUser = async function(userId, password, userType) {
     let user;
@@ -63,8 +48,31 @@ module.exports.authenticateUser = async function(userId, password, userType) {
     }
 
     if (user && (password == user.password)) {
-        return this.generateAndStoreToken(userId, userType);
+        return await generateAndStoreToken(userId, userType);
     } else {
         throw new Error("ID ou PassWord inválidos!");
+    }
+}
+
+// Função para verificar o token
+module.exports.verifyToken = async function(userID, token) {
+    try {
+        if (userID == undefined || token == undefined){
+            throw new Error("Token não existente")
+        } 
+
+        let url;
+        if (userID[0] === 'd') {
+            url = 'http://localhost:10000/docentes/' + userID;
+        } else if (userID[0] === 'a') {
+            url = 'http://localhost:10000/alunos/' + userID;
+        } else {
+            throw new Error('Invalid userID');
+        }
+
+        const resposta = await axios.get(url);
+        return token === resposta.data.token;
+    } catch (error) {
+        return false;
     }
 }
