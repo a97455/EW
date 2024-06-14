@@ -11,7 +11,7 @@ var tokenSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ['Docente', 'Aluno'],
+        enum: ['Docente', 'Aluno','Admin'],
         required: true
     },
     createdAt: {

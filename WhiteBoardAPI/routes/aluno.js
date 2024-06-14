@@ -11,7 +11,7 @@ router.post('/', upload.single('foto'), function(req, res){
     auth.verifyToken(req.query.userID, req.query.token)
     .then(function(response){
         if (!response){
-            res.jsonp({message: 'Realize a Autenticação'})
+            res.status(401).jsonp({message: 'Realize a Autenticação'})
         }
         else{
             var aluno = {
@@ -36,7 +36,7 @@ router.post('/', upload.single('foto'), function(req, res){
         }
     })
     .catch(function(){
-      res.jsonp({message: 'Realize a Autenticação'})
+        res.status(401).jsonp({message: 'Realize a Autenticação'})
     })
 });
 

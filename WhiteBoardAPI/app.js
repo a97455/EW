@@ -13,9 +13,13 @@ db.once('open', function(){
   console.log('Conexão ao MongoDB realizado com sucesso')
 })
 
+// token do docente/aluno/admin autenticado
+global.token = "";
+
 var ucRouter = require('./routes/uc');
 var alunoRouter = require('./routes/aluno');
 var docenteRouter = require('./routes/docente');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
@@ -27,6 +31,7 @@ app.use("/filestore",express.static(path.join(__dirname, 'FileStore')));
 app.use('/ucs', ucRouter);
 app.use('/alunos', alunoRouter);
 app.use('/docentes', docenteRouter);
+app.use('/admins', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

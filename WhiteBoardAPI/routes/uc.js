@@ -7,7 +7,7 @@ router.post('/', function(req, res) {
   auth.verifyToken(req.query.userID, req.query.token)
   .then(function(response){
       if (!response){
-          res.jsonp({message: 'Realize a Autenticação'})
+        res.status(401).jsonp({message: 'Realize a Autenticação'})
       }
       else{
         UC.insert(req.body)
@@ -20,7 +20,7 @@ router.post('/', function(req, res) {
       }
   })
   .catch(function(){
-    res.jsonp({message: 'Realize a Autenticação'})
+    res.status(401).jsonp({message: 'Realize a Autenticação'})
   })
 });
 
