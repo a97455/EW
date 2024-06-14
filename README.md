@@ -96,7 +96,38 @@ O model token contém o **tokenSchema** que representa como um token é constitu
 | createdAt | Date          | Default: Date.now, Expira em 1 dia             |
 
 ---
+### Rotas 
+Existem tres controlers, sendo eles o **aluno**, **docente** e **uc**, que farão querys à base de dados.
 
+O controler do aluno contém as seguintes funções:
+- **findByID:** Devolve o aluno com o id passado como argumento.
+
+- **insert:** Insere um aluno na base de dados.
+
+- **update:** Atualiza o aluno cujo id foi passado como argumento, na base de dados, como os dados atualizados passados por argumento.
+
+- **delete:** Dado um id, elimina o aluno com essa id.
+
+- **insertToken:** Dado um token, associa o token ao id passado como argumento, armazenando-o na base de dados.
+
+O controler do docente contém as seguintes funções exatamente as mesma funções que o controler do aluno, sendo apenas relatrivo ao docente ao invés do aluno
+
+O controler da uc contém as funções apresentadas no controler do aluno, ajustadas para serem relativas às ucs. Contém ainda as seguintes funções:
+- **findGradesByID:** Dado o id de um aluno, devolve as notas do mesmo a todas as ucs em que está inscrito.
+
+- **findGradesByIDAndUC:** Dado o id de um aluno e o id de uma UC, devolve as notas do aluno a essa UC.
+
+- **deleteAula:** Dado o id da UC, remove da UC que contém esse id a aula que corresponde ao id da aula passado por argumento.
+
+- **ucsAluno:** Dado o id do aluno, verifica em que UCS este se encontra inscrito.
+
+- **ucsDocente:** Dado o id do docente, verifica em que UCS este se encontra inscrito.
+
+- **addDocente:** Dado o id do docente, adiciona-o aos docentes da UC associada ao UC passado como argumento.
+
+- **addAluno:** Dado o id do aluno, adiciona-o aos alunos da UC associada ao UC passado como argumento.
+
+---
 ### Rotas 
 As notas estáo vidididas em
 /docentes {post}
