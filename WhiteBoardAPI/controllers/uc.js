@@ -18,7 +18,7 @@ module.exports.findGradesByID = function(idAluno){
                 uc: "$titulo"
             }
         }
-    ]).next().exec()
+    ]).exec()
 }
 
 module.exports.findGradesByIDAndUC = function(idAluno, idUC) {

@@ -93,4 +93,25 @@ router.delete('/:id/aula/:idAula', function(req, res) {
   })
 });
 
+
+router.get('/notas/aluno/:idAluno', function(req, res) {
+  UC.findGradesByID(req.params.idAluno)
+  .then(function(data){
+      res.jsonp(data);
+  })
+  .catch(function(erro){
+      res.jsonp(erro);
+  });
+});
+
+router.get('/:id/nota/aluno/:idAluno', function(req, res) {
+  UC.findGradesByIDAndUC(req.params.idAluno,req.params.id)
+  .then(function(data){
+      res.jsonp(data);
+  })
+  .catch(function(erro){
+      res.jsonp(erro);
+  });
+});
+
 module.exports = router;
