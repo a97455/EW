@@ -14,14 +14,9 @@ router.post('/', function(req, res) {
         params.append('password', req.body.password);
 
         axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id+"/autenticar", {params: params})
-        .then(function(){
-            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id)
-            .then(function(resposta){
-                res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
-            })
-            .catch(function(){
-                res.render('error', {message: "Docente não existente"});
-            })
+        .then(function(resposta){
+            global.token=resposta.data
+            res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)   
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -34,13 +29,8 @@ router.post('/', function(req, res) {
 
         axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id)
-            .then(function(resposta){
-                res.redirect("paginaInicial/"+req.body._id+"?token="+resposta.data.token)
-            })
-            .catch(function(){
-                res.render('error', {message: "Aluno não existente"});
-            })
+            global.token=resposta.data
+            res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -58,11 +48,10 @@ router.get('/paginaInicial/:id', function(req, res) {
     })
 
     if (req.params.id[0] == 'd'){
-        axios.get('http://WhiteBoardAPI:10000/ucs/docente/'+req.params.id)
+        axios.get('http://WhiteBoardAPI:10000/ucs/docente/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
         .then(function(resposta){
-            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.params.id)
+            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
             .then(function(r){
-
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
             })
             .catch(function(){
@@ -74,9 +63,9 @@ router.get('/paginaInicial/:id', function(req, res) {
         }) 
     }
     else if (req.params.id[0] == 'a'){
-        axios.get('http://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id)
+        axios.get('http://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
         .then(function(resposta){
-            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id)
+            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: true});
             })

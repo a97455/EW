@@ -9,6 +9,9 @@ var inicioRouter = require('./routes/inicio');
 
 var app = express();
 
+// token do docente/aluno autenticado
+global.token = "";
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

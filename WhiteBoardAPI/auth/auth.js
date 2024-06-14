@@ -25,8 +25,7 @@ const generateAndStoreToken = async function(userId, userType) {
         await AlunoController.insertToken(userId, token);
     } else if (userType === 'Docente') {
         await DocenteController.insertToken(userId, token);
-    }
-    else if (userType === 'Admin') {
+    } else if (userType === 'Admin') {
         await AdminController.insertToken(userId, token);
     }
 

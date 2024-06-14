@@ -2,17 +2,12 @@ var axios = require('axios')
 
 module.exports.verifyToken = async function(userID, token) {
     try {
-        let url;
-        if (userID[0] === 'd') {
-            url = 'http://WhiteBoardAPI:10000/docentes/' + userID;
-        } else if (userID[0] === 'a') {
-            url = 'http://WhiteBoardAPI:10000/alunos/' + userID;
-        } else {
-            throw new Error('Invalid userID');
-        }
+        if (userID == undefined || token == undefined){
+            throw new Error("Token não existente")
+        } 
 
-        const resposta = await axios.get(url);
-        return token === resposta.data.token;
+        token = token.replace(/^"(.*)"$/, '$1');
+        return token == global.token
     } catch (error) {
         return false;
     }

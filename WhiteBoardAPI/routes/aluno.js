@@ -170,6 +170,7 @@ router.delete('/:id', async function(req, res) {
 router.get('/:id/autenticar', function(req, res) {
     auth.authenticateUser(req.params.id, req.query.password, "Aluno")
     .then(function(data){
+        global.token = data
         res.jsonp(data);
     })
     .catch(function(erro){
