@@ -1,7 +1,5 @@
 # Mongo
-db name -> WhiteBoard
-
-collections names -> docentes, alunos, ucs
+A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **base de dados** denominada **WhiteBoard**, que é composta por **três coleções**, sendo estas a colecção **docentes**, a coleção **alunos** e a coleção **ucs**(unidades curriculares).
 
 # Rotas CRUD (Faltam bastantes rotas que foram adicionadas posteriormente)
 /docentes {post}
