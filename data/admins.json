@@ -2,9 +2,5 @@
     {
         "_id": "admin1",
         "password": "6666"
-    },
-    {
-        "_id": "admin2",
-        "password": "3333"
     }
 ]
