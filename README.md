@@ -332,7 +332,7 @@ python3 WhiteBoardImport.py <pastaData> import
 
 Para realizar a exportação dos dados utiliza-se o comando a seguir apresentado:
 ~~~
-python3 WhiteBoardExport.py
+python3 WhiteBoardExport.py <adminID> <adminPalavraPasse>
 ~~~
 
 # Conclusão FALTA FAZERRRRRRR

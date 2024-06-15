@@ -198,97 +198,97 @@ def validate_structure(urlBase, folder_path):
                     print(f"ADMIN {admin['_id']} não se encontra num formato válido!!")
 
     
-    if (os.path.isfile(alunos_path)): 
-        required_keys_alunos = ["_id", "nome", "foto", "email", "curso", "password"]
-        alunos = load_json(alunos_path)
+        if (os.path.isfile(alunos_path)): 
+            required_keys_alunos = ["_id", "nome", "foto", "email", "curso", "password"]
+            alunos = load_json(alunos_path)
 
-        for aluno in alunos:
-            if aluno['_id'].startswith('a'):
-                option = validate_json_structure(aluno, required_keys_alunos, [])
-                if option == "Entrada Completa":
-                    image_path = os.path.join(images_folder_path, aluno['foto'])
-                    if post_aluno(urlBase+'/alunos?userID=admin1&token='+tokenAdmin, aluno, image_path):
-                        print(f"POST ALUNO {aluno['_id']}")
-                    else: # Aluno já existe
+            for aluno in alunos:
+                if aluno['_id'].startswith('a'):
+                    option = validate_json_structure(aluno, required_keys_alunos, [])
+                    if option == "Entrada Completa":
+                        image_path = os.path.join(images_folder_path, aluno['foto'])
+                        if post_aluno(urlBase+'/alunos?userID=admin1&token='+tokenAdmin, aluno, image_path):
+                            print(f"POST ALUNO {aluno['_id']}")
+                        else: # Aluno já existe
+                            if aluno['foto']:
+                                image_path = os.path.join(images_folder_path, aluno['foto'])
+                                if put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, image_path):
+                                    print(f"PUT ALUNO {aluno['_id']}")
+                            else:
+                                put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, None)
+                                print(f"PUT ALUNO {aluno['_id']}")
+                    elif option == "Entrada Parcial":
                         if aluno['foto']:
                             image_path = os.path.join(images_folder_path, aluno['foto'])
                             if put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, image_path):
                                 print(f"PUT ALUNO {aluno['_id']}")
+                            else: 
+                                print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
                         else:
-                            put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, None)
-                            print(f"PUT ALUNO {aluno['_id']}")
-                elif option == "Entrada Parcial":
-                    if aluno['foto']:
-                        image_path = os.path.join(images_folder_path, aluno['foto'])
-                        if put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, image_path):
-                            print(f"PUT ALUNO {aluno['_id']}")
-                        else: 
-                            print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
+                            if put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, None):
+                                print(f"PUT ALUNO {aluno['_id']}")
+                            else:
+                                print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
                     else:
-                        if put_aluno(urlBase+'/alunos/'+aluno['_id']+'?userID=admin1&token='+tokenAdmin, aluno, None):
-                            print(f"PUT ALUNO {aluno['_id']}")
-                        else:
-                            print(f"ALUNO {aluno['_id']} não existente -> forneça todos os campos necessários.")
-                else:
-                    print(f"Aluno {aluno['_id']} não se encontra num formato válido!!")
+                        print(f"Aluno {aluno['_id']} não se encontra num formato válido!!")
 
 
-    if (os.path.isfile(docentes_path)): 
-        required_keys_docentes = ["_id", "nome", "foto", "categoria", "filiacao", "email", "password"]
-        optional_keys_docentes = ["webpage"]
-        docentes = load_json(docentes_path)
+        if (os.path.isfile(docentes_path)): 
+            required_keys_docentes = ["_id", "nome", "foto", "categoria", "filiacao", "email", "password"]
+            optional_keys_docentes = ["webpage"]
+            docentes = load_json(docentes_path)
 
-        for docente in docentes:
-            if docente['_id'].startswith('d'):
-                option = validate_json_structure(docente, required_keys_docentes, optional_keys_docentes)
-                if option == "Entrada Completa":
-                    image_path = os.path.join(images_folder_path, docente['foto'])
-                    if post_docente(urlBase+'/docentes?userID=admin1&token='+tokenAdmin, docente, image_path):
-                        print(f"POST DOCENTE {docente['_id']}")
-                    else: # Docente já existe
+            for docente in docentes:
+                if docente['_id'].startswith('d'):
+                    option = validate_json_structure(docente, required_keys_docentes, optional_keys_docentes)
+                    if option == "Entrada Completa":
+                        image_path = os.path.join(images_folder_path, docente['foto'])
+                        if post_docente(urlBase+'/docentes?userID=admin1&token='+tokenAdmin, docente, image_path):
+                            print(f"POST DOCENTE {docente['_id']}")
+                        else: # Docente já existe
+                            if docente['foto']:
+                                image_path = os.path.join(images_folder_path, docente['foto'])
+                                put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, image_path)
+                                print(f"PUT DOCENTE {docente['_id']}")
+                            else:
+                                put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, None)
+                                print(f"PUT DOCENTE {docente['_id']}")
+                    elif option == "Entrada Parcial":
                         if docente['foto']:
                             image_path = os.path.join(images_folder_path, docente['foto'])
-                            put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, image_path)
-                            print(f"PUT DOCENTE {docente['_id']}")
+                            if put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, image_path):
+                                print(f"PUT DOCENTE {docente['_id']}")
+                            else: 
+                                print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")
                         else:
-                            put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, None)
-                            print(f"PUT DOCENTE {docente['_id']}")
-                elif option == "Entrada Parcial":
-                    if docente['foto']:
-                        image_path = os.path.join(images_folder_path, docente['foto'])
-                        if put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, image_path):
-                            print(f"PUT DOCENTE {docente['_id']}")
-                        else: 
-                            print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")
+                            if put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, None):
+                                print(f"PUT DOCENTE {docente['_id']}")
+                            else:
+                                print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")        
                     else:
-                        if put_docente(urlBase+'/docentes/'+docente['_id']+'?userID=admin1&token='+tokenAdmin, docente, None):
-                            print(f"PUT DOCENTE {docente['_id']}")
-                        else:
-                            print(f"DOCENTE {docente['_id']} não existente -> forneça todos os campos necessários.")        
+                        print(f"Docente {docente['_id']} não se encontra num formato válido!!")
+
+
+        if (os.path.isfile(ucs_path)): 
+            required_keys_ucs = ["_id", "codUC", "titulo", "docentes", "alunos", "horario", "avaliacao", "datas", "contaAulas", "aulas", "notas"]
+            ucs = load_json(ucs_path)
+
+            for uc in ucs:
+                option = validate_json_structure(uc, required_keys_ucs, [])
+                if option == "Entrada Completa":
+                    if post_uc(urlBase+'/ucs?userID=admin1&token='+tokenAdmin, uc):
+                        print(f"POST UC {uc['_id']}")
+                    else: # UC já existe
+                        put_uc(urlBase+'/ucs/'+uc['_id']+'?userID=admin1&token='+tokenAdmin, uc)
+                        print(f"PUT UC {uc['_id']}")
+                elif option == "Entrada Parcial":
+                    if put_uc(urlBase+'/ucs/'+uc['_id']+'?userID=admin1&token='+tokenAdmin, uc):
+                        print(f"PUT UC {uc['_id']}")
+                    else: 
+                        print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
                 else:
-                    print(f"Docente {docente['_id']} não se encontra num formato válido!!")
-
-
-    if (os.path.isfile(ucs_path)): 
-        required_keys_ucs = ["_id", "codUC", "titulo", "docentes", "alunos", "horario", "avaliacao", "datas", "contaAulas", "aulas", "notas"]
-        ucs = load_json(ucs_path)
-
-        for uc in ucs:
-            option = validate_json_structure(uc, required_keys_ucs, [])
-            if option == "Entrada Completa":
-                if post_uc(urlBase+'/ucs?userID=admin1&token='+tokenAdmin, uc):
-                    print(f"POST UC {uc['_id']}")
-                else: # UC já existe
-                    put_uc(urlBase+'/ucs/'+uc['_id']+'?userID=admin1&token='+tokenAdmin, uc)
-                    print(f"PUT UC {uc['_id']}")
-            elif option == "Entrada Parcial":
-                if put_uc(urlBase+'/ucs/'+uc['_id']+'?userID=admin1&token='+tokenAdmin, uc):
-                  print(f"PUT UC {uc['_id']}")
-                else: 
-                  print(f"UC {uc['_id']} não existente -> forneça todos os campos necessários.")        
-            else:
-                print(f"UC {uc['_id']} não se encontra num formato válido!!")
-   
+                    print(f"UC {uc['_id']} não se encontra num formato válido!!")
+    
     
 if __name__ == "__main__":
     if len(sys.argv) != 3:

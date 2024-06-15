@@ -88,13 +88,12 @@ def get_image(url):
         return get_image(url)
 
 
-def exportData(urlBase):
+def exportData(urlBase, adminID, adminPalavraPasse):
     # Importa o tokenAdmin para o scope local da função
     global tokenAdmin
 
     folder_path = './dataExport'
     images_path = folder_path + '/images'
-    admins_path = './data/admins.json'
 
     # Verifica se a pasta já existe
     if os.path.exists(folder_path):
@@ -102,12 +101,8 @@ def exportData(urlBase):
 
     os.mkdir(folder_path)
     os.mkdir(images_path)
-
-    if (os.path.isfile(admins_path)): 
-        admins = load_json(admins_path)
-        
-        for admin in admins:
-            tokenAdmin = autenticar_admin(urlBase+'/admins/'+admin['_id']+'/autenticar?password='+admin['password'])
+    
+    tokenAdmin = autenticar_admin(urlBase+'/admins/'+adminID+'/autenticar?password='+adminPalavraPasse)
 
     admins = get_admins(urlBase+'/admins?userID=admin1&token='+tokenAdmin)
     write_json(folder_path+'/admins.json', admins)
@@ -131,10 +126,10 @@ def exportData(urlBase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 1:
-        print("Uso: python3 WhiteBoardExport.py")
+    if len(sys.argv) != 3 and sys.argv[1].startswith('admin'):
+        print("Uso: python3 WhiteBoardExport.py <adminID> <adminPalavraPasse>")
         sys.exit(1)
 
     urlBase = 'http://localhost:10000'
 
-    exportData(urlBase)
+    exportData(urlBase, sys.argv[1], sys.argv[2])
