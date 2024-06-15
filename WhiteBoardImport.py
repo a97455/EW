@@ -177,25 +177,24 @@ def validate_structure(urlBase, folder_path):
         required_keys_admins = ["_id", "password"]
         admins = load_json(admins_path)
 
-        for admin in admins:
-            option = validate_json_structure(admin, required_keys_admins, [])
-            if option == "Entrada Completa":
-                if post_admin(urlBase+'/admins?adminPasse=WhiteBoard1234', admin):
-                    tokenAdmin = autenticar_admin(urlBase+'/admins/'+admin['_id']+'/autenticar?password='+admin['password'])
-                    print(f"POST ADMIN {admin['_id']}")
-                else: # ADMIN já existe
-                    tokenAdmin = autenticar_admin(urlBase+'/admins/'+admin['_id']+'/autenticar?password='+admin['password'])
-                    put_admin(urlBase+'/admins/'+admin['_id']+'?userID=admin1&token='+tokenAdmin, admin)
-                    print(f"PUT ADMIN {admin['_id']}")
+        option = validate_json_structure(admins[0], required_keys_admins, [])
+        if option == "Entrada Completa":
+            if post_admin(urlBase+'/admins?adminPasse=WhiteBoard1234', admins[0]):
+                tokenAdmin = autenticar_admin(urlBase+'/admins/'+admins[0]['_id']+'/autenticar?password='+admins[0]['password'])
+                print(f"POST ADMIN {admins[0]['_id']}")
+            else: # ADMIN já existe
+                tokenAdmin = autenticar_admin(urlBase+'/admins/'+admins[0]['_id']+'/autenticar?password='+admins[0]['password'])
+                put_admin(urlBase+'/admins/'+admins[0]['_id']+'?userID=admin1&token='+tokenAdmin, admins[0])
+                print(f"PUT ADMIN {admins[0]['_id']}")
+        else:
+            tokenAdmin = autenticar_admin(urlBase+'/admins/'+admins[0]['_id']+'/autenticar?password='+admins[0]['password'])
+            if option == "Entrada Parcial":
+                if put_admin(urlBase+'/admins/'+admins[0]['_id']+'?userID=admin1&token='+tokenAdmin, admins[0]):
+                    print(f"PUT ADMIN {admins[0]['_id']}")
+                else: 
+                    print(f"ADMIN {admins[0]['_id']} não existente -> forneça todos os campos necessários.")        
             else:
-                tokenAdmin = autenticar_admin(urlBase+'/admins/'+admin['_id']+'/autenticar?password='+admin['password'])
-                if option == "Entrada Parcial":
-                    if put_admin(urlBase+'/admins/'+admin['_id']+'?userID=admin1&token='+tokenAdmin, admin):
-                        print(f"PUT ADMIN {admin['_id']}")
-                    else: 
-                        print(f"ADMIN {admin['_id']} não existente -> forneça todos os campos necessários.")        
-                else:
-                    print(f"ADMIN {admin['_id']} não se encontra num formato válido!!")
+                print(f"ADMIN {admins[0]['_id']} não se encontra num formato válido!!")
 
     
         if (os.path.isfile(alunos_path)): 

@@ -126,7 +126,7 @@ def exportData(urlBase, adminID, adminPalavraPasse):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3 and sys.argv[1].startswith('admin'):
+    if len(sys.argv) != 3:
         print("Uso: python3 WhiteBoardExport.py <adminID> <adminPalavraPasse>")
         sys.exit(1)
 
