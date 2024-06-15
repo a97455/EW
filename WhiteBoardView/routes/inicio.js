@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios')
-var auth = require('../auth/auth')
 
 router.get('/', function(req, res) {
     res.render('login', {title: "Autenticação"});
@@ -15,9 +14,8 @@ router.post('/', function(req, res) {
 
         axios.get('http://WhiteBoardAPI:10000/docentes/'+req.body._id+"/autenticar", {params: params})
         .then(function(resposta){
-            global.token=resposta.data
-            global.userID = req.body._id
-            res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)   
+            global.tokens[req.body._id] = resposta.data
+            res.redirect("paginaInicial/"+req.body._id+"?token="+global.tokens[req.body._id])   
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -30,9 +28,8 @@ router.post('/', function(req, res) {
 
         axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
         .then(function(){
-            global.token=resposta.data
-            global.userID = req.body._id
-            res.redirect("paginaInicial/"+req.body._id+"?token="+global.token)
+            global.tokens[req.body._id] = resposta.data
+            res.redirect("paginaInicial/"+req.body._id+"?token="+global.tokens[req.body._id])
         })
         .catch(function(erro){
             res.render('error', {message: erro.response.data.error});
@@ -42,17 +39,10 @@ router.post('/', function(req, res) {
 })
 
 router.get('/paginaInicial/:id', function(req, res) {
-    auth.verifyToken(req.params.id, req.query.token)
-    .then(function(response){
-        if (!response){
-            res.render('error', {message: 'Realize a Autenticação'})
-        }
-    })
-
     if (req.params.id[0] == 'd'){
-        axios.get('http://WhiteBoardAPI:10000/ucs/docente/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
+        axios.get('http://WhiteBoardAPI:10000/ucs/docente/'+req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
         .then(function(resposta){
-            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
+            axios.get('http://WhiteBoardAPI:10000/docentes/'+req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
             })
@@ -65,9 +55,9 @@ router.get('/paginaInicial/:id', function(req, res) {
         }) 
     }
     else if (req.params.id[0] == 'a'){
-        axios.get('http://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
+        axios.get('http://WhiteBoardAPI:10000/ucs/aluno/'+req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
         .then(function(resposta){
-            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id+"?userID="+req.params.id+"&token="+global.token)
+            axios.get('http://WhiteBoardAPI:10000/alunos/'+req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: true});
             })

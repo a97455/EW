@@ -9,9 +9,8 @@ var inicioRouter = require('./routes/inicio');
 
 var app = express();
 
-// token e id do docente/aluno autenticado
-global.token = "";
-global.userID = "";
+// Dicionário que associa os ids dos users ao seu token atual
+global.tokens = new Object();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
