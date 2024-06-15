@@ -31,7 +31,7 @@ router.post('/', function(req, res) {
         params.append('password', req.body.password);
 
         axios.get('http://WhiteBoardAPI:10000/alunos/'+req.body._id+"/autenticar", {params: params})
-        .then(function(){
+        .then(function(resposta){
             global.tokens[req.body._id] = resposta.data
             res.redirect("paginaInicial/"+req.body._id+"?token="+global.tokens[req.body._id])
         })

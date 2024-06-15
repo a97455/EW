@@ -42,8 +42,7 @@ module.exports.authenticateUser = async function(userId, password, userType) {
         user = await AlunoController.findById(userId);
     } else if (userType == 'Admin') {
         user = await AdminController.findById(userId);
-    }
-    else {
+    } else {
         throw new Error("Tipo de utilizador inválido!");
     }
 
@@ -62,20 +61,17 @@ module.exports.verifyToken = async function(userID, token) {
         } 
 
         let user;
-        if (userType == 'Docente') {
-            user = await DocenteController.findById(userID);
-        } else if (userType == 'Aluno') {
-            user = await AlunoController.findById(userID);
-        } else if (userType == 'Admin') {
+        if (userID.includes('admin')) {
             user = await AdminController.findById(userID);
-        }
-        else {
+        } else if (userID[0]=='a') {
+            user = await AlunoController.findById(userID);
+        } else if (userID[0]=='d') {
+            user = await DocenteController.findById(userID);
+        } else {
             throw new Error("Tipo de utilizador inválido!");
         }
 
         token = token.replace(/^"(.*)"$/, '$1');
-        console.log("TokenQuery -> ",token)
-        console.log("TokenBD -> ",user.token)
         return token == user.token
     } catch (error) {
         return false;
