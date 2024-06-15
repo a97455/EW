@@ -184,7 +184,6 @@ router.delete('/:id', function(req, res) {
 router.get('/:id/autenticar', function(req, res) {
   auth.authenticateUser(req.params.id, req.query.password, "Docente")
   .then(function(data){
-    global.token = data
     res.jsonp(data);
   })
   .catch(function(erro){

@@ -18,7 +18,11 @@ router.post('/', function(req, res) {
             res.redirect("paginaInicial/"+req.body._id+"?token="+global.tokens[req.body._id])   
         })
         .catch(function(erro){
-            res.render('error', {message: erro.response.data.error});
+            if (erro.response && erro.response.status === 401) {
+                res.render('error', {message: erro.response.data.message});
+            } else {
+                res.render('error', {message: erro.response.data.error});
+            }
         }) 
     }
     else if (req.body._id[0] == 'a'){
@@ -32,7 +36,11 @@ router.post('/', function(req, res) {
             res.redirect("paginaInicial/"+req.body._id+"?token="+global.tokens[req.body._id])
         })
         .catch(function(erro){
-            res.render('error', {message: erro.response.data.error});
+            if (erro.response && erro.response.status === 401) {
+                res.render('error', {message: erro.response.data.message});
+            } else {
+                res.render('error', {message: erro.response.data.error});
+            }        
         }) 
     }
     else res.render('error', {message: 'Formato de ID inválido'});
@@ -46,12 +54,20 @@ router.get('/paginaInicial/:id', function(req, res) {
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: false});
             })
-            .catch(function(){
-                res.render('error', {message: 'Docente não encontrado'})
+            .catch(function(erro){
+                if (erro.response && erro.response.status === 401) {
+                    res.render('error', {message: erro.response.data.message});
+                } else {
+                    res.render('error', {message: 'Docente não encontrado'})
+                }
             })
         })
-        .catch(function(){
-            res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+        .catch(function(erro){
+            if (erro.response && erro.response.status === 401) {
+                res.render('error', {message: erro.response.data.message});
+            } else {
+                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+            }
         }) 
     }
     else if (req.params.id[0] == 'a'){
@@ -61,11 +77,20 @@ router.get('/paginaInicial/:id', function(req, res) {
             .then(function(r){
                 res.render('paginaInicial', {title: "Página inicial", user: r.data, lista: resposta.data, aluno: true});
             })
-            .catch(function(){
-                res.render('error', {message: 'Docente não encontrado'})
-            })        })
-        .catch(function(){
-            res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+            .catch(function(erro){
+                if (erro.response && erro.response.status === 401) {
+                    res.render('error', {message: erro.response.data.message});
+                } else {
+                    res.render('error', {message: 'Docente não encontrado'})
+                }
+            })   
+        })
+        .catch(function(erro){
+            if (erro.response && erro.response.status === 401) {
+                res.render('error', {message: erro.response.data.message});
+            } else {
+                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+            }
         })
     }
     else res.render('error', {message: 'Formato de ID inválido'});

@@ -13,10 +13,7 @@ db.once('open', function(){
   console.log('Conexão ao MongoDB realizado com sucesso')
 })
 
-// token do docente/aluno/admin autenticado
-global.token = "";
-
-// Password de admin
+// Password que permite a adição de admins
 global.adminPasse = "WhiteBoard1234"
 
 var ucRouter = require('./routes/uc');
