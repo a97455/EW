@@ -19,8 +19,12 @@ router.get('/:id', function(req, res) {
         res.render('error', {message: 'Docente não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else if (req.params.id[0] == 'a'){
@@ -34,8 +38,12 @@ router.get('/:id', function(req, res) {
         res.render('error', {message: 'Aluno não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else {
@@ -52,8 +60,12 @@ router.get('/:id/notas', function(req, res){
         res.render('alunoVerNotas', {aluno: response.data, notasAlunos: notas, alunoID: req.params.id})
       })
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   
 });
@@ -89,8 +101,12 @@ router.post('/:id/inscreverUC', function(req, res) {
           res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
         }
         })
-      .catch(function(){
-        res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+      .catch(function(erro){
+        if (erro.response && erro.response.status === 401) {
+          res.render('error', {message: erro.response.data.message});
+        } else {
+          res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+        }
       })
     })
   }
@@ -106,8 +122,12 @@ router.post('/:id/inscreverUC', function(req, res) {
           res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
         }
         })
-      .catch(function(){
-        res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+      .catch(function(erro){
+        if (erro.response && erro.response.status === 401) {
+          res.render('error', {message: erro.response.data.message});
+        } else {
+          res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+        }
       })
     })
   }
@@ -128,8 +148,12 @@ router.get('/:id/editar', function(req, res) {
         res.render('error', {message: 'Docente não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else if (req.params.id[0] == 'a'){
@@ -143,8 +167,12 @@ router.get('/:id/editar', function(req, res) {
         res.render('error', {message: 'Aluno não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else {
@@ -184,8 +212,12 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
         res.render('error', {message: 'Docente não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else if (req.params.id[0] == 'a'){
@@ -205,8 +237,12 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
         res.render('error', {message: 'Aluno não registado na WhiteBoard'})
       }
     })
-    .catch(function(){
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else {
