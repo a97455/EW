@@ -113,24 +113,24 @@ def exportData(urlBase, adminID, adminPalavraPasse):
     os.mkdir(folder_path)
     os.mkdir(images_path)
 
-    admins = get_admins(urlBase+'/admins?userID=admin1&token='+tokenAdmin)
+    admins = get_admins(urlBase+'/admins?userID='+adminID+'&token='+tokenAdmin)
     write_json(folder_path+'/admins.json', admins)
 
-    docentes = get_docentes(urlBase+'/docentes?userID=admin1&token='+tokenAdmin)
+    docentes = get_docentes(urlBase+'/docentes?userID='+adminID+'&token='+tokenAdmin)
     write_json(folder_path+'/docentes.json', docentes)
 
     for docente in docentes:
         image = get_image("http://localhost:10000/filestore/"+docente['foto'])
         load_image(images_path+'/'+ docente['foto'], image)
 
-    alunos = get_alunos(urlBase+'/alunos?userID=admin1&token='+tokenAdmin)
+    alunos = get_alunos(urlBase+'/alunos?userID='+adminID+'&token='+tokenAdmin)
     write_json(folder_path+'/alunos.json',alunos)
 
     for aluno in alunos:
         image = get_image("http://localhost:10000/filestore/"+aluno['foto'])
         load_image(images_path+'/'+ aluno['foto'], image)
 
-    ucs = get_ucs(urlBase+'/ucs?userID=admin1&token='+tokenAdmin)
+    ucs = get_ucs(urlBase+'/ucs?userID='+adminID+'&token='+tokenAdmin)
     write_json(folder_path+'/ucs.json',ucs)
 
 
