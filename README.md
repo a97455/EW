@@ -322,7 +322,7 @@ docker compose up --build -d
 
 Para parar os containers e os remover automaticamente, basta correr o seguinte comando na pasta EW:
 ~~~
-./dropDocker.sh
+docker compose down
 ~~~
 
 Para realizar a importação dos dados utiliza-se o comando a seguir apresentado:
@@ -336,8 +336,10 @@ python3 WhiteBoardExport.py <adminID> <adminPalavraPasse>
 ~~~
 
 # Conclusão 
-Este trabalho permitiu-nos interligar todos os conteúdos abordados na UC· Como resultado, desenvolvemos a WhiteBoard, uma aplicação completa que, do nosso ponto de vista, cumpriu todos os requisitos estabelecidos para o projeto·
+Este trabalho permitiu-nos interligar todos os conteúdos abordados na UC. 
 
-Este projeto proporcionou-nos a oportunidade de trabalhar com JsonWebToken (JWT), destacando a importância da autenticação para adequar as funcionalidades da aplicação ao utilizador autenticado·
+Como resultado, desenvolvemos a WhiteBoard, uma aplicação completa que, do nosso ponto de vista, cumpriu todos os requisitos estabelecidos para o projeto.
 
-Além disso, permitiu-nos trabalhar com Docker, uma ferramenta amplamente utilizada no mercado de trabalho, sendo, portanto, uma mais valia para nós saber usá-la· O Docker permitiu que todos os membros da equipa trabalhassem num ambiente de desenvolvimento idêntico, eliminando problemas de configurações e melhorando, assim, o processo de desenvolvimento· 
+Este projeto proporcionou-nos a oportunidade de trabalhar com JsonWebToken (JWT), destacando a importância da autenticação para adequar as funcionalidades da aplicação ao utilizador autenticado.
+
+Além disso, permitiu-nos trabalhar com Docker, uma ferramenta amplamente utilizada no mercado de trabalho, sendo, portanto uma mais valia para nós saber usá-la. O Docker permitiu que todos os membros da equipa trabalhassem num ambiente de desenvolvimento idêntico, eliminando problemas de configurações e melhorando o processo de desenvolvimento.
