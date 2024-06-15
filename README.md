@@ -335,4 +335,9 @@ Para realizar a exportação dos dados utiliza-se o comando a seguir apresentado
 python3 WhiteBoardExport.py
 ~~~
 
-# Conclusão FALTA FAZERRRRRRR
+# Conclusão 
+Este trabalho permitiu-nos interligar todos os conteúdos abordados na UC. Como resultado, desenvolvemos a WhiteBoard, uma aplicação completa que, do nosso ponto de vista, cumpriu todos os requisitos estabelecidos para o projeto.
+
+Este projeto proporcionou-nos a oportunidade de trabalhar com JsonWebToken (JWT), destacando a importância da autenticação para adequar as funcionalidades da aplicação ao utilizador autenticado.
+
+Além disso, permitiu-nos trabalhar com Docker, uma ferramenta amplamente utilizada no mercado de trabalho, sendo, portanto, uma mais valia para nós saber usá-la. O Docker permitiu que todos os membros da equipa trabalhassem num ambiente de desenvolvimento idêntico, eliminando problemas de configurações e melhorando, assim, o processo de desenvolvimento.
