@@ -26,6 +26,9 @@ def autenticar_admin(url):
     try:
         response = requests.get(url)
 
+        if response.status_code == 500:
+            return False
+
         return response.text
     
     except Exception:
@@ -91,6 +94,14 @@ def get_image(url):
 def exportData(urlBase, adminID, adminPalavraPasse):
     # Importa o tokenAdmin para o scope local da função
     global tokenAdmin
+    
+    autenticado = autenticar_admin(urlBase+'/admins/'+adminID+'/autenticar?password='+adminPalavraPasse)
+
+    if (not autenticado):
+        print("ID ou PassWord de Admin inválidos!!")
+        return
+    else:
+        tokenAdmin = autenticado
 
     folder_path = './dataExport'
     images_path = folder_path + '/images'
@@ -101,8 +112,6 @@ def exportData(urlBase, adminID, adminPalavraPasse):
 
     os.mkdir(folder_path)
     os.mkdir(images_path)
-    
-    tokenAdmin = autenticar_admin(urlBase+'/admins/'+adminID+'/autenticar?password='+adminPalavraPasse)
 
     admins = get_admins(urlBase+'/admins?userID=admin1&token='+tokenAdmin)
     write_json(folder_path+'/admins.json', admins)
