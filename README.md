@@ -20,7 +20,7 @@ A importação de dados é feita através de um script python `WhiteBoardImport.
 
 O script formulado tenta realizar o POST ou PUT das informações, utilizando para isso o token de um dos administradores presentes no respetivo ficheiro após realizar diversas verificações:
 
-- Ids dos alunos começam por 'a' e dos docentes começam por 'd' já que é um critério utilizado na implementação para distinguis alunos de docentes;
+- Ids dos alunos começam por 'a', dos docentes começam por 'd' e dos administradores por 'admin' já que é um critério utilizado na implementação para distinguir alunos, docentes e administradores;
 
 - Estrutura json válida, percebendo-se se a estrutura recebida corresponde a uma entrada completa daquele tipo, a uma entrada parcial ou se não está de acordo com as informações pretendidas. Para isso utilizam-se sets de chaves obrigatórias e opcionais tentando-se perceber se as informações correspondem ou não ao que era esperado;
 
