@@ -53,12 +53,11 @@ router.get('/:id', function(req, res) {
 
 router.get('/:id/notas', function(req, res){
   axios.get("http://WhiteBoardAPI:10000/ucs/notas/aluno/"+req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
-    .then(function(resposta){
-      const notas = resposta.data
-      axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
-      .then(function(response){
-        res.render('alunoVerNotas', {aluno: response.data, notasAlunos: notas, alunoID: req.params.id})
-      })
+  .then(function(resposta){
+    const notas = resposta.data
+    axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
+    .then(function(response){
+      res.render('alunoVerNotas', {aluno: response.data, notasAlunos: notas, alunoID: req.params.id})
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
@@ -67,7 +66,14 @@ router.get('/:id/notas', function(req, res){
         res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
-  
+  })
+  .catch(function(erro){
+    if (erro.response && erro.response.status === 401) {
+      res.render('error', {message: erro.response.data.message});
+    } else {
+      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+    }
+  })
 });
 
 router.get('/:id/inscreverUC', function(req, res) {
@@ -76,11 +82,25 @@ router.get('/:id/inscreverUC', function(req, res) {
     .then(function(response){
       res.render('inscreverUC', {user: response.data, userID: req.params.id})
     })
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
+    })
   }
   else if (req.params.id[0] == 'a'){
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
     .then(function(response){
       res.render('inscreverUC', {user: response.data, userID: req.params.id})
+    })
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else {
@@ -109,6 +129,13 @@ router.post('/:id/inscreverUC', function(req, res) {
         }
       })
     })
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
+    })
   }
   else if (req.params.id[0] == 'a'){
     axios.get('http://WhiteBoardAPI:10000/alunos/' + req.params.id+"?userID="+req.params.id+"&token="+global.tokens[req.params.id])
@@ -129,6 +156,13 @@ router.post('/:id/inscreverUC', function(req, res) {
           res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
         }
       })
+    })
+    .catch(function(erro){
+      if (erro.response && erro.response.status === 401) {
+        res.render('error', {message: erro.response.data.message});
+      } else {
+        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      }
     })
   }
   else {
