@@ -1,7 +1,7 @@
 var Docente = require('../models/docente')
 
 module.exports.find = function(){
-    return Docente.find().exec()
+    return Docente.find().select('-token').exec() 
 }
 
 module.exports.findById = function(id){

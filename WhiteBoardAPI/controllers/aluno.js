@@ -1,7 +1,7 @@
 var Aluno = require('../models/aluno')
 
 module.exports.find = function(){
-    return Aluno.find().exec()
+    return Aluno.find().select('-token').exec()
 }
 
 module.exports.findById = function(id){

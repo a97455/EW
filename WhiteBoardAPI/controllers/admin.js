@@ -1,7 +1,7 @@
 var Admin = require('../models/admin')
 
 module.exports.find = function(){
-    return Admin.find().exec()
+    return Admin.find().select('-token').exec()
 }
 
 module.exports.findById = function(id){
