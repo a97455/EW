@@ -12,10 +12,30 @@ Membros:
 
 
 # Introdução
-Para este projeto decidimos implementar a WhiteBoard, uma plataforma inspirada na BlackBoard que conta com um processo de autenticação de alunos e docentes, dando-lhes depois acesso a informações sobre as Unidades Curriculares em que estão inscritos. Os docentes de cada UC conseguem alterar as informações acerca da mesma ou acrescentar conteúdo novo, como as aulas ou as notas dos alunos. Os alunos podem consultar as suas notas e as informações disponibilizadas nas UCs em que estão inscritos.
+Para este projeto decidimos implementar a WhiteBoard, uma plataforma inspirada na BlackBoard que conta com um processo de autenticação de alunos e docentes, dando-lhes depois acesso a informações sobre as Unidades Curriculares em que estão inscritos. Os docentes de cada UC conseguem alterar as informações acerca da mesma ou acrescentar conteúdo novo, como as aulas ou as notas dos alunos. Os alunos podem consultar as suas notas e as informações disponibilizadas nas UCs em que estão inscritos. Temos ainda os administradores que têm acesso a todos os dados, sendo capazes de proceder à sua importação e respetiva exportação.
+
+# Importação de dados 
+
+A importação de dados é feita através de um script python `WhiteBoardImport`.py por um administrador. Para isso espera-se ter uma pasta (data) que pode conter os ficheiros `alunos.json`, `docentes.json` e `ucs.json`. É ainda necessária a existência de um ficheiro `admins.json` nessa diretoria. As imagens necessárias devem estar guardadas numa pasta images na diretoria data.
+
+O script formulado tenta realizar o POST ou PUT das informações, utilizando para isso o token de um dos administradores presentes no respetivo ficheiro após realizar diversas verificações:
+
+- Ids dos alunos começam por 'a' e dos docentes começam por 'd' já que é um critério utilizado na implementação para distinguis alunos de docentes;
+
+- Estrutura json válida, percebendo-se se a estrutura recebida corresponde a uma entrada completa daquele tipo, a uma entrada parcial ou se não está de acordo com as informações pretendidas. Para isso utilizam-se arrays de chaves obrigatórias e opcionais tentando-se perceber se as informações correspondem ou não ao que era esperado;
+
+- O parâmetro foto, existindo, tem uma correspondência com esse nome na pasta images.
+
+Após todas estas verificações tenta-se fazer um POST no caso de a entrada ser completa ou um PUT caso a entrada seja apenas parcial ou o POST não funcione, de forma a substituir a informação já existente pois damos prioridade à informação importada sobre a que já se encontra no mongo.
+
+O script dá ainda algum feedback sobre a importação e possíveis erros que possam ter ocorrido, permitindo ao administrador identificar os problemas e corrigi-los mais facilmente se necessário.
+
+# Exportação de dados
+
+A exportação dos dados é feita através do script python `WhiteBoardExport.py`. Este após a autenticação de um admin, faz pedidos à api de modo a obter todos as informações sobre os admins, ucs, docentes e alunos para as guardar nos ficheiros json respetivos, bem como as imagens dos alunos e dos docentes numa pasta images, originando uma pasta dataExport com todas as informações necesssárias e uma organização idêntica à pasta necessária à importação dos dados, facilitando um posterior processo de importação desses dados.
 
 # Mongo
-A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **base de dados** denominada **WhiteBoard**, que é composta por **três coleções**, sendo estas a colecção **docentes**, a coleção **alunos** e a coleção **ucs**(unidades curriculares).
+A base de dados usada no nosso trabalho foi o mongodb. Nela construímos a **base de dados** denominada **WhiteBoard**, que é composta por **quatro coleções**, sendo estas a colecção **docentes**, a coleção **alunos**, a coleção **ucs**(unidades curriculares) a coleção **admins**(administradores).
 
 # WhiteBoardAPI
 Esta aplicação é responsável por realizar pedidos à base de dados e as colocar disponíveis para posterior solicitação por parte da **WhiteBoardView**.
@@ -26,7 +46,7 @@ A aplicação fica disponível na **porta 10000**.
 
 ---
 ### Models
-O nosso trabalho contém quatro **models**, sendo eles o model do **aluno**, do **docente** da **uc** e do **token**.
+O nosso trabalho contém cinco **models**, sendo eles o model do **aluno**, do **docente** da **uc**, do **token** e o do **admin**.
 
 O model do aluno contém o **alunoSchema** que representa a informação relativa a um aluno.
 
@@ -116,15 +136,25 @@ O model token contém o **tokenSchema** que representa como um token é constitu
 | userType  | String        | Enum: ['Docente', 'Aluno'], Obrigatório        |
 | createdAt | Date          | Default: Date.now, Expira em 1 dia             |
 
+Por fim, o model admins apresenta o **admin** com as informações acerca do administrador
+
+| Atributo | Tipo    |
+|----------|---------|
+| _id      | String  |
+| password | String  |
+| token    | String  |
+
 Os dados estão no formato jsonArray de forma a serem importados para o mongo, sendo que as fotos são guardadas nestes modelos apenas através de uma string que corresponde ao nome do ficheiro. Optamos por guardar as imagens com um nome que corresponde ao identificador do utilizador seguido do mimetype da imagem de forma a garantir que não aparecem imagens com nomes repetidos. As imagens em si são guardadas na pasta FileStore e através do nome conseguimos acesso às mesmas.
 
 ---
 
 ### Controllers 
 
-Existem três controlers, sendo eles o **aluno**, **docente** e **uc**, que farão queries à base de dados.
+Existem três controllers, sendo eles o **aluno**, **docente** e **uc**, que farão queries à base de dados.
 
-O controler do aluno contém as seguintes funções:
+O controller do aluno contém as seguintes funções:
+
+- **find:** Devolve uma lista com todos os alunos da base de dados.
 
 - **findByID:** Devolve o aluno com o id passado como argumento.
 
@@ -136,9 +166,11 @@ O controler do aluno contém as seguintes funções:
 
 - **insertToken:** Dado um token, associa o token ao id passado como argumento, armazenando-o na base de dados.
 
-O controler do docente contém as seguintes funções exatamente as mesma funções que o controler do aluno, sendo apenas relativo ao docente ao invés do aluno
+O controller do docente contém as seguintes funções exatamente as mesma funções que o controller do aluno, sendo apenas relativo ao docente ao invés do aluno
 
-O controler da UC contém as funções apresentadas no controler do aluno, ajustadas para serem relativas às UCs. Contém ainda as seguintes funções:
+O controller do admin apresenta também as mesmas funções mas relativas ao admin e não ao aluno ou ao docente.
+
+O controller da UC contém as funções apresentadas no controller do aluno, à exceção da função insertToken já que não há autenticação no caso das UCs. Estas foram ajustadas para serem relativas às UCs. Contém ainda as seguintes funções:
 
 - **findGradesByID:** Dado o id de um aluno, devolve as notas do mesmo a todas as UCs em que está inscrito.
 
@@ -155,16 +187,44 @@ O controler da UC contém as funções apresentadas no controler do aluno, ajust
 - **addAluno:** Dado o id do aluno, adiciona-o aos alunos da UC associada ao UC passado como argumento.
 
 ---
-### Rotas  FALTA FAZERRRRRRR
-As notas estáo vidididas em
-/docentes {post}
-/docentes/:id {get, put, delete} -> Marta
+### Rotas
 
-/alunos {post}
-/alunos/:id {get, put, delete} -> Ema
+Para a nossa API optamos por usar 4 routers diferentes:
 
-/ucs {post}
-/ucs/:id {get, put, delete} -> Henrique
+- ucRouter para rotas relacionadas com as UCs e começadas por /ucs
+
+- alunoRouter para rotas relacionadas com os alunos e começadas por /alunos
+
+- docenteRouter para rotas relacionadas com os docentes e começadas por /docentes
+
+- adminRouter para rotas relacionadas com os administradores e começadas por /admins
+
+Todos estes routers têm em comum os seguintes pedidos para as rotas especificadas e que chamam utilizam diferentes funções dos respetivos controllers. Na maioria dos casos, o procedimento nestes pedidos é verificar a autenticação, chamar a função correspondente e verificar se foi executada sem erros.
+
+| Tipo   | Rota               | Função      |
+|--------|--------------------|-------------|
+| GET    | /                  | find        |
+| POST   | /                  | insert      |
+| GET    | /:id               | findByID    |
+| PUT    | /:id               | update      |
+| DELETE | /:id               | delete      |
+| GET    | /:id/autenticar    | insertToken |
+
+Note-se que o último pedido desta tabela não se aplica no caso das UCs pois estas não necessitam de autenticação.
+
+Além disso, no caso dos alunos e dos docentes os POST, PUT e DELETE têm a particularidade de envolver o tratamento de ficheiros pois possuem uma foto. O POST atribui à imagem o nome do id do utilizador e guarda-a na FileStore, deixando o seu nome guardado nas informações do utilizador, o PUT verifica a existência de um ficheiro e procede da mesma forma, e o delete utiliza o nome que está guardado para eliminar a foto além de eliminar o utilizador em si.
+
+As UCs, apresentam ainda os seguintes pedidos:
+
+| Tipo   | Rota                              | Função              |
+|--------|-----------------------------------|---------------------|
+| GET    | /aluno/:id                        | ucsAluno            |
+| GET    | /docente/:id                      | ucsDocente          |
+| PUT    | /addDocente/:idUC/:idDocente      | addDocente          |
+| PUT    | /addAluno/:idUC/:idAluno          | addAluno            |
+| DELETE | /:id/aula/:idAula                 | deleteAula          |
+| GET    | /notas/aluno/:idAluno             | findGradesByID      |
+| GET    | /:id/nota/aluno/:idAluno          | findGradesByIDAndUC |
 
 
 # WhiteBoardView
@@ -200,55 +260,73 @@ A **modificarNotasAluno** exibe as notas do aluno, caso este as tenha, e permite
 A **error** é a página que é exibida quando algum erro ocorre. Essa página exibe o erro que ocorreu e contém um botão para que o utilizador possa voltar à página em que se encontrava.
 
 
-### Rotas FALTA FAZER
-/ -> Login  
-/registoAluno -> registoAluno  
-/registoDocente -> registoDocente  
-/paginaInicial/:idDocente?token=tokenDocente -> paginaInicial  
-/paginaInicial/:idAluno?token=tokenAluno -> paginaInicial  
+### Rotas
 
-/ucs/:idUC/aluno/:idAluno?token=tokenAluno -> Uc de um certo id, versão aluno. As aulas aparecem ordenadas ao contrário temporalmente  
-/ucs/:idUC/docente/:idDocente?token=tokenDocente -> Uc de um certo id, versão docente. As aulas aparecem ordenadas ao contrário temporalmente  
-/ucs/:idUC/docente/:idDocente/editar?token=tokenDocente -> Editar informações de docentes, horários ...  
-/ucs/:idUC/docente/:idDocente/notas?token=tokenDocente -> Vê notas dos alunos numa determinada UC  
-/ucs/:idUC/docente/:idDocente/modificarNotas?token=tokenDocente -> Modifica as notas. Os alunos aparecem ordenados alfabeticamente  
-/ucs/:idUC/docente/:idDocente/adicionarAula?token=tokenDocente -> Adiciona aula a uma determinada UC.  
-/ucs/:idUC/docente/:idDocente/eliminarAula/:idAula?token=tokenDocente -> Para eliminar uma aula  
-/perfil/:idUser?token=tokenUser -> perfil (idUser pode ser docente ou aluno)  
-/perfil/:idUser/editar?token=tokenUser -> editar informações do perfil (idUser pode ser docente ou aluno)  
-/perfil/:idUser/inscreverUC?token=tokenUser -> inscrever em UC (idUser pode ser docente ou aluno)    
-/perfil/:idAluno/notas?token=tokenUser -> ver as notas (id aluno)  
+Através dos routes, é possível associar a cada rota uma página que deve ser renderizada e fazer pedidos à API de modo a obter as informações necessárias à página. Estes pedidos são realizados através do axios.
 
-# Importação de dados 
+À exceção da rota '/' que corresponde ao login, todas as rotas apresentam uma query token utilizada para confirmas a autenticação do utilizador.
 
-A importação de dados é feita através de um script python `WhiteBoardImport`.py por um administrador. Para isso espera-se ter uma pasta (data) que pode conter os ficheiros `alunos.json`, `docentes.json` e `ucs.json`. As imagens necessárias devem estar guardadas numa pasta images na diretoria data.
+Em caso de erro é renderizada a página `error` com uma mensagem a indicar o que pode ter corrido mal.
 
-O script formulado tenta realizar o POST ou PUT das informações após realizar diversas verificações:
+Neste caso, optamos por criar apenas 3 routers: inicio, perfil e ucs. Cada um apresenta as diversas rotas, às quais está associada uma página e uma determinada funcionalidade
 
-- Ids dos alunos começam por 'a' e dos docentes começam por 'd' já que é um critério utilizado na implementação para distinguis alunos de docentes;
+O router inicio (inicioRouter) tem prefixo '/' e apresenta as seguintes rotas:
+- / -> login, permite realizar a autenticação do utilizador
+- /paginaInicial/:idDocente?token=tokenDocente -> paginaInicial, apresenta as unidades curriculares em que o docente está inscrito e a sua foto que o leve ao seu perfil;
+- /paginaInicial/:idAluno?token=tokenAluno -> paginaInicial, apresenta as unidades curriculares em que o aluno está inscrito  e a sua foto que o leve ao seu perfil;
 
-- Estrutura json válida, percebendo-se se a estrutura recebida corresponde a uma entrada completa daquele tipo, a uma entrada parcial ou se não está de acordo com as informações pretendidas. Para isso utilizam-se arrays de chaves obrigatórias e opcionais tentando-se perceber se as informações correspondem ou não ao que era esperado;
+O router uc (ucRouter) tem prefixo '/ucs' e apresenta as seguintes rotas:
+- /ucs/:idUC/aluno/:idAluno?token=tokenAluno -> informacoesUC, apresenta a UC com um certo id apenas para observação e com as aulas ordenadas da mais recente para a mais antiga;
+- /ucs/:idUC/docente/:idDocente?token=tokenDocente -> informacoesUC, apresenta a UC com um certo id com opções de editar ou acrescentar novas informações e com as aulas ordenadas da mais recente para a mais antiga;
+- /ucs/:idUC/docente/:idDocente/editar?token=tokenDocente -> editarUC, permite que o docente edite diferentes informações sobre a unidade curricular;
+- /ucs/:idUC/docente/:idDocente/notas?token=tokenDocente -> verNotasDocente, permite que o docente consulte as notas dos alunos de uma determinada UC  
+- /ucs/:idUC/docente/:idDocente/modificarNotas?token=tokenDocente -> modificarNotas, o docente consegue atribuir ou alterar as classificações dos alunos que aparecem ordenados alfabeticamente, ou selecionar um único aluno;
+- /ucs/:id/docente/:idDocente/modificarNotas/aluno/:idAluno?token=tokenDocente -> modificarNotasAluno, permite atribuir ou alterar as classificações de um aluno em concreto;
+- /ucs/:idUC/docente/:idDocente/adicionarAula?token=tokenDocente -> novaAula, o docente pode adicionar uma nova aula a uma determinada UC;
+- /ucs/:idUC/docente/:idDocente/eliminarAula/:idAula?token=tokenDocente -> permite apenas eliminar uma aula, não levando a nenhuma página em concreto mas redirecionando para a página da uc;
 
-- O parâmetro foto, existindo, tem uma correspondência com esse nome na pasta images.
-
-Após todas estas verificações tenta-se fazer um POST no caso de a entrada ser completa ou um PUT caso a entrada seja apenas parcial ou o POST não funcione, de forma a substituir a informação já existente pois damos prioridade à informação importada sobre a que já se encontra no mongo.
-
-O script dá ainda algum feedback sobre a importação e possíveis erros que possam ter ocorrido, permitindo ao administrador identificar os problemas e corrigi-los mais facilmente se necessário.
-
-# Exportação de dados FALTA FAZERRRRRRRR
+O router perfil (perfilRouter) tem prefixo '/perfil' e apresenta as seguintes rotas:
+- /perfil/:idUser?token=tokenUser -> perfil, o utilizador pode ver os dados que constam do seu perfil;
+- /perfil/:idUser/editar?token=tokenUser -> editarPerfil, o utilizador consegue editar informações do seu perfil;
+- /perfil/:idUser/inscreverUC?token=tokenUser -> inscreverUC, permite que um utilizador se inscreva numa UC utilizando o respetivo código;
+- /perfil/:idAluno/notas?token=tokenUser -> alunoVerNotas, permite que o aluno consulte as suas notas;
 
 # Autenticação FALTA FAZERRRR
 
-# Docker FALTA FAZERRRRRR
+# Docker
 
-# Como correr COMPLETARRRRRR
+De modo a faciltar o processo de setup da aplicação, recorremos ao Docker. Assim, criamos um `Dockerfile` para a WhiteBoardAPI e um para a WhiteBoardView para serem instaladas as dependências necessárias antes de iniciar a aplicação e informar a porta em que cada uma delas está à escuta.
+
+Elaboramos ainda o `docker-compose.yml` que realiza 4 serviços:
+
+- **mongodb:** cria o container WhiteBoardMongo usando a imagem mongo onde ficará a nossa base de dados WhiteBoard e as respetivas coleções, estando exposta a porta 27027.
+
+- **whiteboardapi:** cria o container WhiteBoardAPI onde vai correr a nossa API de dados na porta 10000. Esta depende do MongoDB.
+
+- **whiteboardview:** cria o container WhiteBoardView onde ficará a aplicação que fornece uma interface para a API, dependendo desta. Esta estará exposta na porta 10001.
+
+- **whiteboardimport:** cria o container WhiteBoardImport onde é corrido o script de importação no modo setup de forma a que os dados da pasta data sejam importados corretamente.
+
+# Comandos para correr a aplicação
+
 Para colocar a aplicação a correr, deve se executar o seguinte comando, dentro da pasta EW:
 ~~~
 docker compose up --build -d
 ~~~
-Para parar os containers e os remover automáticamente, basta correr o seguinte comando na pasta EW
+
+Para parar os containers e os remover automaticamente, basta correr o seguinte comando na pasta EW:
 ~~~
- ./dropDocker.sh
+./dropDocker.sh CONFIRMARRRRR
+~~~
+
+Para realizar a importação dos dados utiliza-se o comando a seguir apresentado:
+~~~
+python3 WhiteBoardImport.py <pastaData> import
+~~~
+
+Para realizar a importação dos dados utiliza-se o comando a seguir apresentado:
+~~~
+python3 WhiteBoardExport.py CONFIRMARRRRR
 ~~~
 
 # Conclusão FALTA FAZERRRRRRR
