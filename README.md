@@ -338,7 +338,7 @@ python3 WhiteBoardExport.py <adminID> <adminPalavraPasse>
 # Conclusão 
 Este trabalho permitiu-nos interligar todos os conteúdos abordados na UC. 
 
-Como resultado, desenvolvemos a WhiteBoard, uma aplicação completa que, do nosso ponto de vista, cumpriu todos os requisitos estabelecidos para o projeto.
+Como resultado, desenvolvemos a WhiteBoard, uma aplicação completa que, do nosso ponto de vista, cumpriu todos os requisitos estabelecidos para o projeto, utilizando uma API para selecionar e alterar as informações das diferentes coleções da base de dados e uma interface para mostrar e recolher essas informações dos utilizadores, permitindo uma fácil navegação e várias funcionalidades de grande utilidade aos utilizadores.
 
 Este projeto proporcionou-nos a oportunidade de trabalhar com JsonWebToken (JWT), destacando a importância da autenticação para adequar as funcionalidades da aplicação ao utilizador autenticado.
 
