@@ -9,7 +9,7 @@ block content
       h2.w3-margin-left
         b #{message}
 
-      if (message == "Realize a Autenticação")
+      if (message == "Realize a Autenticação" || message == "Formato de ID inválido")
         a(href="/")
           button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
       else if (message == "Inscrição na UC inválida" || message == "ID de UC não existente")
@@ -21,8 +21,11 @@ block content
       else if (message == "Aluno não inscrito na UC" || message == "Docente não inscrito na UC" || message == "Erro ao obter os dados da UC")
         a(href="/paginaInicial/"+idUser+"/?token="+token)
           button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
-      else 
-        button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'`) Voltar
+      else if (token)
+        button.w3-button.w3-blue-gray.w3-margin.w3-right(type="button" onclick=`window.location.href='./'+'/?token='+ ${token}`) Voltar
+      else
+        a(href="/")
+          button.w3-button.w3-blue-gray.w3-margin.w3-right Voltar
 
     footer.w3-container.w3-blue-gray
       h4.w3-center WhiteBoard, Jun 2024 - Powered by 

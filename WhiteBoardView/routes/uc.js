@@ -28,31 +28,31 @@ router.get('/:id/aluno/:idAluno', function(req, res) {
                         })
                         .catch(function(erro){
                             if (erro.response && erro.response.status === 401) {
-                                res.render('error', {message: erro.response.data.message});
+                                res.render('error', {token:req.query.token, message: erro.response.data.message});
                             } else {
-                                res.render('error', {message: 'Aluno não existente'});
+                                res.render('error', {token:req.query.token, message: 'Aluno não existente'});
                             }
                         })
                     }
                 })
                 .catch(function(erro){
                     if (erro.response && erro.response.status === 401) {
-                        res.render('error', {message: erro.response.data.message});
+                        res.render('error', {token:req.query.token, message: erro.response.data.message});
                     } else {
-                        res.render('error', {message: 'Erro ao obter o nome do professor'});
+                        res.render('error', {token:req.query.token, message: 'Erro ao obter o nome do professor'});
                     }
                 });
             }
         }
         else {
-            res.render('error', {idUser: req.params.idAluno, token:req.query.token, message: 'Aluno não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idAluno,  message: 'Aluno não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idAluno, token:req.query.token, message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idAluno,  message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -81,31 +81,31 @@ router.get('/:id/docente/:idDocente', function(req, res) {
                         })
                         .catch(function(erro){
                             if (erro.response && erro.response.status === 401) {
-                                res.render('error', {message: erro.response.data.message});
+                                res.render('error', {token:req.query.token, message: erro.response.data.message});
                             } else {
-                                res.render('error', {message: 'Docente não existente'});
+                                res.render('error', {token:req.query.token, message: 'Docente não existente'});
                             }
                         })
                     }
                 })
                 .catch(function(erro){
                     if (erro.response && erro.response.status === 401) {
-                        res.render('error', {message: erro.response.data.message});
+                        res.render('error', {token:req.query.token, message: erro.response.data.message});
                     } else {
-                       res.render('error', {message: 'Erro ao obter o nome do professor'});
+                       res.render('error', {token:req.query.token, message: 'Erro ao obter o nome do professor'});
                     }
                 });
             }
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -121,22 +121,22 @@ router.get('/:id/docente/:idDocente/editar', function(req, res){
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                  res.render('error', {message: erro.response.data.message});
+                  res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                  res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+                  res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
                 }
             })
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 })
@@ -165,21 +165,21 @@ router.post('/:id/docente/:idDocente/editar', function(req, res){
             })
             .catch(function(erro) {
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
                     res.status(500).json({ error: 'Erro ao obter a UC' });
                 }
             });
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -195,21 +195,21 @@ router.get('/:id/docente/:idDocente/notas', function(req, res) {
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                  res.render('error', {message: erro.response.data.message});
+                  res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                  res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+                  res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
                 }
             })
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -225,22 +225,22 @@ router.get('/:id/docente/:idDocente/modificarNotas', function(req, res) {
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                  res.render('error', {message: erro.response.data.message});
+                  res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                  res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+                  res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
                 }
             })
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -296,7 +296,7 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
                 })
                 .catch(function(erro) {
                     if (erro.response && erro.response.status === 401) {
-                        res.render('error', {message: erro.response.data.message});
+                        res.render('error', {token:req.query.token, message: erro.response.data.message});
                     } else {
                         res.status(500).json({ error: 'Erro ao atualizar a UC' });
                     }
@@ -308,14 +308,14 @@ router.post('/:id/docente/:idDocente/modificarNotas', function(req, res) {
             }
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -332,26 +332,26 @@ router.get('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(req
                     const token = req.query.token;
                     res.render('modificarNotasAluno', {notas: notas, uc:req.params.id, aluno: req.params.idAluno, docente:req.params.idDocente, token:token});
                 }else{
-                    res.render('error', {message: 'ID de aluno inválido', idUC:req.params.id, idUser:req.params.idDocente,token:req.query.token});
+                    res.render('error', {token:req.query.token, message: 'ID de aluno inválido', idUC:req.params.id, idUser:req.params.idDocente,token:req.query.token});
                 }
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                    res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+                    res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
                 }
             });
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 })
@@ -384,22 +384,22 @@ router.post('/:id/docente/:idDocente/modificarNotas/aluno/:idAluno', function(re
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                    res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+                    res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
                 }
             });
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
 
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 
@@ -417,21 +417,21 @@ router.get('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             })    
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                  res.render('error', {message: erro.response.data.message});
+                  res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                  res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+                  res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
                 }
             })        
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 })
@@ -459,21 +459,21 @@ router.post('/:id/docente/:idDocente/adicionarAula', function(req, res) {
             })
             .catch(function(erro) {
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
                    res.status(500).json({ error: 'Erro ao atualizar a UC' });
                 }
             });
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });
@@ -489,21 +489,21 @@ router.post('/:id/docente/:idDocente/eliminarAula/:idAula', function(req, res){
             })
             .catch(function(erro) {
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
                     res.status(500).json({ error: 'Erro ao eliminar aula' });
                 }
             });
         }
         else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token, message: 'Docente não inscrito na UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,  message: 'Docente não inscrito na UC'});
         }
     })
     .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-            res.render('error', {message: erro.response.data.message});
+            res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-            res.render('error', {idUser: req.params.idDocente, token:req.query.token,  message: 'Erro ao obter os dados da UC'});
+            res.render('error', {token:req.query.token, idUser: req.params.idDocente,   message: 'Erro ao obter os dados da UC'});
         }
     });
 });

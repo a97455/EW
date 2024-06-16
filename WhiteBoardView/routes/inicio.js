@@ -56,17 +56,17 @@ router.get('/paginaInicial/:id', function(req, res) {
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                    res.render('error', {message: 'Docente não encontrado'})
+                    res.render('error', {token:req.query.token, message: 'Docente não encontrado'})
                 }
             })
         })
         .catch(function(erro){
             if (erro.response && erro.response.status === 401) {
-                res.render('error', {message: erro.response.data.message});
+                res.render('error', {token:req.query.token, message: erro.response.data.message});
             } else {
-                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+                res.render('error', {token:req.query.token, message: 'Não foi possível apresentar a página pretendida'})
             }
         }) 
     }
@@ -79,21 +79,21 @@ router.get('/paginaInicial/:id', function(req, res) {
             })
             .catch(function(erro){
                 if (erro.response && erro.response.status === 401) {
-                    res.render('error', {message: erro.response.data.message});
+                    res.render('error', {token:req.query.token, message: erro.response.data.message});
                 } else {
-                    res.render('error', {message: 'Docente não encontrado'})
+                    res.render('error', {token:req.query.token, message: 'Docente não encontrado'})
                 }
             })   
         })
         .catch(function(erro){
             if (erro.response && erro.response.status === 401) {
-                res.render('error', {message: erro.response.data.message});
+                res.render('error', {token:req.query.token, message: erro.response.data.message});
             } else {
-                res.render('error', {message: 'Não foi possível apresentar a página pretendida'})
+                res.render('error', {token:req.query.token, message: 'Não foi possível apresentar a página pretendida'})
             }
         })
     }
-    else res.render('error', {message: 'Formato de ID inválido'});
+    else res.render('error', {token:req.query.token, message: 'Formato de ID inválido'});
 })
 
 module.exports = router;

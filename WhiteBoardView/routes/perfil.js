@@ -16,14 +16,14 @@ router.get('/:id', function(req, res) {
         res.render('perfil', {isDocente : true, docente: docente});
       } 
       else{
-        res.render('error', {message: 'Docente não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Docente não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
@@ -35,19 +35,19 @@ router.get('/:id', function(req, res) {
         res.render('perfil', {isDocente : false, aluno: aluno});
       } 
       else{
-        res.render('error', {message: 'Aluno não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Aluno não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
   else {
-    res.render('error', {message: 'Formato de ID inválido'})
+    res.render('error', {token:req.query.token, message: 'Formato de ID inválido'})
   }
 });
 
@@ -61,17 +61,17 @@ router.get('/:id/notas', function(req, res){
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   })
   .catch(function(erro){
     if (erro.response && erro.response.status === 401) {
-      res.render('error', {message: erro.response.data.message});
+      res.render('error', {token:req.query.token, message: erro.response.data.message});
     } else {
-      res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+      res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
     }
   })
 });
@@ -84,9 +84,9 @@ router.get('/:id/inscreverUC', function(req, res) {
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
@@ -97,14 +97,14 @@ router.get('/:id/inscreverUC', function(req, res) {
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
   else {
-    res.render('error', {message: 'Formato de ID inválido'})
+    res.render('error', {token:req.query.token, message: 'Formato de ID inválido'})
   }
 });
 
@@ -118,22 +118,22 @@ router.post('/:id/inscreverUC', function(req, res) {
           res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
         } 
         else{
-          res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
+          res.render('error', {token:req.query.token, idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
         }
         })
       .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-          res.render('error', {message: erro.response.data.message});
+          res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-          res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+          res.render('error', {token:req.query.token, idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
         }
       })
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
@@ -146,27 +146,27 @@ router.post('/:id/inscreverUC', function(req, res) {
           res.redirect("/perfil/"+req.params.id+"?token="+response.data.token)
         } 
         else{
-          res.render('error', {idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
+          res.render('error', {token:req.query.token, idUser: req.params.id, user: response.data, message: 'Inscrição na UC inválida'})
         }
         })
       .catch(function(erro){
         if (erro.response && erro.response.status === 401) {
-          res.render('error', {message: erro.response.data.message});
+          res.render('error', {token:req.query.token, message: erro.response.data.message});
         } else {
-          res.render('error', {idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
+          res.render('error', {token:req.query.token, idUser: req.params.id, user: response.data, message: 'ID de UC não existente'})
         }
       })
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
   else {
-    res.render('error', {message: 'Formato de ID inválido'})
+    res.render('error', {token:req.query.token, message: 'Formato de ID inválido'})
   }
 });
 
@@ -179,14 +179,14 @@ router.get('/:id/editar', function(req, res) {
         res.render('editarPerfil', {isDocente : true, docente: docente});
       } 
       else{
-        res.render('error', {message: 'Docente não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Docente não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
@@ -198,19 +198,19 @@ router.get('/:id/editar', function(req, res) {
         res.render('editarPerfil', {isDocente : false, aluno: aluno});
       } 
       else{
-        res.render('error', {message: 'Aluno não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Aluno não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
   else {
-    res.render('error', {message: 'Formato de ID inválido'})
+    res.render('error', {token:req.query.token, message: 'Formato de ID inválido'})
   }
 });
 
@@ -243,14 +243,14 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
           }
       } 
       else{
-        res.render('error', {message: 'Docente não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Docente não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
@@ -268,19 +268,19 @@ router.post('/:id/editar', upload.single('foto'), function(req, res) {
           }
       } 
       else{
-        res.render('error', {message: 'Aluno não registado na WhiteBoard'})
+        res.render('error', {token:req.query.token, message: 'Aluno não registado na WhiteBoard'})
       }
     })
     .catch(function(erro){
       if (erro.response && erro.response.status === 401) {
-        res.render('error', {message: erro.response.data.message});
+        res.render('error', {token:req.query.token, message: erro.response.data.message});
       } else {
-        res.render('error', {message: 'Rota não existente na WhiteBoardAPI'})
+        res.render('error', {token:req.query.token, message: 'Rota não existente na WhiteBoardAPI'})
       }
     })
   }
   else {
-    res.render('error', {message: 'Formato de ID inválido'})
+    res.render('error', {token:req.query.token, message: 'Formato de ID inválido'})
   }
 });
 
