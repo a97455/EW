@@ -42,6 +42,13 @@ block content
                     ul
                         each avaliacao in uc.avaliacao
                             li= avaliacao 
+
+                li.w3-light-gray
+                    b Datas Avaliação:
+                    ul
+                        li Teste: #{uc.datas.teste} 
+                        li Exame: #{uc.datas.exame} 
+                        li Projeto: #{uc.datas.projeto} 
         
         if docente
             .w3-margin.w3-flex-container
